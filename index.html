@@ -188,6 +188,10 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
 .log{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:.82rem}
 .log li{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:4px 0}
 .log li span.t{font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.main.gen{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.kinds{display:grid;gap:6px;margin:4px 0 0}
+.kinds label{display:flex;gap:8px;align-items:center;font-size:.88rem}
+.kinds small{color:var(--muted);font-size:.76rem}
 .empty-state{text-align:center;padding:28px 16px;display:grid;gap:10px;justify-items:center}
 .empty-state p{margin:0;color:var(--muted);max-width:46ch}
 @media (prefers-reduced-motion:no-preference){.slotbtn,.btn,.pick button,nav.tabs button{transition:background .15s,border-color .15s,color .15s}}
@@ -230,10 +234,9 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
           <label class="check"><input type="checkbox" id="sStag"><span>Quarts décalés (relève à mi-quart)<small>Un quart de 3 h = 1 h 30 avec celui qui finit, puis 1 h 30 avec celui qui arrive. Nécessite 2 équipiers par quart ou plus.</small></span></label>
           <label class="f">Lever du soleil<input type="time" id="sSunrise"></label>
           <label class="f">Coucher du soleil<input type="time" id="sSunset"></label>
-          <label class="f">Repos entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
-          <label class="f">Battement entre deux tâches (h)<input type="number" id="sGap" min="0" max="6" step="0.25"></label>
+          <label class="f full">Repos minimum entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
         </div>
-        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster en route. Les heures de nuit comptées dans l'équité sont celles de la plage de nuit. Le battement s'applique à toutes les tâches : personne n'est mis de corvée ou de repas moins de ce délai avant ou après un quart ou une autre tâche.</p>
+        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster en route. Les heures de nuit comptées dans l'équité sont celles de la plage de nuit. Le battement entre deux tâches se règle dans l'onglet Général.</p>
       </details>
 
       <section class="panel">
@@ -252,21 +255,6 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
         <div class="spread" id="spread"></div>
       </section>
 
-      <section class="panel" id="calPanel">
-        <h2>Agenda</h2>
-        <div class="grid2">
-          <label class="f full">Quarts de<select id="calWho"></select></label>
-          <label class="f">Période<select id="calWhen"><option value="all">Toute la traversée</option><option value="next">À partir de maintenant</option></select></label>
-          <label class="f">Rappel<select id="calAlarm"><option value="0">Aucun</option><option value="10">10 min avant</option><option value="15">15 min avant</option><option value="30">30 min avant</option></select></label>
-          <label class="f">Heure du bord (UTC+)<input type="number" id="calBoat" min="-12" max="14" step="0.5"></label>
-          <label class="f">Agenda Google (UTC+)<input type="number" id="calAgenda" min="-12" max="14" step="0.5"></label>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary small" type="button" id="icsBtn">Fichier .ics</button>
-          <button class="btn small" type="button" id="csvBtn">Fichier .csv Google</button>
-        </div>
-        <p class="hint" id="calMsg">.ics : iPhone (ouvrir le fichier), Google Agenda (import sur ordinateur), Outlook ; inclut les rappels. .csv : import Google Agenda sans rappel, heures converties dans le fuseau de ton agenda. Importe dans un agenda dédié « Quarts » : après un changement, tu le vides et tu réimportes.</p>
-      </section>
     </aside>
 
     <section class="col">
@@ -291,6 +279,9 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
 
   <!-- ===== INVENTAIRE ===== -->
   <div class="col" id="view-inv" hidden></div>
+
+  <!-- ===== GÉNÉRAL ===== -->
+  <div class="main gen" id="view-gen" hidden></div>
 
   <details class="panel" id="savePanel">
     <summary><h2>Sauvegarde et transfert</h2></summary>
@@ -491,16 +482,17 @@ function compute(){RW=assignWatches();RD=assignDuties(RW)}
 function renderAll(){renderTabs();renderView();$("exportBox").value=JSON.stringify(S)}
 
 function renderTabs(){
-  const t=[["quarts","Quarts"],...S.duties.map(d=>["p-"+d.id,d.name]),["inventaire","Inventaire"]];
+  const t=[["general","Général"],["quarts","Quarts"],...S.duties.map(d=>["p-"+d.id,d.name]),["inventaire","Inventaire"]];
   $("tabs").innerHTML=t.map(([id,l])=>`<button type="button" role="tab" data-tab="${id}" aria-selected="${S.tab===id}">${esc(l)}</button>`).join("")+`<button type="button" class="add" data-act="addDuty" title="Nouveau planning">＋ Planning</button>`;
   $("invList").innerHTML=S.inv.map(i=>`<option value="${esc(i.name)}">`).join("");
 }
 function renderView(){
   const t=S.tab, duty=t.startsWith("p-")?S.duties.find(d=>"p-"+d.id===t):null;
   if(t.startsWith("p-")&&!duty)S.tab="quarts";
-  $("view-quarts").hidden=S.tab!=="quarts";$("view-duty").hidden=!duty;$("view-inv").hidden=S.tab!=="inventaire";
+  $("view-quarts").hidden=S.tab!=="quarts";$("view-gen").hidden=S.tab!=="general";$("view-duty").hidden=!duty;$("view-inv").hidden=S.tab!=="inventaire";
   $("legend").hidden=S.tab!=="quarts";
-  if(S.tab==="quarts"){renderStats();renderTimeline();renderCal()}
+  if(S.tab==="quarts"){renderStats();renderTimeline()}
+  else if(S.tab==="general")renderGen();
   else if(duty)renderDuty(duty);
   else renderInv();
 }
@@ -510,7 +502,7 @@ function go(tab){S.tab=tab;editKey=null;dutyEdit=null;save();renderTabs();render
 function renderSettings(){
   const s=S.settings;
   $("sStart").value=s.start;$("sDays").value=s.days;$("sPer").value=s.per;$("sDurDay").value=s.durDay;$("sDurNight").value=s.durNight;
-  $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sGap").value=s.gap;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
+  $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
   $("sNightOnly").checked=!!s.nightOnly;$("sStag").checked=!!s.stag;$("sDurDay").disabled=!!s.nightOnly;
 }
 function renderCrew(){
@@ -587,23 +579,58 @@ function watchEditor(sl){
 
 /* ---------- Agenda ---------- */
 let DL=null;
-try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DL=d;if(S.tab==="quarts")renderCal()},()=>{})}catch(e){}
-function renderCal(){
-  const c=S.cal,w=$("calWho");
-  if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
-  w.innerHTML=S.crew.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("")+`<option value="all">Tout l'équipage (un événement par quart)</option>`;
-  w.value=c.who;$("calWhen").value=c.when;$("calAlarm").value=c.alarm;$("calBoat").value=c.boat;$("calAgenda").value=c.agenda;
-  $("icsBtn").disabled=!!DL;$("icsBtn").title=DL?"Disponible dans la version hors ligne":"";
-  if(DL&&!$("calMsg").dataset.art){$("calMsg").dataset.art=1;$("calMsg").insertAdjacentHTML("afterbegin","<strong>Ici, seul le .csv se télécharge ; le .ics est dans la version hors ligne.</strong> ")}
+try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DL=d;if(S.tab==="general")renderGen()},()=>{})}catch(e){}
+const kindOn=k=>S.cal.kinds?S.cal.kinds[k]!==false:true;
+function renderGen(){
+  const c=S.cal;if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
+  const n=calEvents().length;
+  const kinds=[["quarts","Quarts",RW.watches.length+" quarts"],...S.duties.map(d=>[d.id,d.name,RD.res[d.id].inst.length+" occurrences"+(d.meal?", avec la recette":"")])];
+  $("view-gen").innerHTML=`
+  <section class="panel"><h2>Règles communes</h2>
+    <div class="grid2">
+      <label class="f full">Battement entre deux tâches, toutes tâches confondues (h)<input type="number" id="gGap" min="0" max="6" step="0.25" value="${S.settings.gap}"></label>
+    </div>
+    <p class="hint">Personne n'est mis de corvée ou de repas moins de ce délai avant ou après un quart ou une autre tâche. Les quarts sont calculés en premier, les corvées s'organisent autour. Si personne n'est libre, l'outil choisit d'abord quelqu'un sans chevauchement, et ne lève la règle qu'en dernier recours.</p>
+  </section>
+  <section class="panel"><h2>Export vers l'agenda</h2>
+    <div class="grid2">
+      <label class="f full">Pour<select id="calWho">${S.crew.map(p=>`<option value="${p.id}" ${p.id===c.who?"selected":""}>${esc(p.name)}</option>`).join("")}<option value="all" ${c.who==="all"?"selected":""}>Tout l'équipage (un événement par tâche)</option></select></label>
+      <div class="full"><span class="f" style="font-size:.8rem;color:var(--muted)">À exporter</span>
+        <div class="kinds">${kinds.map(([k,l,info])=>`<label><input type="checkbox" data-kind="${esc(k)}" ${kindOn(k)?"checked":""}> ${esc(l)} <small>${esc(info)}</small></label>`).join("")}</div></div>
+      <label class="f">Période<select id="calWhen"><option value="all" ${c.when==="all"?"selected":""}>Toute la traversée</option><option value="next" ${c.when==="next"?"selected":""}>À partir de maintenant</option></select></label>
+      <label class="f">Rappel<select id="calAlarm">${[["0","Aucun"],["10","10 min avant"],["15","15 min avant"],["30","30 min avant"]].map(([v,l])=>`<option value="${v}" ${String(c.alarm)===v?"selected":""}>${l}</option>`).join("")}</select></label>
+      <label class="f">Heure du bord (UTC+)<input type="number" id="calBoat" min="-12" max="14" step="0.5" value="${c.boat}"></label>
+      <label class="f">Agenda Google (UTC+)<input type="number" id="calAgenda" min="-12" max="14" step="0.5" value="${c.agenda}"></label>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn primary small" type="button" id="icsBtn" ${DL?"disabled title=\"Disponible dans la version hors ligne\"":""}>Fichier .ics</button>
+      <button class="btn small" type="button" id="csvBtn">Fichier .csv Google</button>
+      <span class="pill">${n} événement${n>1?"s":""}</span>
+    </div>
+    <p class="hint" id="calMsg">${DL?"<strong>Ici, seul le .csv se télécharge ; le .ics est dans la version hors ligne.</strong> ":""}.ics : iPhone (ouvrir le fichier), Google Agenda (import sur ordinateur), Outlook ; inclut les rappels. .csv : import Google Agenda sans rappel, heures converties dans le fuseau de ton agenda. Importe dans un agenda dédié « Bord » : après un changement, tu le vides et tu réimportes.</p>
+  </section>`;
 }
 const KLBL={nuit:"de nuit",jour:"de jour",lever:"lever du soleil",coucher:"coucher du soleil"};
 function calEvents(){
-  const c=S.cal,now=Date.now(),keep=e=>c.when==="all"||e.end>now;
-  if(c.who==="all")return RW.segs.filter(keep).map(s=>{const team=s.team.map(nameOf);
-    return {start:s.start,end:s.end,uid:s.key,summary:`Quart ${KLBL[s.type]} : ${team.join(" + ")||"personne"}`,desc:`Quart ${fmtT(s.start)}–${fmtT(s.end)} heure du bord. Équipe : ${team.join(", ")||"personne"}.`}});
-  return RW.watches.filter(w=>w.id===c.who&&keep(w)).map(w=>{
-    const others=[...new Set(RW.segs.filter(s=>s.start<w.end&&s.end>w.start).flatMap(s=>s.team))].filter(i=>i!==w.id).map(nameOf);
-    return {start:w.start,end:w.end,uid:w.key,summary:`Quart ${KLBL[w.type]}${others.length?" avec "+others.join(", "):""}`,desc:`Quart ${fmtT(w.start)}–${fmtT(w.end)} heure du bord (${fmtH(w.hours)} h). Avec : ${others.join(", ")||"personne"}.`}});
+  const c=S.cal,now=Date.now(),keep=e=>c.when==="all"||e.end>now,out=[];
+  if(kindOn("quarts")){
+    if(c.who==="all")RW.segs.filter(keep).forEach(s=>{const team=s.team.map(nameOf);
+      out.push({start:s.start,end:s.end,uid:"q"+s.key,summary:`Quart ${KLBL[s.type]} : ${team.join(" + ")||"personne"}`,desc:`Quart ${fmtT(s.start)}–${fmtT(s.end)} heure du bord. Équipe : ${team.join(", ")||"personne"}.`})});
+    else RW.watches.filter(w=>w.id===c.who&&keep(w)).forEach(w=>{
+      const others=[...new Set(RW.segs.filter(s=>s.start<w.end&&s.end>w.start).flatMap(s=>s.team))].filter(i=>i!==w.id).map(nameOf);
+      out.push({start:w.start,end:w.end,uid:"q"+w.key,summary:`Quart ${KLBL[w.type]}${others.length?" avec "+others.join(", "):""}`,desc:`Quart ${fmtT(w.start)}–${fmtT(w.end)} heure du bord (${fmtH(w.hours)} h). Avec : ${others.join(", ")||"personne"}.`})});
+  }
+  S.duties.forEach(d=>{if(!kindOn(d.id))return;
+    RD.res[d.id].inst.filter(it=>keep(it)&&(c.who==="all"||it.team.includes(c.who))).forEach(it=>{
+      const m=d.meal?S.meals[it.key]:null,recipe=m&&m.recipe?m.recipe:"";
+      const others=(c.who==="all"?it.team:it.team.filter(i=>i!==c.who)).map(nameOf);
+      const title=`${d.name} · ${it.occ.label}${recipe?" : "+recipe:""}`;
+      const ings=m&&m.items.length?" Ingrédients : "+m.items.filter(x=>x.n).map(x=>{const inv=invItem(x.n);return `${x.n} ${fmtQ(+x.q||0)}${inv?" "+inv.unit:""}`}).join(", ")+".":"";
+      out.push({start:it.start,end:it.end,uid:d.id+"-"+it.key,summary:c.who==="all"?`${title} : ${others.join(" + ")||"personne"}`:`${title}${others.length?" avec "+others.join(", "):""}`,
+        desc:`${d.name} (${it.occ.label}) ${fmtT(it.start)}–${fmtT(it.end)} heure du bord. Équipe : ${it.team.map(nameOf).join(", ")||"personne"}.${recipe?" Recette : "+recipe+".":""}${ings}`});
+    });
+  });
+  return out.sort((a,b)=>a.start-b.start);
 }
 const wall=ms=>{const d=new Date(ms);return [d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes()]};
 const toUTC=(ms,off)=>{const [y,mo,d,h,mi]=wall(ms);return Date.UTC(y,mo,d,h,mi)-off*H};
@@ -613,9 +640,9 @@ const fold=l=>{const out=[];let s=l;while(s.length>60){out.push(s.slice(0,60));s
 function buildICS(){
   const c=S.cal,list=calEvents(),stamp=icsDate(Date.now()),seq=Math.floor((Date.now()-Date.UTC(2026,0,1))/60000);
   const who=c.who==="all"?"équipage":nameOf(c.who);
-  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Tableau des quarts//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH",`X-WR-CALNAME:${icsEsc("Quarts – "+who)}`];
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Tableau des quarts//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH",`X-WR-CALNAME:${icsEsc("Bord – "+who)}`];
   for(const e of list){
-    L.push("BEGIN:VEVENT",`UID:${e.uid.replace(/[-:]/g,"")}-${c.who}@tableau-des-quarts`,`SEQUENCE:${seq}`,`DTSTAMP:${stamp}`,`DTSTART:${icsDate(toUTC(e.start,c.boat))}`,`DTEND:${icsDate(toUTC(e.end,c.boat))}`,`SUMMARY:${icsEsc(e.summary)}`,`DESCRIPTION:${icsEsc(e.desc)}`,"TRANSP:OPAQUE");
+    L.push("BEGIN:VEVENT",`UID:${e.uid.replace(/[^A-Za-z0-9]/g,"")}-${c.who}@tableau-des-quarts`,`SEQUENCE:${seq}`,`DTSTAMP:${stamp}`,`DTSTART:${icsDate(toUTC(e.start,c.boat))}`,`DTEND:${icsDate(toUTC(e.end,c.boat))}`,`SUMMARY:${icsEsc(e.summary)}`,`DESCRIPTION:${icsEsc(e.desc)}`,"TRANSP:OPAQUE");
     if(+c.alarm>0)L.push("BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${icsEsc(e.summary)}`,`TRIGGER:-PT${+c.alarm}M`,"END:VALARM");
     L.push("END:VEVENT");
   }
@@ -630,10 +657,10 @@ function buildCSV(){
 }
 const slug=s=>norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"quarts";
 async function offer(ext,mime,built){
-  const msg=$("calMsg");if(!built.n){msg.textContent="Aucun quart à exporter pour ce choix.";return}
-  const filename=`quarts-${S.cal.who==="all"?"equipage":slug(nameOf(S.cal.who))}.${ext}`;
-  if(DL){try{await DL.save({filename,data:built.text});msg.textContent=`${built.n} quarts exportés dans ${filename}.`}catch(e){msg.textContent=e&&e.code==="declined"?"Téléchargement annulé.":"Téléchargement impossible ici : utilise la version hors ligne."}return}
-  try{const url=URL.createObjectURL(new Blob([built.text],{type:mime}));const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent=`${built.n} quarts exportés dans ${filename}.`}
+  const msg=$("calMsg");if(!built.n){msg.textContent="Aucun événement à exporter pour ce choix.";return}
+  const filename=`bord-${S.cal.who==="all"?"equipage":slug(nameOf(S.cal.who))}.${ext}`;
+  if(DL){try{await DL.save({filename,data:built.text});msg.textContent=`${built.n} événements exportés dans ${filename}.`}catch(e){msg.textContent=e&&e.code==="declined"?"Téléchargement annulé.":"Téléchargement impossible ici : utilise la version hors ligne."}return}
+  try{const url=URL.createObjectURL(new Blob([built.text],{type:mime}));const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent=`${built.n} événements exportés dans ${filename}.`}
   catch(e){msg.textContent="Le navigateur a bloqué le téléchargement."}
 }
 
@@ -665,8 +692,7 @@ function renderDuty(duty){
       <div class="row" style="margin-top:8px"><button class="btn small" type="button" data-act="addOcc">Ajouter un horaire</button></div>
       <h2 style="margin-top:14px">Participants</h2>
       <div class="pick">${S.crew.map(c=>`<button type="button" data-act="toggleExcl" data-id="${c.id}" aria-pressed="${!duty.excl.includes(c.id)}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}</button>`).join("")}</div>
-      <label class="f" style="margin-top:10px">Battement entre deux tâches, toutes tâches confondues (h)<input type="number" id="dGap" min="0" max="6" step="0.25" value="${S.settings.gap}"></label>
-      <p class="hint">Personne n'est programmé moins de ce délai avant ou après un quart ou une autre tâche (réglage commun à tous les plannings). Si personne n'est libre, la règle est levée pour cette occurrence.</p>
+      <p class="hint">Personne n'est programmé moins de ${fmtH(S.settings.gap)} h avant ou après un quart ou une autre tâche (battement réglé dans l'onglet <a href="#general" data-act="goGen">Général</a>).</p>
       <div class="row" style="margin-top:12px" id="delDutyZone"><button class="btn small danger" type="button" data-act="delDuty">Supprimer ce planning</button></div>
     </details>
     <section class="panel"><h2>Équité · ${esc(duty.name)}</h2>
@@ -780,7 +806,7 @@ $("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)
   go(b.dataset.tab)});
 
 const bindNum=(id,k,min,max)=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=S.settings[k];v=Math.min(max,Math.max(min,v));S.settings[k]=v;e.target.value=v;editKey=null;recompute()});
-bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);bindNum("sGap","gap",0,6);
+bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);
 [["sStart","start"],["sSunrise","sunrise"],["sSunset","sunset"],["sNightStart","nightStart"],["sNightEnd","nightEnd"]].forEach(([id,k])=>$(id).addEventListener("change",e=>{if(!e.target.value)return;S.settings[k]=e.target.value;editKey=null;recompute()}));
 $("sNightOnly").addEventListener("change",e=>{S.settings.nightOnly=e.target.checked;$("sDurDay").disabled=e.target.checked;editKey=null;recompute()});
 $("sStag").addEventListener("change",e=>{S.settings.stag=e.target.checked;if(e.target.checked&&S.settings.per<2){S.settings.per=2;$("sPer").value=2}editKey=null;recompute()});
@@ -819,10 +845,14 @@ $("timeline").addEventListener("click",e=>{
 $("orphans").addEventListener("click",e=>{if(e.target.closest("[data-act=clearOrphans]")){RW.orphans.forEach(k=>delete S.overrides[k]);recompute()}});
 $("nowBtn").addEventListener("click",()=>{const now=Date.now();const sl=RW.segs.find(s=>now>=s.start&&now<s.end)||RW.segs.find(s=>s.start>now)||RW.segs[0];
   if(!sl)return;$("onlyMine").checked=false;renderTimeline();const el=document.getElementById("slot-"+sl.key);el&&el.scrollIntoView({block:"center",behavior:"smooth"})});
-["calWho","calWhen","calAlarm"].forEach(id=>$(id).addEventListener("change",e=>{S.cal[{calWho:"who",calWhen:"when",calAlarm:"alarm"}[id]]=e.target.value;save()}));
-["calBoat","calAgenda"].forEach(id=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=8;v=Math.max(-12,Math.min(14,v));e.target.value=v;S.cal[id==="calBoat"?"boat":"agenda"]=v;save()}));
-$("icsBtn").addEventListener("click",()=>offer("ics","text/calendar",buildICS()));
-$("csvBtn").addEventListener("click",()=>offer("csv","text/csv",buildCSV()));
+const VG=$("view-gen");
+VG.addEventListener("change",e=>{const t=e.target;
+  if(t.id==="gGap"){S.settings.gap=Math.max(0,Math.min(6,parseFloat(t.value)||0));t.value=S.settings.gap;recompute();return}
+  if(t.dataset.kind){S.cal.kinds=S.cal.kinds||{};S.cal.kinds[t.dataset.kind]=t.checked}
+  else if(t.id==="calWho")S.cal.who=t.value;else if(t.id==="calWhen")S.cal.when=t.value;else if(t.id==="calAlarm")S.cal.alarm=t.value;
+  else if(t.id==="calBoat"||t.id==="calAgenda"){let v=parseFloat(t.value);if(isNaN(v))v=8;S.cal[t.id==="calBoat"?"boat":"agenda"]=Math.max(-12,Math.min(14,v))}
+  save();renderGen();$("exportBox").value=JSON.stringify(S)});
+VG.addEventListener("click",e=>{if(e.target.id==="icsBtn")offer("ics","text/calendar",buildICS());if(e.target.id==="csvBtn")offer("csv","text/csv",buildCSV())});
 
 /* --- plannings --- */
 const curDuty=()=>S.duties.find(d=>"p-"+d.id===S.tab);
@@ -831,7 +861,6 @@ V.addEventListener("change",e=>{
   const duty=curDuty();if(!duty)return;const t=e.target;
   if(t.id==="dName"){duty.name=t.value.trim()||duty.name;renderTabs();recompute();return}
   if(t.id==="dPer"){duty.per=Math.max(1,Math.min(8,parseInt(t.value)||1));recompute();return}
-  if(t.id==="dGap"){S.settings.gap=Math.max(0,Math.min(6,parseFloat(t.value)||0));$("sGap").value=S.settings.gap;dutyEdit="__settings";recompute();return}
   if(t.id==="dMeal"){duty.meal=t.checked;recompute();return}
   if(t.id==="dFocus"){S.focus=t.value;save();renderView();return}
   if(t.id==="dOccN"){let n=Math.max(1,Math.min(6,parseInt(t.value)||1));
@@ -857,6 +886,7 @@ V.addEventListener("click",e=>{
   if(btn){const k=btn.dataset.dkey;if(dutyEdit===k)dutyEdit=null;else{dutyEdit=k;const it=RD.res[duty.id].inst.find(x=>x.key===k);dutyDraft=[...(it?it.team:[])]}renderView();
     const el=document.getElementById("slot-"+k);el&&dutyEdit&&el.scrollIntoView({block:"nearest"});return}
   const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act;
+  if(act==="goGen"){e.preventDefault();go("general");return}
   if(act==="dpick"){const id=a.dataset.id;dutyDraft=dutyDraft.includes(id)?dutyDraft.filter(x=>x!==id):[...dutyDraft,id];a.setAttribute("aria-pressed",dutyDraft.includes(id))}
   if(act==="dclose"){dutyEdit=null;renderView()}
   if(act==="dreset"){delete duty.overrides[dutyEdit];recompute()}
@@ -927,9 +957,9 @@ function boot(){
   if(S.fresh){const m=S.duties.find(d=>d.meal);if(m)prefillMeals(m);S.fresh=false}
   renderSettings();renderCrew();renderAll();save();
 }
-const h=(location.hash||"").slice(1);if(h&&(h==="quarts"||h==="inventaire"||h.startsWith("p-")))S.tab=h;
+const h=(location.hash||"").slice(1);if(h&&(h==="quarts"||h==="general"||h==="inventaire"||h.startsWith("p-")))S.tab=h;
 if(window.matchMedia("(max-width:860px)").matches)$("settingsPanel").open=false;
-window.addEventListener("hashchange",()=>{const x=location.hash.slice(1);if(x&&x!==S.tab&&(x==="quarts"||x==="inventaire"||S.duties.some(d=>"p-"+d.id===x)))go(x)});
+window.addEventListener("hashchange",()=>{const x=location.hash.slice(1);if(x&&x!==S.tab&&(x==="quarts"||x==="general"||x==="inventaire"||S.duties.some(d=>"p-"+d.id===x)))go(x)});
 boot();
 setInterval(()=>{if(!editKey&&!dutyEdit&&S.tab==="quarts")renderTimeline()},60000);
 window.__T={get S(){return S},assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
