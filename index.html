@@ -219,6 +219,7 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
       <h1>Tableau des quarts</h1>
       <p class="sub">Lombok → Thaïlande · heure du bord · quarts, corvées, repas et vivres</p>
     </div>
+    <button class="pill warn" id="syncBadge" type="button" hidden></button>
     <div class="legend" aria-label="Légende" id="legend">
       <span><i class="sw" style="background:var(--night)"></i>Nuit</span>
       <span><i class="sw" style="background:var(--day)"></i>Jour</span>
@@ -294,15 +295,6 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
       <p class="hint">Décoche une tâche pour en exempter quelqu'un (skipper hors quart, malade, cuisinier attitré) sans l'effacer. Les mêmes réglages se retrouvent dans chaque planning.</p>
     </section>
     <div id="genDyn" style="display:contents"></div>
-    <section class="panel" id="savePanel">
-    <h2>Sauvegarde et transfert</h2>
-    <p class="hint" style="margin-top:0">Tout (quarts, corvées, repas, inventaire) est gardé sur cet appareil. Pour le transférer sur un autre téléphone, copie ce texte et colle-le de l'autre côté.</p>
-    <label class="f">Export<textarea id="exportBox" readonly></textarea></label>
-    <div class="row" style="margin-top:8px"><button class="btn small" id="copyBtn" type="button">Copier</button><span class="hint" id="copyMsg" style="margin:0"></span></div>
-    <label class="f" style="margin-top:12px">Import<textarea id="importBox" placeholder="Colle ici un export"></textarea></label>
-    <div class="row" style="margin-top:8px"><button class="btn small" id="importBtn" type="button">Importer</button><span class="hint" id="importMsg" style="margin:0"></span></div>
-    <div class="row" style="margin-top:14px" id="resetZone"><button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button></div>
-    </section>
   </div>
 
 </div>
@@ -332,14 +324,15 @@ function defaultDuties(){return [
   {id:"vaisselle",name:"Vaisselle",meal:false,per:2,occ:[{id:"midi",label:"Après déjeuner",time:"13:30",dur:0.5},{id:"soir",label:"Après dîner",time:"20:00",dur:0.5}],excl:[],overrides:{}},
   {id:"menage",name:"Ménage",meal:false,per:2,occ:[{id:"matin",label:"Carré et sanitaires",time:"10:00",dur:1}],excl:[],overrides:{}}
 ]}
+const seedInv=()=>SEED.inventory.map(i=>Object.assign({id:"i-"+norm(i.name).replace(/[^a-z0-9]+/g,"-")},i));
 function defaults(){
   const d=new Date();d.setDate(d.getDate()+1);d.setHours(18,0,0,0);
   const names=["Mehdi","Équipier 2","Équipier 3","Équipier 4","Équipier 5","Équipier 6","Équipier 7","Équipier 8"];
   return {v:2,tab:"quarts",
     settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3,gap:1,nightStart:"18:00",nightEnd:"06:00",nightOnly:false,stag:false,stagSolo:false},
-    crew:names.map((n,i)=>({id:uid(),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
+    crew:names.map((n,i)=>({id:"c"+(i+1),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
     cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8},
-    duties:defaultDuties(),meals:{},inv:SEED.inventory.map(i=>Object.assign({id:uid()},i)),invLog:[],
+    duties:defaultDuties(),meals:{},inv:seedInv(),invLog:[],
     banners:{inv:true,meals:true},fresh:true};
 }
 const DEF=defaults();
@@ -362,7 +355,89 @@ function normalize(){
   if(!S.tab)S.tab="quarts";
 }
 normalize();
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+/* ================= SYNCHRONISATION ================= */
+let hadData=false;try{hadData=!!localStorage.getItem(KEY)||!!localStorage.getItem(KEY_V1)}catch(e){}
+function flatten(st){const r={};
+  r.settings=JSON.stringify(st.settings);
+  st.crew.forEach((c,i)=>r["crew:"+c.id]=JSON.stringify(Object.assign({},c,{pos:i})));
+  Object.entries(st.overrides||{}).forEach(([k,v])=>r["ov:"+k]=JSON.stringify(v));
+  st.duties.forEach((d,i)=>{const m=Object.assign({},d,{pos:i});delete m.overrides;r["duty:"+d.id]=JSON.stringify(m);
+    Object.entries(d.overrides||{}).forEach(([k,v])=>r["dov:"+d.id+"|"+k]=JSON.stringify(v))});
+  Object.entries(st.meals||{}).forEach(([k,v])=>{if(v&&(v.recipe||(v.items&&v.items.length)||v.done))r["meal:"+k]=JSON.stringify(v)});
+  st.inv.forEach((it,i)=>r["inv:"+it.id]=JSON.stringify(Object.assign({},it,{pos:i})));
+  (st.invLog||[]).forEach(l=>r["log:"+l.id]=JSON.stringify(l));
+  return r;
+}
+function unflatten(rec){
+  const crew=[],duties=[],inv=[],invLog=[],overrides={},meals={},dov={};let settings=null;
+  for(const [k,raw] of Object.entries(rec)){let v;try{v=JSON.parse(raw)}catch(e){continue}
+    const i=k.indexOf(":"),type=i<0?k:k.slice(0,i),rest=i<0?"":k.slice(i+1);
+    if(type==="settings")settings=v;else if(type==="crew")crew.push(v);else if(type==="ov")overrides[rest]=v;
+    else if(type==="duty")duties.push(v);else if(type==="dov"){const j=rest.indexOf("|");(dov[rest.slice(0,j)]=dov[rest.slice(0,j)]||{})[rest.slice(j+1)]=v}
+    else if(type==="meal")meals[rest]=v;else if(type==="inv")inv.push(v);else if(type==="log")invLog.push(v)}
+  const byPos=a=>a.sort((x,y)=>(x.pos||0)-(y.pos||0)).map(x=>{const y=Object.assign({},x);delete y.pos;return y});
+  const D=byPos(duties);D.forEach(d=>d.overrides=dov[d.id]||{});
+  return {settings:Object.assign({},DEF.settings,settings||S.settings),crew:byPos(crew),overrides,duties:D,meals,inv:byPos(inv),invLog:invLog.sort((a,b)=>a.t-b.t)};
+}
+function initSync(){
+  if(!S.sync){S.sync={meta:{},tomb:{},pristine:!hadData,lastPush:0,pushedOnce:false,seq:0,remote:{url:"",key:"",boat:""},lastSync:0};
+    if(hadData){const now=Date.now();Object.keys(flatten(S)).forEach(k=>S.sync.meta[k]=now)}}
+  S.sync=Object.assign({meta:{},tomb:{},pristine:false,lastPush:0,pushedOnce:false,seq:0,remote:{url:"",key:"",boat:""},lastSync:0},S.sync);
+}
+initSync();
+let lastFlat=null;
+function track(){const cur=flatten(S),sy=S.sync,now=Date.now();let ch=false;
+  if(lastFlat){for(const k in cur)if(lastFlat[k]!==cur[k]){sy.meta[k]=now;delete sy.tomb[k];ch=true}
+    for(const k in lastFlat)if(!(k in cur)){sy.tomb[k]=now;delete sy.meta[k];ch=true}}
+  lastFlat=cur;if(ch)sy.pristine=false;return cur}
+const save=()=>{track();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}renderBadge()};
+function pendingKeys(){const sy=S.sync,cur=lastFlat||flatten(S),out=[];
+  for(const k in cur)if(!sy.pushedOnce||(sy.meta[k]||0)>sy.lastPush)out.push(k);
+  for(const k in sy.tomb)if(sy.tomb[k]>sy.lastPush)out.push(k);return out}
+const remoteOK=()=>{const r=S.sync.remote;return !!(r.url&&r.key&&r.boat&&r.boat.length>=12)};
+function renderBadge(){const b=document.getElementById("syncBadge");if(!b)return;
+  if(!remoteOK()){b.hidden=true;return}const n=pendingKeys().length;b.hidden=n===0;b.textContent=`${n} changement${n>1?"s":""} à enregistrer`}
+function makePackage(){const rec=track(),sy=S.sync,meta={};Object.keys(rec).forEach(k=>meta[k]=sy.meta[k]||0);
+  return {app:"bord-tiare",v:3,full:true,at:Date.now(),records:rec,meta,tomb:Object.assign({},sy.tomb),remote:remoteOK()?sy.remote:undefined}}
+function asPackage(o){
+  if(o&&o.app==="bord-tiare"&&o.records)return o;
+  if(o&&o.settings&&Array.isArray(o.crew)){const st=JSON.parse(JSON.stringify(o));st.duties=st.duties||defaultDuties();st.meals=st.meals||{};st.inv=st.inv||seedInv();st.invLog=st.invLog||[];st.overrides=st.overrides||{};
+    st.duties.forEach(d=>{d.overrides=d.overrides||{};d.excl=d.excl||[]});const rec=flatten(st),t=o.sync?0:Date.now(),meta={};
+    Object.keys(rec).forEach(k=>meta[k]=(o.sync&&o.sync.meta&&o.sync.meta[k])||t);return {app:"bord-tiare",v:3,full:true,records:rec,meta,tomb:(o.sync&&o.sync.tomb)||{}}}
+  return null}
+function mergePackage(pkg){
+  const sy=S.sync,L=track();let rec,changed=0;
+  if(sy.pristine){rec=Object.assign({},pkg.records);sy.meta=Object.assign({},pkg.meta);sy.tomb=Object.assign({},pkg.tomb||{});
+    changed=Object.keys(rec).filter(k=>rec[k]!==L[k]).length+Object.keys(L).filter(k=>!(k in rec)).length}
+  else{rec=Object.assign({},L);
+    const keys=new Set([...Object.keys(L),...Object.keys(sy.tomb),...Object.keys(pkg.records),...Object.keys(pkg.tomb||{})]);
+    keys.forEach(k=>{
+      const lt=k in L?(sy.meta[k]||0):(k in sy.tomb?sy.tomb[k]:-1);
+      const inR=k in pkg.records,rt=inR?(pkg.meta[k]||0):(pkg.tomb&&k in pkg.tomb?pkg.tomb[k]:-1);
+      if(rt<0)return;
+      const lv=k in L?L[k]:"",rv=inR?pkg.records[k]:"";
+      if(rt>lt||(rt===lt&&rv>lv)){
+        if(inR){if(rec[k]!==rv)changed++;rec[k]=rv;sy.meta[k]=rt;delete sy.tomb[k]}
+        else{if(k in rec)changed++;delete rec[k];sy.tomb[k]=rt;delete sy.meta[k]}}
+    });
+    if(pkg.full)Object.keys(L).forEach(k=>{if(!(k in pkg.records)&&!(pkg.tomb&&k in pkg.tomb)&&!(sy.meta[k]>0)&&k in rec){delete rec[k];changed++}})}
+  Object.assign(S,unflatten(rec));
+  S.duties.forEach(d=>{d.occ=d.occ||[];d.excl=d.excl||[];d.overrides=d.overrides||{};d.per=d.per||1});
+  sy.pristine=false;S.fresh=false;
+  if(pkg.remote&&!remoteOK())sy.remote=Object.assign({},pkg.remote);
+  lastFlat=flatten(S);
+  return changed;
+}
+async function rpc(fn,body){const r=S.sync.remote,h={"Content-Type":"application/json",apikey:r.key};if(/^eyJ/.test(r.key))h.Authorization="Bearer "+r.key;
+  const res=await fetch(r.url.trim().replace(/\/+$/,"")+"/rest/v1/rpc/"+fn,{method:"POST",headers:h,body:JSON.stringify(body)});
+  if(!res.ok){let t="";try{t=await res.text()}catch(e){}throw new Error(`${res.status} ${t.slice(0,160)}`)}return res.json()}
+async function pushRemote(){const sy=S.sync,started=Date.now(),cur=track(),keys=pendingKeys(),rows=keys.map(k=>k in cur?{k,v:cur[k],t:sy.meta[k]||0}:{k,v:null,t:sy.tomb[k],d:true});
+  let n=0;for(let i=0;i<rows.length;i+=200)n+=await rpc("bord_push",{p_boat:sy.remote.boat,p_rows:rows.slice(i,i+200)});
+  sy.lastPush=started;sy.pushedOnce=true;return {sent:rows.length,applied:n}}
+async function pullRemote(){const sy=S.sync,pkg={records:{},meta:{},tomb:{},full:!(sy.seq>0)};let since=sy.seq||0,maxSeq=since,got=0;
+  for(let guard=0;guard<200;guard++){const rows=await rpc("bord_pull",{p_boat:sy.remote.boat,p_since:since});if(!rows.length)break;
+    rows.forEach(r=>{got++;if(r.deleted){pkg.tomb[r.k]=+r.t}else{pkg.records[r.k]=r.v;pkg.meta[r.k]=+r.t}maxSeq=Math.max(maxSeq,+r.seq)});since=maxSeq;if(rows.length<1000)break}
+  const changed=got?mergePackage(pkg):0;sy.seq=maxSeq;sy.lastSync=Date.now();return {got,changed}}
 const $=id=>document.getElementById(id);
 const crewById=id=>S.crew.find(c=>c.id===id);
 const nameOf=id=>(crewById(id)||{}).name||"?";
@@ -499,7 +574,7 @@ function invCompute(){
 let RW,RD,editKey=null,draft=[],dutyEdit=null,dutyDraft=[];
 const KIND={nuit:["Nuit","var(--night)"],jour:["Jour","var(--day)"],lever:["Lever","var(--dawn)"],coucher:["Coucher","var(--dusk)"]};
 function compute(){RW=assignWatches();RD=assignDuties(RW)}
-function renderAll(){renderTabs();renderView();$("exportBox").value=JSON.stringify(S)}
+function renderAll(){renderTabs();renderView();updExport()}
 
 function renderTabs(){
   const t=[["general","Général"],["quarts","Quarts"],...S.duties.map(d=>["p-"+d.id,d.name]),["inventaire","Inventaire"]];
@@ -610,7 +685,7 @@ function renderTimeline(){
   const nEdit=Object.keys(S.overrides).length-RW.orphans.length;
   $("editCount").textContent=nEdit?`${nEdit} quart${nEdit>1?"s":""} modifié${nEdit>1?"s":""}`:"Planning auto";
   $("orphans").innerHTML=RW.orphans.length?`<div class="notice"><span>${RW.orphans.length} modification${RW.orphans.length>1?"s":""} ne correspond${RW.orphans.length>1?"ent":""} plus à un quart (horaires changés).</span><button class="btn small" type="button" data-act="clearOrphans">Les effacer</button></div>`:"";
-  $("exportBox").value=JSON.stringify(S);
+  updExport();
 }
 function restWarn(id,a,b,skipKey){
   const rest=S.settings.rest*H;
@@ -658,7 +733,64 @@ function renderGen(){
       <span class="pill">${n} événement${n>1?"s":""}</span>
     </div>
     <p class="hint" id="calMsg">${DL?"<strong>Ici, seul le .csv se télécharge ; le .ics est dans la version hors ligne.</strong> ":""}.ics : iPhone (ouvrir le fichier), Google Agenda (import sur ordinateur), Outlook ; inclut les rappels. .csv : import Google Agenda sans rappel, heures converties dans le fuseau de ton agenda. Importe dans un agenda dédié « Bord » : après un changement, tu le vides et tu réimportes.</p>
+  </section>
+  <section class="panel" id="savePanel"><h2>Partage entre téléphones</h2>
+    ${S.sync.pristine?`<div class="notice info" style="margin-bottom:10px"><span>Ce téléphone n'a encore rien reçu. Commence par « Récupérer les changements » ou « Intégrer un fichier » avant de modifier quoi que ce soit.</span></div>`:""}
+    <p class="hint" style="margin-top:0">Chacun travaille sur son téléphone puis enregistre ses changements ; les autres les récupèrent. Pour chaque élément (un équipier, un repas, un quart modifié, une denrée…), la modification la plus récente l'emporte : deux personnes qui touchent des éléments différents ne s'écrasent pas.</p>
+    ${syncOnlineHtml()}
+    <h2 style="margin-top:16px">Sans réseau</h2>
+    <div class="row"><button class="btn primary small" type="button" data-sy="share">Partager mes changements</button>
+      <label class="btn small" style="display:inline-flex;align-items:center">Intégrer un fichier<input type="file" id="syFile" accept=".json,application/json" hidden></label></div>
+    <p class="hint">« Partager » crée un fichier à envoyer par AirDrop, Quick Share ou Bluetooth (pas besoin d'internet). Le destinataire touche « Intégrer un fichier » : ses changements et les tiens sont fusionnés.</p>
+    <p class="hint" id="syMsg" role="status"></p>
+    <details id="advPanel" style="margin-top:10px"><summary class="hint" style="cursor:pointer">Avancé : copier-coller, réinitialiser</summary>
+      <label class="f" style="margin-top:8px">Export<textarea id="exportBox" readonly></textarea></label>
+      <div class="row" style="margin-top:8px"><button class="btn small" type="button" data-sy="copy">Copier</button></div>
+      <label class="f" style="margin-top:12px">Coller un export pour le fusionner<textarea id="importBox" placeholder="Colle ici un export"></textarea></label>
+      <div class="row" style="margin-top:8px"><button class="btn small" type="button" data-sy="paste">Fusionner</button></div>
+      <div class="row" style="margin-top:14px" id="resetZone"><button class="btn small" type="button" data-sy="reset">Tout réinitialiser sur ce téléphone</button></div>
+    </details>
   </section>`;
+}
+let syEditCfg=false,syBusy=false;
+function syncOnlineHtml(){
+  if(DL)return `<h2 style="margin-top:12px">En ligne</h2><p class="hint" style="margin:0">La synchronisation en ligne fonctionne depuis la version GitHub ou le fichier hors ligne, pas depuis claude.ai. Le partage par fichier ci-dessous fonctionne partout.</p>`;
+  const r=S.sync.remote,n=pendingKeys().length;
+  if(!remoteOK()||syEditCfg)return `<h2 style="margin-top:12px">En ligne</h2>
+    <div class="grid2"><label class="f full">Adresse du projet Supabase<input type="text" id="syUrl" placeholder="https://xxxx.supabase.co" value="${esc(r.url)}" autocomplete="off"></label>
+    <label class="f full">Clé publique (anon / publishable)<input type="text" id="syKey" value="${esc(r.key)}" autocomplete="off"></label>
+    <label class="f full">Code du bateau (12 caractères min., le même sur tous les téléphones)<input type="text" id="syBoat" value="${esc(r.boat)}" autocomplete="off"></label></div>
+    <div class="row" style="margin-top:8px"><button class="btn small" type="button" data-sy="gen">Créer un code</button><button class="btn primary small" type="button" data-sy="cfg">Enregistrer la configuration</button>${remoteOK()?`<button class="btn ghost small" type="button" data-sy="cfgCancel">Annuler</button>`:""}</div>
+    <p class="hint">À faire une fois : crée un projet gratuit sur supabase.com, exécute le script <b>supabase-setup.sql</b> du dépôt dans « SQL Editor », puis copie ici l'adresse et la clé publique (Project Settings › API). Les autres téléphones reçoivent cette configuration avec le premier fichier partagé.</p>`;
+  return `<h2 style="margin-top:12px">En ligne</h2>
+    <div class="row"><button class="btn primary small" type="button" data-sy="push" ${syBusy?"disabled":""}>Enregistrer les changements</button><button class="btn small" type="button" data-sy="pull" ${syBusy?"disabled":""}>Récupérer les changements</button></div>
+    <p class="hint">${n?`<b>${n} changement${n>1?"s":""}</b> pas encore enregistré${n>1?"s":""}.`:"Tout est enregistré."} ${S.sync.lastSync?`Dernière récupération : ${fmtDay(S.sync.lastSync)} ${fmtT(S.sync.lastSync)}.`:"Jamais récupéré."} « Enregistrer » envoie tes changements puis récupère ceux des autres.</p>
+    <p class="hint">Base ${esc(r.url.replace(/^https?:\/\//,""))} · bateau ${esc(r.boat.slice(0,4))}… <button class="btn ghost small" type="button" data-sy="cfgEdit">Modifier</button></p>`;
+}
+function updExport(){const a=document.getElementById("advPanel"),b=document.getElementById("exportBox");if(a&&b&&a.open)b.value=JSON.stringify(makePackage())}
+function syMsg(t){const m=document.getElementById("syMsg");if(m)m.textContent=t}
+function afterMerge(changed,how){editKey=null;dutyEdit=null;INV=null;compute();renderCrew();renderSettings();renderAll();save();syMsg(`${how} : ${changed} élément${changed>1?"s":""} mis à jour.`)}
+async function syAction(act,el){
+  if(act==="gen"){const a="abcdefghjkmnpqrstuvwxyz23456789";let c="tiare-";const r=new Uint32Array(14);(window.crypto||{getRandomValues:x=>x.map(()=>Math.random()*4e9)}).getRandomValues(r);r.forEach(x=>c+=a[x%a.length]);document.getElementById("syBoat").value=c;return}
+  if(act==="cfg"){const url=document.getElementById("syUrl").value.trim(),key=document.getElementById("syKey").value.trim(),boat=document.getElementById("syBoat").value.trim();
+    if(!/^https:\/\//.test(url)||!key||boat.length<12){syMsg("Renseigne l'adresse (https://…), la clé et un code d'au moins 12 caractères.");return}
+    S.sync.remote={url,key,boat};syEditCfg=false;save();renderGen();syMsg("Configuration enregistrée. Touche « Récupérer les changements » pour vérifier la connexion.");return}
+  if(act==="cfgEdit"){syEditCfg=true;renderGen();return}
+  if(act==="cfgCancel"){syEditCfg=false;renderGen();return}
+  if(act==="push"||act==="pull"){if(syBusy)return;syBusy=true;renderGen();syMsg(act==="push"?"Envoi en cours…":"Récupération en cours…");
+    try{let sent=null;if(act==="push")sent=await pushRemote();const r=await pullRemote();syBusy=false;
+      afterMerge(r.changed,sent?`${sent.sent} changement${sent.sent>1?"s":""} envoyé${sent.sent>1?"s":""}, ${r.got} reçu${r.got>1?"s":""}`:`${r.got} reçu${r.got>1?"s":""}`);save();renderGen()}
+    catch(e){syBusy=false;renderGen();syMsg(/Failed to fetch|NetworkError|Load failed/i.test(String(e))?"Pas de connexion à la base : réessaie quand il y a du réseau, ou partage par fichier.":"Erreur de la base : "+e.message)}return}
+  if(act==="share"){const text=JSON.stringify(makePackage()),d=new Date(),name=`bord-${d.getFullYear()}${p2(d.getMonth()+1)}${p2(d.getDate())}-${p2(d.getHours())}${p2(d.getMinutes())}.json`;
+    if(DL){try{await DL.save({filename:name,data:text});syMsg("Fichier enregistré : envoie-le aux autres.")}catch(e){syMsg(e&&e.code==="declined"?"Partage annulé.":"Enregistrement du fichier impossible ici.")}return}
+    try{const f=new File([text],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Tableau des quarts"});syMsg("Fichier partagé.");return}}
+    catch(e){if(e&&e.name==="AbortError"){syMsg("Partage annulé.");return}}
+    try{const url=URL.createObjectURL(new Blob([text],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);syMsg(`Fichier ${name} téléchargé : envoie-le aux autres.`)}catch(e){syMsg("Le navigateur a bloqué le fichier : utilise Avancé › Copier.")}return}
+  if(act==="copy"){const t=document.getElementById("exportBox");t.value=JSON.stringify(makePackage());try{navigator.clipboard.writeText(t.value).then(()=>syMsg("Copié."),()=>{t.select();syMsg("Texte sélectionné, copie-le manuellement.")})}catch(e){t.select()}return}
+  if(act==="paste"){try{const pkg=asPackage(JSON.parse(document.getElementById("importBox").value));if(!pkg)throw 0;afterMerge(mergePackage(pkg),"Fusion faite");}catch(e){syMsg("Texte non reconnu : colle l'export complet, sans le modifier.")}return}
+  if(act==="reset"){document.getElementById("resetZone").innerHTML=`<span class="confirm">Effacer tout ce qui est sur ce téléphone ? Ce qui a été enregistré en ligne ou partagé reste récupérable. <button class="btn small danger" type="button" data-sy="resetYes">Oui, réinitialiser</button><button class="btn ghost small" type="button" data-sy="resetNo">Annuler</button></span>`;return}
+  if(act==="resetNo"){renderGen();return}
+  if(act==="resetYes"){const remote=S.sync.remote;S=defaults();normalize();hadData=false;initSync();S.sync.remote=remote;lastFlat=null;editKey=null;dutyEdit=null;boot();syMsg("Téléphone réinitialisé. Récupère ou intègre les changements des autres.");return}
 }
 const KLBL={nuit:"de nuit",jour:"de jour",lever:"lever du soleil",coucher:"coucher du soleil"};
 function calEvents(){
@@ -850,7 +982,7 @@ function renderInv(){
 }
 
 /* ================= ÉVÉNEMENTS ================= */
-function recompute(){compute();INV=null;renderView();save();$("exportBox").value=JSON.stringify(S)}
+function recompute(){compute();INV=null;renderView();save();updExport()}
 $("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
   if(b.dataset.act==="addDuty"){const id=uid();S.duties.push({id,name:"Nouveau planning",meal:false,per:1,occ:[{id:uid(),label:"Matin",time:"09:00",dur:0.5}],excl:[],overrides:{}});compute();dutyEdit="__settings";go("p-"+id);dutyEdit="__settings";renderView();setTimeout(()=>{const n=$("dName");n&&(n.focus(),n.select())},0);return}
   go(b.dataset.tab)});
@@ -899,12 +1031,16 @@ $("nowBtn").addEventListener("click",()=>{const now=Date.now();const sl=RW.segs.
   if(!sl)return;$("onlyMine").checked=false;renderTimeline();const el=document.getElementById("slot-"+sl.key);el&&el.scrollIntoView({block:"center",behavior:"smooth"})});
 const VG=$("genDyn");
 VG.addEventListener("change",e=>{const t=e.target;
+  if(t.id&&t.id.startsWith("sy")&&t.id!=="syFile")return;
+  if(t.id==="importBox")return;
+  if(t.id==="syFile"){const f=t.files&&t.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{try{const pkg=asPackage(JSON.parse(fr.result));if(!pkg)throw 0;afterMerge(mergePackage(pkg),"Fichier intégré")}catch(x){syMsg("Fichier non reconnu : choisis un fichier partagé depuis cet outil.")}};fr.readAsText(f);t.value="";return}
   if(t.id==="gGap"){S.settings.gap=Math.max(0,Math.min(6,parseFloat(t.value)||0));t.value=S.settings.gap;recompute();return}
   if(t.dataset.kind){S.cal.kinds=S.cal.kinds||{};S.cal.kinds[t.dataset.kind]=t.checked}
   else if(t.id==="calWho")S.cal.who=t.value;else if(t.id==="calWhen")S.cal.when=t.value;else if(t.id==="calAlarm")S.cal.alarm=t.value;
   else if(t.id==="calBoat"||t.id==="calAgenda"){let v=parseFloat(t.value);if(isNaN(v))v=8;S.cal[t.id==="calBoat"?"boat":"agenda"]=Math.max(-12,Math.min(14,v))}
-  save();renderGen();$("exportBox").value=JSON.stringify(S)});
-VG.addEventListener("click",e=>{if(e.target.id==="icsBtn")offer("ics","text/calendar",buildICS());if(e.target.id==="csvBtn")offer("csv","text/csv",buildCSV())});
+  save();renderGen();updExport()});
+VG.addEventListener("toggle",e=>{if(e.target.id==="advPanel")updExport()},true);
+VG.addEventListener("click",e=>{const sy=e.target.closest("[data-sy]");if(sy){syAction(sy.dataset.sy,sy);return}if(e.target.id==="icsBtn")offer("ics","text/calendar",buildICS());if(e.target.id==="csvBtn")offer("csv","text/csv",buildCSV())});
 
 /* --- plannings --- */
 const curDuty=()=>S.duties.find(d=>"p-"+d.id===S.tab);
@@ -930,7 +1066,7 @@ V.addEventListener("change",e=>{
     else x.q=t.value===""?"":Math.max(0,parseFloat(t.value)||0);
     INV=null;save();const u=V.querySelector(`[data-unit="${i}"]`),inv=invItem(x.n);
     if(u){u.className="unit"+(x.n&&!inv?" unknown":"");u.textContent=inv?`${inv.unit} · reste ${fmtQ(invLeft(inv))}`:(x.n?"absent de l'inventaire":"")}
-    $("exportBox").value=JSON.stringify(S);}
+    updExport();}
 });
 V.addEventListener("click",e=>{
   const duty=curDuty();if(!duty)return;
@@ -970,7 +1106,7 @@ const VI=$("view-inv");
 VI.addEventListener("input",e=>{if(e.target.id==="invSearch"){invFilter=e.target.value;const pos=e.target.selectionStart;renderInv();const s=$("invSearch");s.focus();try{s.setSelectionRange(pos,pos)}catch(x){}}});
 VI.addEventListener("change",e=>{const t=e.target;
   if(t.id==="invAlerts"){invAlertsOnly=t.checked;renderInv();return}
-  if(t.dataset.invF==="initial"){const tr=t.closest("[data-inv]"),it=S.inv.find(i=>i.id===tr.dataset.inv);if(it){it.initial=Math.max(0,parseFloat(t.value)||0);save();renderInv();$("exportBox").value=JSON.stringify(S)}}
+  if(t.dataset.invF==="initial"){const tr=t.closest("[data-inv]"),it=S.inv.find(i=>i.id===tr.dataset.inv);if(it){it.initial=Math.max(0,parseFloat(t.value)||0);save();renderInv();updExport()}}
 });
 VI.addEventListener("submit",e=>{if(e.target.id!=="invAddForm")return;e.preventDefault();
   const name=$("iaName").value.trim(),unit=$("iaUnit").value.trim(),q=parseFloat($("iaQty").value);
@@ -987,34 +1123,23 @@ VI.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(!a)ret
   if(act==="delInvYes"){S.inv=S.inv.filter(i=>i.id!==a.dataset.id);save();renderTabs();renderInv()}
   if(act==="cancel")renderInv();
   if(act==="hideBanner"){S.banners[a.dataset.b]=false;save();renderInv()}
-  if(act==="loadSeed"){S.inv=SEED.inventory.map(i=>Object.assign({id:uid()},i));S.banners.inv=true;save();renderTabs();renderInv()}
+  if(act==="loadSeed"){const keep={};S.inv.forEach(i=>keep[norm(i.name)]=i.id);S.inv=seedInv().map(i=>Object.assign(i,keep[norm(i.name)]?{id:keep[norm(i.name)]}:{}));S.banners.inv=true;save();renderTabs();renderInv()}
   if(act==="askSeed"){$("seedZone").innerHTML=`<span class="confirm">Remplacer toutes les quantités de départ par la liste prévue ? Les sorties et les repas sont conservés. <button class="btn small danger" type="button" data-act="loadSeed">Remplacer</button><button class="btn ghost small" type="button" data-act="cancel">Annuler</button></span>`}
 });
 
 /* --- sauvegarde --- */
-$("copyBtn").addEventListener("click",()=>{const t=$("exportBox");const ok=()=>$("copyMsg").textContent="Copié.";const fb=()=>{t.focus();t.select();$("copyMsg").textContent="Texte sélectionné, copie-le manuellement."};
-  try{navigator.clipboard.writeText(t.value).then(ok,fb)}catch(e){fb()}});
-$("importBtn").addEventListener("click",()=>{
-  try{const d=JSON.parse($("importBox").value);if(!d.settings||!Array.isArray(d.crew))throw 0;
-    S=d;if(!S.v){S.duties=defaultDuties();S.inv=SEED.inventory.map(i=>Object.assign({id:uid()},i));S.banners={inv:true,meals:false}}
-    normalize();editKey=null;dutyEdit=null;boot();$("importMsg").textContent="Planning importé.";$("importBox").value="";
-  }catch(e){$("importMsg").textContent="Texte non reconnu : colle l'export complet, sans le modifier."}});
-$("resetZone").addEventListener("click",e=>{const z=$("resetZone");
-  if(e.target.id==="resetBtn")z.innerHTML=`<span class="confirm">Effacer équipage, réglages, corvées, repas et inventaire ? <button class="btn small danger" type="button" data-r="yes">Oui, tout réinitialiser</button><button class="btn ghost small" type="button" data-r="no">Annuler</button></span>`;
-  else if(e.target.dataset.r==="yes"){S=defaults();normalize();editKey=null;dutyEdit=null;boot();z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`}
-  else if(e.target.dataset.r==="no")z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`});
-
+$("syncBadge").addEventListener("click",()=>go("general"));
 function boot(){
   compute();
   if(S.fresh){const m=S.duties.find(d=>d.meal);if(m)prefillMeals(m);S.fresh=false}
-  renderSettings();renderCrew();renderAll();save();
+  renderSettings();renderCrew();renderAll();save();renderBadge();
 }
 const h=(location.hash||"").slice(1);if(h&&(h==="quarts"||h==="general"||h==="inventaire"||h.startsWith("p-")))S.tab=h;
 if(window.matchMedia("(max-width:860px)").matches)$("settingsPanel").open=false;
 window.addEventListener("hashchange",()=>{const x=location.hash.slice(1);if(x&&x!==S.tab&&(x==="quarts"||x==="general"||x==="inventaire"||S.duties.some(d=>"p-"+d.id===x)))go(x)});
 boot();
 setInterval(()=>{if(!editKey&&!dutyEdit&&S.tab==="quarts")renderTimeline()},60000);
-window.__T={get S(){return S},assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
+window.__T={get S(){return S},save:()=>save(),syAction,recompute:()=>recompute(),flatten,mergePackage,makePackage,asPackage,pendingKeys,assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
 })();
 </script>
 

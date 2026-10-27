@@ -8,4 +8,24 @@ Outil de bord pour la traversée Lombok → Thaïlande, en une seule page sans s
 - **Général** : équipage, battement minimum entre deux tâches (toutes tâches confondues) et export agenda (.ics / .csv Google) en choisissant quoi exporter (quarts, repas, corvées), sauvegarde et transfert entre téléphones.
 - **Inventaire** : stock de départ, consommé (repas faits + sorties hors repas), reste, besoins des menus prévus et alertes de manque.
 
-Les données restent dans le navigateur de chaque appareil (localStorage). La section « Sauvegarde et transfert » permet de copier l'état complet d'un téléphone à l'autre. La page fonctionne hors ligne une fois chargée.
+Les données sont gardées dans le navigateur de chaque téléphone et la page fonctionne hors ligne. Pour travailler à plusieurs, l'onglet **Général › Partage entre téléphones** propose deux voies, qui fusionnent les changements de chacun : pour chaque élément (équipier, repas, quart modifié, denrée…), la modification la plus récente l'emporte.
+
+## Partage sans réseau
+
+« Partager mes changements » crée un fichier `.json` à envoyer par AirDrop, Quick Share ou Bluetooth. Le destinataire choisit « Intégrer un fichier ». Aucun compte ni internet nécessaire.
+
+## Synchronisation en ligne (quand il y a du réseau)
+
+À faire une fois, par une seule personne :
+
+1. Créer un compte et un projet gratuits sur [supabase.com](https://supabase.com).
+2. Dans le projet : **SQL Editor › New query**, coller le contenu de [`supabase-setup.sql`](supabase-setup.sql), puis **Run**.
+3. Dans **Project Settings › API** : copier l'adresse du projet (`https://xxxx.supabase.co`) et la clé publique (`anon` ou `publishable`).
+4. Dans l'outil, onglet **Général › En ligne** : coller l'adresse et la clé, toucher « Créer un code » (code du bateau), puis « Enregistrer la configuration », puis « Enregistrer les changements ».
+5. Partager une fois un fichier (voie sans réseau) aux autres téléphones : ils reçoivent la configuration avec, et n'ont plus qu'à toucher « Récupérer les changements ».
+
+Ensuite : « Enregistrer les changements » envoie les siens et récupère ceux des autres ; « Récupérer les changements » ne fait que récupérer.
+
+Sécurité : la table n'est accessible qu'au travers de deux fonctions qui exigent le code du bateau. Toute personne qui connaît l'adresse, la clé publique et le code peut lire et modifier le planning : ne les publie pas (ils ne sont pas dans ce dépôt).
+
+Sur un téléphone neuf, commencer par récupérer ou intégrer avant de modifier quoi que ce soit. La synchronisation en ligne ne fonctionne pas depuis la version claude.ai de la page (le partage par fichier, si).
