@@ -230,9 +230,10 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
           <label class="check"><input type="checkbox" id="sStag"><span>Quarts décalés (relève à mi-quart)<small>Un quart de 3 h = 1 h 30 avec celui qui finit, puis 1 h 30 avec celui qui arrive. Nécessite 2 équipiers par quart ou plus.</small></span></label>
           <label class="f">Lever du soleil<input type="time" id="sSunrise"></label>
           <label class="f">Coucher du soleil<input type="time" id="sSunset"></label>
-          <label class="f full">Repos minimum entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
+          <label class="f">Repos entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
+          <label class="f">Battement entre deux tâches (h)<input type="number" id="sGap" min="0" max="6" step="0.25"></label>
         </div>
-        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster en route. Les heures de nuit comptées dans l'équité sont celles de la plage de nuit.</p>
+        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster en route. Les heures de nuit comptées dans l'équité sont celles de la plage de nuit. Le battement s'applique à toutes les tâches : personne n'est mis de corvée ou de repas moins de ce délai avant ou après un quart ou une autre tâche.</p>
       </details>
 
       <section class="panel">
@@ -331,7 +332,7 @@ function defaults(){
   const d=new Date();d.setDate(d.getDate()+1);d.setHours(18,0,0,0);
   const names=["Mehdi","Équipier 2","Équipier 3","Équipier 4","Équipier 5","Équipier 6","Équipier 7","Équipier 8"];
   return {v:2,tab:"quarts",
-    settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3,nightStart:"18:00",nightEnd:"06:00",nightOnly:false,stag:false},
+    settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3,gap:1,nightStart:"18:00",nightEnd:"06:00",nightOnly:false,stag:false},
     crew:names.map((n,i)=>({id:uid(),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
     cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8},
     duties:defaultDuties(),meals:{},inv:SEED.inventory.map(i=>Object.assign({id:uid()},i)),invLog:[],
@@ -446,13 +447,13 @@ function assignDuties(RW){
     const inst=instancesOf(duty),ids=new Set(S.crew.map(c=>c.id));
     const pool=S.crew.filter(c=>!duty.excl.includes(c.id)),cnt={};S.crew.forEach(c=>cnt[c.id]=0);
     const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
-    const isBusy=(id,a,b)=>busy[id].some(x=>x.a<b&&x.b>a);
+    const gap=(+S.settings.gap||0)*H,isBusy=(id,a,b,g)=>busy[id].some(x=>x.a<b+g&&x.b>a-g);
     inst.forEach(it=>{
       let team;const ov=duty.overrides[it.key];
       if(ov){team=ov.filter(id=>ids.has(id));it.edited=true}
       else{team=[];
         for(let k=0;k<Math.min(duty.per,pool.length);k++){
-          const cands=pool.filter(p=>!team.includes(p.id)),free=cands.filter(p=>!isBusy(p.id,it.start,it.end)),use=free.length?free:cands;
+          const cands=pool.filter(p=>!team.includes(p.id)),free=cands.filter(p=>!isBusy(p.id,it.start,it.end,gap)),free0=free.length?free:cands.filter(p=>!isBusy(p.id,it.start,it.end,0)),use=free0.length?free0:cands;
           const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
           use.sort((a,b)=>cnt[a.id]-cnt[b.id]||pair(a)-pair(b)||total[a.id]-total[b.id]||order[a.id]-order[b.id]);
           team.push(use[0].id);
@@ -509,7 +510,7 @@ function go(tab){S.tab=tab;editKey=null;dutyEdit=null;save();renderTabs();render
 function renderSettings(){
   const s=S.settings;
   $("sStart").value=s.start;$("sDays").value=s.days;$("sPer").value=s.per;$("sDurDay").value=s.durDay;$("sDurNight").value=s.durNight;
-  $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
+  $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sGap").value=s.gap;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
   $("sNightOnly").checked=!!s.nightOnly;$("sStag").checked=!!s.stag;$("sDurDay").disabled=!!s.nightOnly;
 }
 function renderCrew(){
@@ -664,7 +665,8 @@ function renderDuty(duty){
       <div class="row" style="margin-top:8px"><button class="btn small" type="button" data-act="addOcc">Ajouter un horaire</button></div>
       <h2 style="margin-top:14px">Participants</h2>
       <div class="pick">${S.crew.map(c=>`<button type="button" data-act="toggleExcl" data-id="${c.id}" aria-pressed="${!duty.excl.includes(c.id)}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}</button>`).join("")}</div>
-      <p class="hint">La répartition évite les personnes de quart ou déjà prises par une autre corvée au même moment.</p>
+      <label class="f" style="margin-top:10px">Battement entre deux tâches, toutes tâches confondues (h)<input type="number" id="dGap" min="0" max="6" step="0.25" value="${S.settings.gap}"></label>
+      <p class="hint">Personne n'est programmé moins de ce délai avant ou après un quart ou une autre tâche (réglage commun à tous les plannings). Si personne n'est libre, la règle est levée pour cette occurrence.</p>
       <div class="row" style="margin-top:12px" id="delDutyZone"><button class="btn small danger" type="button" data-act="delDuty">Supprimer ce planning</button></div>
     </details>
     <section class="panel"><h2>Équité · ${esc(duty.name)}</h2>
@@ -699,7 +701,7 @@ function renderDuty(duty){
     <div class="row"><span class="pill">${Object.keys(duty.overrides).length-R.orphans.length} modifiée(s)</span></div></div>${banner}${orph}<div class="timeline">${list}</div></section>`;
 }
 function dutyWarn(id,it,dutyId){
-  const b=(RD.busy[id]||[]).find(x=>x.a<it.end&&x.b>it.start&&!(x.what===S.duties.find(d=>d.id===dutyId).name.toLowerCase()&&x.a===it.start));
+  const gap=(+S.settings.gap||0)*H,b=(RD.busy[id]||[]).find(x=>x.a<it.end+gap&&x.b>it.start-gap&&!(x.what===S.duties.find(d=>d.id===dutyId).name.toLowerCase()&&x.a===it.start));
   return b?`${b.what} ${fmtT(b.a)}–${fmtT(b.b)}`:"";
 }
 function dutyEditor(duty,it){
@@ -778,7 +780,7 @@ $("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)
   go(b.dataset.tab)});
 
 const bindNum=(id,k,min,max)=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=S.settings[k];v=Math.min(max,Math.max(min,v));S.settings[k]=v;e.target.value=v;editKey=null;recompute()});
-bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);
+bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);bindNum("sGap","gap",0,6);
 [["sStart","start"],["sSunrise","sunrise"],["sSunset","sunset"],["sNightStart","nightStart"],["sNightEnd","nightEnd"]].forEach(([id,k])=>$(id).addEventListener("change",e=>{if(!e.target.value)return;S.settings[k]=e.target.value;editKey=null;recompute()}));
 $("sNightOnly").addEventListener("change",e=>{S.settings.nightOnly=e.target.checked;$("sDurDay").disabled=e.target.checked;editKey=null;recompute()});
 $("sStag").addEventListener("change",e=>{S.settings.stag=e.target.checked;if(e.target.checked&&S.settings.per<2){S.settings.per=2;$("sPer").value=2}editKey=null;recompute()});
@@ -829,6 +831,7 @@ V.addEventListener("change",e=>{
   const duty=curDuty();if(!duty)return;const t=e.target;
   if(t.id==="dName"){duty.name=t.value.trim()||duty.name;renderTabs();recompute();return}
   if(t.id==="dPer"){duty.per=Math.max(1,Math.min(8,parseInt(t.value)||1));recompute();return}
+  if(t.id==="dGap"){S.settings.gap=Math.max(0,Math.min(6,parseFloat(t.value)||0));$("sGap").value=S.settings.gap;dutyEdit="__settings";recompute();return}
   if(t.id==="dMeal"){duty.meal=t.checked;recompute();return}
   if(t.id==="dFocus"){S.focus=t.value;save();renderView();return}
   if(t.id==="dOccN"){let n=Math.max(1,Math.min(6,parseInt(t.value)||1));
