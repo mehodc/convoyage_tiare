@@ -240,16 +240,6 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
       </details>
 
       <section class="panel">
-        <h2>Équipage</h2>
-        <ul class="crew" id="crewList"></ul>
-        <form class="addrow" id="addForm">
-          <input type="text" id="addName" placeholder="Prénom de l'équipier" aria-label="Prénom du nouvel équipier">
-          <button class="btn primary" type="submit">Ajouter</button>
-        </form>
-        <p class="hint">Décocher « de quart » sort quelqu'un de la rotation des quarts (skipper, malade) sans l'effacer. Les corvées se règlent dans chaque onglet.</p>
-      </section>
-
-      <section class="panel">
         <h2>Équité des quarts</h2>
         <div class="tablewrap"><table class="stats" id="stats"></table></div>
         <div class="spread" id="spread"></div>
@@ -281,17 +271,28 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
   <div class="col" id="view-inv" hidden></div>
 
   <!-- ===== GÉNÉRAL ===== -->
-  <div class="main gen" id="view-gen" hidden></div>
-
-  <details class="panel" id="savePanel">
-    <summary><h2>Sauvegarde et transfert</h2></summary>
+  <div class="main gen" id="view-gen" hidden>
+    <section class="panel">
+      <h2>Équipage</h2>
+      <ul class="crew" id="crewList"></ul>
+      <form class="addrow" id="addForm">
+        <input type="text" id="addName" placeholder="Prénom de l'équipier" aria-label="Prénom du nouvel équipier">
+        <button class="btn primary" type="submit">Ajouter</button>
+      </form>
+      <p class="hint">Décocher « de quart » sort quelqu'un de la rotation des quarts (skipper, malade) sans l'effacer. Les participants aux corvées se règlent dans chaque planning.</p>
+    </section>
+    <div id="genDyn" style="display:contents"></div>
+    <section class="panel" id="savePanel">
+    <h2>Sauvegarde et transfert</h2>
     <p class="hint" style="margin-top:0">Tout (quarts, corvées, repas, inventaire) est gardé sur cet appareil. Pour le transférer sur un autre téléphone, copie ce texte et colle-le de l'autre côté.</p>
     <label class="f">Export<textarea id="exportBox" readonly></textarea></label>
     <div class="row" style="margin-top:8px"><button class="btn small" id="copyBtn" type="button">Copier</button><span class="hint" id="copyMsg" style="margin:0"></span></div>
     <label class="f" style="margin-top:12px">Import<textarea id="importBox" placeholder="Colle ici un export"></textarea></label>
     <div class="row" style="margin-top:8px"><button class="btn small" id="importBtn" type="button">Importer</button><span class="hint" id="importMsg" style="margin:0"></span></div>
     <div class="row" style="margin-top:14px" id="resetZone"><button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button></div>
-  </details>
+    </section>
+  </div>
+
 </div>
 
 <script>
@@ -585,7 +586,7 @@ function renderGen(){
   const c=S.cal;if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
   const n=calEvents().length;
   const kinds=[["quarts","Quarts",RW.watches.length+" quarts"],...S.duties.map(d=>[d.id,d.name,RD.res[d.id].inst.length+" occurrences"+(d.meal?", avec la recette":"")])];
-  $("view-gen").innerHTML=`
+  $("genDyn").innerHTML=`
   <section class="panel"><h2>Règles communes</h2>
     <div class="grid2">
       <label class="f full">Battement entre deux tâches, toutes tâches confondues (h)<input type="number" id="gGap" min="0" max="6" step="0.25" value="${S.settings.gap}"></label>
@@ -845,7 +846,7 @@ $("timeline").addEventListener("click",e=>{
 $("orphans").addEventListener("click",e=>{if(e.target.closest("[data-act=clearOrphans]")){RW.orphans.forEach(k=>delete S.overrides[k]);recompute()}});
 $("nowBtn").addEventListener("click",()=>{const now=Date.now();const sl=RW.segs.find(s=>now>=s.start&&now<s.end)||RW.segs.find(s=>s.start>now)||RW.segs[0];
   if(!sl)return;$("onlyMine").checked=false;renderTimeline();const el=document.getElementById("slot-"+sl.key);el&&el.scrollIntoView({block:"center",behavior:"smooth"})});
-const VG=$("view-gen");
+const VG=$("genDyn");
 VG.addEventListener("change",e=>{const t=e.target;
   if(t.id==="gGap"){S.settings.gap=Math.max(0,Math.min(6,parseFloat(t.value)||0));t.value=S.settings.gap;recompute();return}
   if(t.dataset.kind){S.cal.kinds=S.cal.kinds||{};S.cal.kinds[t.dataset.kind]=t.checked}
