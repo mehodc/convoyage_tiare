@@ -8,12 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout : panneau de bord (réglages, équipage, équité) à gauche, journal de quarts par jour à droite ; une colonne sur téléphone */
+/* Layout : onglets en tête ; chaque planning = panneau de réglages à gauche, journal par jour à droite ; inventaire pleine largeur ; une colonne sur téléphone */
 :root{
   --bg:#ECF0F2; --surface:#FFFFFF; --sunk:#F4F7F8; --ink:#13283A; --muted:#5A6B78; --line:#D2DBE1;
   --sea:#1E6A86; --sea-ink:#FFFFFF; --sea-soft:#DCEBF1;
   --night:#1B2B44; --day:#EFE3B0; --dawn:#E3855A; --dusk:#A9567A;
   --warn:#B4700E; --warn-soft:#F8ECD7; --edit:#7A4FB0; --edit-soft:#EEE6F7;
+  --ok:#2F7D4F; --ok-soft:#DFF0E5; --bad:#B23A3A; --bad-soft:#F7E0E0;
   --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
@@ -22,26 +23,34 @@
   --bg:#0D1720; --surface:#14232F; --sunk:#101D27; --ink:#E2EBF1; --muted:#93A5B3; --line:#263B4C;
   --sea:#5DB3D0; --sea-ink:#0B1A24; --sea-soft:#17394A;
   --night:#08111C; --day:#6A6340; --dawn:#E8976B; --dusk:#C47595;
-  --warn:#E3A44A; --warn-soft:#3A2E17; --edit:#B595E0; --edit-soft:#2C2240; color-scheme:dark}}
+  --warn:#E3A44A; --warn-soft:#3A2E17; --edit:#B595E0; --edit-soft:#2C2240;
+  --ok:#6CC18E; --ok-soft:#173527; --bad:#EE7B7B; --bad-soft:#3C1E22; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D1720; --surface:#14232F; --sunk:#101D27; --ink:#E2EBF1; --muted:#93A5B3; --line:#263B4C;
   --sea:#5DB3D0; --sea-ink:#0B1A24; --sea-soft:#17394A;
   --night:#08111C; --day:#6A6340; --dawn:#E8976B; --dusk:#C47595;
-  --warn:#E3A44A; --warn-soft:#3A2E17; --edit:#B595E0; --edit-soft:#2C2240; color-scheme:dark}
+  --warn:#E3A44A; --warn-soft:#3A2E17; --edit:#B595E0; --edit-soft:#2C2240;
+  --ok:#6CC18E; --ok-soft:#173527; --bad:#EE7B7B; --bad-soft:#3C1E22; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
-.wrap{max-width:1180px;margin:0 auto;display:grid;gap:20px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
 header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
 h1{font-family:var(--f-display);font-weight:700;font-size:2.1rem;letter-spacing:.01em;margin:0;line-height:1;text-wrap:balance}
 .sub{color:var(--muted);margin:4px 0 0;font-size:.92rem}
 .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:.8rem;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:5px}
-.sw{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid var(--line);flex:none}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:2px solid var(--line);scrollbar-width:thin}
+nav.tabs button{font-family:var(--f-display);font-weight:600;font-size:1.05rem;letter-spacing:.04em;text-transform:uppercase;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:8px 14px;color:var(--muted);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--sea)}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button.add{color:var(--sea)}
 .main{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
 @media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
 .side{display:grid;gap:16px;min-width:0}
+.col{display:grid;gap:14px;min-width:0}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
 .panel h2{font-family:var(--f-display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.08em;margin:0 0 10px;color:var(--muted)}
 details.panel>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -51,45 +60,53 @@ details.panel>summary::after{content:"＋";color:var(--muted);font-size:1rem}
 details.panel[open]>summary::after{content:"－"}
 details.panel[open]>summary{margin-bottom:10px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
-label.f{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
-label.f.full{grid-column:1/-1}
+label.f{display:grid;gap:4px;font-size:.8rem;color:var(--muted);min-width:0}
+label.f.full,.full{grid-column:1/-1}
+label.check{display:flex;gap:8px;align-items:flex-start;font-size:.85rem;color:var(--ink);grid-column:1/-1}
+label.check input{margin-top:3px}
+label.check small{display:block;color:var(--muted);font-size:.76rem}
 input,select,textarea,button{font:inherit;color:inherit}
-input[type=number],input[type=time],input[type=datetime-local],input[type=text],select,textarea{
+input[type=number],input[type=time],input[type=datetime-local],input[type=text],input[type=search],select,textarea{
   background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%;min-width:0;color:var(--ink)}
 textarea{font-family:var(--f-mono);font-size:.75rem;min-height:90px;resize:vertical}
 :focus-visible{outline:2px solid var(--sea);outline-offset:2px}
 .btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 12px;cursor:pointer;font-size:.88rem;font-weight:500}
 .btn:hover{border-color:var(--sea)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn.primary{background:var(--sea);color:var(--sea-ink);border-color:var(--sea)}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--muted);padding:5px 8px}
 .btn.ghost:hover{color:var(--ink)}
 .btn.small{padding:4px 9px;font-size:.8rem}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .hint{font-size:.78rem;color:var(--muted);margin:8px 0 0}
 .crew{display:grid;gap:6px;margin:0;padding:0;list-style:none}
 .crew li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}
 .crew input[type=text]{padding:5px 8px}
 .crew li.off input[type=text]{color:var(--muted);text-decoration:line-through}
-.dot{width:10px;height:10px;border-radius:50%}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
 .toggle{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--muted);white-space:nowrap}
 .addrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}
+.occs{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.occs li{display:grid;grid-template-columns:minmax(0,1fr) 6.2rem 4.4rem auto;gap:6px;align-items:end}
+.occs li label.f{font-size:.7rem}
 
 .tablewrap{overflow-x:auto}
 table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
-.stats th{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;color:var(--muted);text-align:right;padding:4px 6px;border-bottom:1px solid var(--line)}
+.stats th{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;color:var(--muted);text-align:right;padding:4px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
 .stats th:first-child,.stats td:first-child{text-align:left}
 .stats td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:.8rem}
 .stats td:first-child{font-family:var(--f-body);font-size:.85rem}
 .stats tr.off td{color:var(--muted)}
 .stats td.hi{color:var(--warn);font-weight:600}
 .spread{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.pill{font-size:.75rem;border-radius:999px;padding:3px 9px;background:var(--sunk);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.pill{font-size:.75rem;border-radius:999px;padding:3px 9px;background:var(--sunk);border:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
 .pill.ok{border-color:var(--sea);color:var(--sea)}
 .pill.warn{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+.pill.bad{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
 
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
-.toolbar .row{gap:10px}
-.toolbar select{width:auto}
+.toolbar select{width:auto;max-width:12rem}
 .timeline{display:grid;gap:14px}
 .day{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
 .dayhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 14px 6px}
@@ -99,6 +116,7 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
 .strip{position:relative;height:30px;margin:2px 14px 4px;border-radius:5px;overflow:hidden;border:1px solid var(--line)}
 .strip .sky{position:absolute;top:0;bottom:0}
 .strip .seg{position:absolute;top:0;bottom:0;border-left:1px solid color-mix(in srgb,var(--ink) 35%,transparent);cursor:pointer}
+.strip .seg.watch{background:color-mix(in srgb,var(--surface) 22%,transparent)}
 .strip .seg.me{background:color-mix(in srgb,var(--sea) 70%,transparent);box-shadow:inset 0 0 0 2px var(--sea)}
 .strip .seg.now{box-shadow:inset 0 0 0 2px var(--warn)}
 .ticks{position:relative;height:14px;margin:0 14px 6px;font-family:var(--f-mono);font-size:.62rem;color:var(--muted)}
@@ -107,67 +125,114 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
 .ticks span:last-child{transform:translateX(-100%)}
 .slots{list-style:none;margin:0;padding:0}
 .slot{border-top:1px solid var(--line)}
-.slotbtn{display:grid;grid-template-columns:7.2rem 5.6rem minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:9px 14px;cursor:pointer}
+.slotbtn{display:grid;grid-template-columns:7.2rem 6rem minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:9px 14px;cursor:pointer}
 .slotbtn:hover{background:var(--sunk)}
 @media (max-width:520px){.slotbtn{grid-template-columns:6.6rem minmax(0,1fr) auto;row-gap:4px}.slotbtn .kind{grid-column:1;grid-row:2}.slotbtn .who{grid-column:2/4;grid-row:1/3}}
 .time{font-family:var(--f-mono);font-size:.85rem;font-variant-numeric:tabular-nums}
 .time small{display:block;color:var(--muted);font-size:.7rem}
-.kind{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
-.who{display:flex;flex-wrap:wrap;gap:5px;min-width:0}
+.kind{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:5px;color:var(--muted);min-width:0}
+.who{display:flex;flex-wrap:wrap;gap:5px;min-width:0;align-items:center}
+.who .recipe{flex-basis:100%;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who .recipe b{color:var(--ink);font-weight:500}
 .chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px 2px 6px;font-size:.82rem;background:var(--sunk);border:1px solid var(--line);white-space:nowrap}
 .chip.me{border-color:var(--sea);background:var(--sea-soft);font-weight:600}
+.chip.out{opacity:.62;border-style:dashed}
 .chip.empty{color:var(--warn);border-color:var(--warn);background:var(--warn-soft);padding-left:9px}
+.chip small{color:var(--muted);font-size:.68rem}
 .flag{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border-radius:4px;padding:2px 6px;white-space:nowrap}
 .flag.edit{color:var(--edit);background:var(--edit-soft)}
 .flag.now{color:var(--warn);background:var(--warn-soft)}
+.flag.done{color:var(--ok);background:var(--ok-soft)}
+.flag.todo{color:var(--muted);background:var(--sunk)}
 .slot.isnow .slotbtn{background:color-mix(in srgb,var(--warn) 9%,transparent)}
 .slot.dim .slotbtn{opacity:.45}
-.editor{padding:4px 14px 14px;background:var(--sunk);border-top:1px dashed var(--line)}
-.editor p{margin:8px 0;font-size:.82rem;color:var(--muted)}
+.editor{padding:4px 14px 14px;background:var(--sunk);border-top:1px dashed var(--line);display:grid;gap:10px}
+.editor p{margin:6px 0 0;font-size:.82rem;color:var(--muted)}
+.editor h4{margin:6px 0 0;font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.85rem;color:var(--muted)}
 .pick{display:flex;flex-wrap:wrap;gap:6px}
 .pick button{border-radius:999px;border:1px solid var(--line);background:var(--surface);padding:5px 11px;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .pick button[aria-pressed="true"]{background:var(--sea);border-color:var(--sea);color:var(--sea-ink);font-weight:600}
 .pick button .warnmark{color:var(--warn);font-size:.72rem}
 .pick button[aria-pressed="true"] .warnmark{color:inherit}
-.editor .row{margin-top:10px}
+.ings{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.ings li{display:grid;grid-template-columns:minmax(0,1fr) 5.2rem 6.4rem auto;gap:6px;align-items:center}
+.ings .unit{font-size:.76rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ings .unit.unknown{color:var(--warn)}
+@media (max-width:520px){.ings li{grid-template-columns:minmax(0,1fr) 4.6rem auto}.ings .unit{grid-column:1/-1;grid-row:2}}
 .notice{font-size:.82rem;background:var(--warn-soft);color:var(--ink);border:1px solid var(--warn);border-radius:8px;padding:8px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.notice.info{background:var(--sea-soft);border-color:var(--sea)}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.82rem}
-@media (prefers-reduced-motion:no-preference){.slotbtn,.btn,.pick button{transition:background .15s,border-color .15s}}
+
+/* Inventaire */
+.invsum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.kpi b{display:block;font-family:var(--f-display);font-size:1.8rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.78rem;color:var(--muted)}
+.kpi.bad b{color:var(--bad)}.kpi.warn b{color:var(--warn)}
+table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums;min-width:760px}
+.inv th{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;color:var(--muted);text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface);position:sticky;top:0}
+.inv th:first-child,.inv td:first-child{text-align:left}
+.inv td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
+.inv td.num{font-family:var(--f-mono);font-size:.8rem;white-space:nowrap}
+.inv tr.cat td{background:var(--sunk);font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.8rem;color:var(--muted);text-align:left;padding-top:10px}
+.inv td .nm{font-weight:500}
+.inv td .un{display:block;font-size:.72rem;color:var(--muted)}
+.inv input[type=number]{width:5.6rem;padding:4px 6px;text-align:right;font-family:var(--f-mono);font-size:.8rem}
+.gauge{display:block;width:72px;height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-left:auto}
+.gauge i{display:block;height:100%;background:var(--ok)}
+.gauge.warn i{background:var(--warn)}.gauge.bad i{background:var(--bad)}
+.neg{color:var(--bad);font-weight:600}
+.lowv{color:var(--warn);font-weight:600}
+.take{display:inline-flex;gap:4px;align-items:center;justify-content:flex-end}
+.take input[type=number]{width:4.4rem}
+.log{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:.82rem}
+.log li{display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:4px 0}
+.log li span.t{font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.empty-state{text-align:center;padding:28px 16px;display:grid;gap:10px;justify-items:center}
+.empty-state p{margin:0;color:var(--muted);max-width:46ch}
+@media (prefers-reduced-motion:no-preference){.slotbtn,.btn,.pick button,nav.tabs button{transition:background .15s,border-color .15s,color .15s}}
 </style>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 </head>
 <body>
 
 
+<datalist id="invList"></datalist>
 <div class="wrap">
   <header>
     <div>
       <h1>Tableau des quarts</h1>
-      <p class="sub">Lombok → Thaïlande · heure du bord · répartition auto équitable, modifiable quart par quart</p>
+      <p class="sub">Lombok → Thaïlande · heure du bord · quarts, corvées, repas et vivres</p>
     </div>
-    <div class="legend" aria-label="Légende">
+    <div class="legend" aria-label="Légende" id="legend">
       <span><i class="sw" style="background:var(--night)"></i>Nuit</span>
       <span><i class="sw" style="background:var(--day)"></i>Jour</span>
       <span><i class="sw" style="background:var(--dawn)"></i>Lever</span>
       <span><i class="sw" style="background:var(--dusk)"></i>Coucher</span>
     </div>
   </header>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Plannings"></nav>
 
-  <div class="main">
+  <!-- ===== QUARTS ===== -->
+  <div class="main" id="view-quarts">
     <aside class="side">
       <details class="panel" id="settingsPanel" open>
-        <summary><h2>Réglages</h2></summary>
+        <summary><h2>Réglages des quarts</h2></summary>
         <div class="grid2">
           <label class="f full">Début du premier quart<input type="datetime-local" id="sStart"></label>
           <label class="f">Durée de la traversée (jours)<input type="number" id="sDays" min="1" max="60" step="1"></label>
           <label class="f">Équipiers par quart<input type="number" id="sPer" min="1" max="4" step="1"></label>
+          <label class="f">Début de la nuit<input type="time" id="sNightStart"></label>
+          <label class="f">Fin de la nuit<input type="time" id="sNightEnd"></label>
           <label class="f">Durée quart de jour (h)<input type="number" id="sDurDay" min="1" max="8" step="0.5"></label>
           <label class="f">Durée quart de nuit (h)<input type="number" id="sDurNight" min="1" max="8" step="0.5"></label>
+          <label class="check"><input type="checkbox" id="sNightOnly"><span>Programmer uniquement les quarts de nuit<small>La journée, la veille se fait de façon informelle.</small></span></label>
+          <label class="check"><input type="checkbox" id="sStag"><span>Quarts décalés (relève à mi-quart)<small>Un quart de 3 h = 1 h 30 avec celui qui finit, puis 1 h 30 avec celui qui arrive. Nécessite 2 équipiers par quart ou plus.</small></span></label>
           <label class="f">Lever du soleil<input type="time" id="sSunrise"></label>
           <label class="f">Coucher du soleil<input type="time" id="sSunset"></label>
           <label class="f full">Repos minimum entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
         </div>
-        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster au fil de la route. Un quart « lever » ou « coucher » est celui pendant lequel le soleil se lève ou se couche.</p>
+        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster en route. Les heures de nuit comptées dans l'équité sont celles de la plage de nuit.</p>
       </details>
 
       <section class="panel">
@@ -177,11 +242,11 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
           <input type="text" id="addName" placeholder="Prénom de l'équipier" aria-label="Prénom du nouvel équipier">
           <button class="btn primary" type="submit">Ajouter</button>
         </form>
-        <p class="hint">Décocher « de quart » sort quelqu'un de la rotation (skipper, malade) sans l'effacer.</p>
+        <p class="hint">Décocher « de quart » sort quelqu'un de la rotation des quarts (skipper, malade) sans l'effacer. Les corvées se règlent dans chaque onglet.</p>
       </section>
 
       <section class="panel">
-        <h2>Équité</h2>
+        <h2>Équité des quarts</h2>
         <div class="tablewrap"><table class="stats" id="stats"></table></div>
         <div class="spread" id="spread"></div>
       </section>
@@ -201,19 +266,9 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
         </div>
         <p class="hint" id="calMsg">.ics : iPhone (ouvrir le fichier), Google Agenda (import sur ordinateur), Outlook ; inclut les rappels. .csv : import Google Agenda sans rappel, heures converties dans le fuseau de ton agenda. Importe dans un agenda dédié « Quarts » : après un changement, tu le vides et tu réimportes.</p>
       </section>
-
-      <details class="panel" id="savePanel">
-        <summary><h2>Sauvegarde</h2></summary>
-        <p class="hint" style="margin-top:0">Le planning est gardé sur cet appareil. Pour le transférer sur un autre téléphone, copie ce texte et colle-le de l'autre côté.</p>
-        <label class="f">Export<textarea id="exportBox" readonly></textarea></label>
-        <div class="row" style="margin-top:8px"><button class="btn small" id="copyBtn" type="button">Copier</button><span class="hint" id="copyMsg" style="margin:0"></span></div>
-        <label class="f" style="margin-top:12px">Import<textarea id="importBox" placeholder="Colle ici un export"></textarea></label>
-        <div class="row" style="margin-top:8px"><button class="btn small" id="importBtn" type="button">Importer</button><span class="hint" id="importMsg" style="margin:0"></span></div>
-        <div class="row" style="margin-top:14px" id="resetZone"><button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button></div>
-      </details>
     </aside>
 
-    <section style="display:grid;gap:14px;min-width:0">
+    <section class="col">
       <div class="toolbar">
         <div class="row">
           <label class="toggle" for="focusSel" style="font-size:.85rem">Suivre</label>
@@ -229,97 +284,235 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
       <div class="timeline" id="timeline"></div>
     </section>
   </div>
+
+  <!-- ===== PLANNINGS (vaisselle, ménage, repas…) ===== -->
+  <div class="main" id="view-duty" hidden></div>
+
+  <!-- ===== INVENTAIRE ===== -->
+  <div class="col" id="view-inv" hidden></div>
+
+  <details class="panel" id="savePanel">
+    <summary><h2>Sauvegarde et transfert</h2></summary>
+    <p class="hint" style="margin-top:0">Tout (quarts, corvées, repas, inventaire) est gardé sur cet appareil. Pour le transférer sur un autre téléphone, copie ce texte et colle-le de l'autre côté.</p>
+    <label class="f">Export<textarea id="exportBox" readonly></textarea></label>
+    <div class="row" style="margin-top:8px"><button class="btn small" id="copyBtn" type="button">Copier</button><span class="hint" id="copyMsg" style="margin:0"></span></div>
+    <label class="f" style="margin-top:12px">Import<textarea id="importBox" placeholder="Colle ici un export"></textarea></label>
+    <div class="row" style="margin-top:8px"><button class="btn small" id="importBtn" type="button">Importer</button><span class="hint" id="importMsg" style="margin:0"></span></div>
+    <div class="row" style="margin-top:14px" id="resetZone"><button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button></div>
+  </details>
 </div>
 
 <script>
 (function(){
-const H=3600e3, MIN=60e3, KEY="quarts-voilier-v1";
+const SEED={"inventory":[{"name":"Farine de blé","unit":"kg","cat":"Féculents","initial":17.5},{"name":"Flocons d'avoine","unit":"kg","cat":"Féculents","initial":7.5},{"name":"Muesli / granola","unit":"kg","cat":"Féculents","initial":5.0},{"name":"Nouilles aux œufs sèches","unit":"kg","cat":"Féculents","initial":4.5},{"name":"Pain de mie","unit":"paquet","cat":"Féculents","initial":5.0},{"name":"Pâtes","unit":"kg","cat":"Féculents","initial":12.5},{"name":"Riz blanc","unit":"kg","cat":"Féculents","initial":37.0},{"name":"Haricots rouges","unit":"boîte 400 g","cat":"Légumineuses","initial":49.0},{"name":"Lentilles corail","unit":"kg","cat":"Légumineuses","initial":10.0},{"name":"Lentilles vertes/brunes","unit":"kg","cat":"Légumineuses","initial":1.6},{"name":"Pois chiches","unit":"boîte 400 g","cat":"Légumineuses","initial":45.0},{"name":"Lait de coco","unit":"brique 400 ml","cat":"Conserves","initial":40.0},{"name":"Maïs doux","unit":"boîte 300 g","cat":"Conserves","initial":30.0},{"name":"Olives","unit":"bocal","cat":"Conserves","initial":6.0},{"name":"Sardines","unit":"boîte 155 g","cat":"Conserves","initial":20.0},{"name":"Thon","unit":"boîte 170 g","cat":"Conserves","initial":36.0},{"name":"Tomates concassées","unit":"boîte 400 g","cat":"Conserves","initial":53.0},{"name":"Bœuf haché","unit":"kg","cat":"Protéines (congélo)","initial":1.5},{"name":"Filets de poisson","unit":"kg","cat":"Protéines (congélo)","initial":3.0},{"name":"Hauts de cuisse de poulet désossés","unit":"kg","cat":"Protéines (congélo)","initial":4.5},{"name":"Tempeh","unit":"kg","cat":"Protéines (congélo)","initial":3.0},{"name":"Tofu ferme","unit":"kg","cat":"Protéines (congélo)","initial":4.0},{"name":"Fromage","unit":"kg","cat":"Œufs et frais","initial":1.4},{"name":"Margarine Blue Band","unit":"kg","cat":"Œufs et frais","initial":0.3},{"name":"Œufs","unit":"pièce","cat":"Œufs et frais","initial":300},{"name":"Café moulu","unit":"kg","cat":"Petit-déj et boissons","initial":6.0},{"name":"Confiture","unit":"kg","cat":"Petit-déj et boissons","initial":2.9},{"name":"Lait UHT entier","unit":"L","cat":"Petit-déj et boissons","initial":56.5},{"name":"Lait concentré sucré","unit":"boîte 370 g","cat":"Petit-déj et boissons","initial":10.0},{"name":"Miel","unit":"kg","cat":"Petit-déj et boissons","initial":1.8},{"name":"Milo / cacao en poudre","unit":"kg","cat":"Petit-déj et boissons","initial":2.1},{"name":"Raisins secs","unit":"kg","cat":"Petit-déj et boissons","initial":0.9},{"name":"Thé","unit":"sachet","cat":"Petit-déj et boissons","initial":200},{"name":"Beurre de cacahuète","unit":"kg","cat":"Épicerie et condiments","initial":3.2},{"name":"Bumbu kare / pâte de curry","unit":"sachet","cat":"Épicerie et condiments","initial":9.0},{"name":"Bumbu pecel","unit":"kg","cat":"Épicerie et condiments","initial":0.9},{"name":"Coco râpée séchée","unit":"kg","cat":"Épicerie et condiments","initial":1.0},{"name":"Concentré de tomate","unit":"kg","cat":"Épicerie et condiments","initial":0.3},{"name":"Cubes de bouillon","unit":"cube","cat":"Épicerie et condiments","initial":36.0},{"name":"Herbes séchées","unit":"kg","cat":"Épicerie et condiments","initial":0.2},{"name":"Huile d'olive","unit":"L","cat":"Épicerie et condiments","initial":1.3},{"name":"Huile de cuisson","unit":"L","cat":"Épicerie et condiments","initial":7.0},{"name":"Kecap manis","unit":"L","cat":"Épicerie et condiments","initial":1.5},{"name":"Levure chimique","unit":"kg","cat":"Épicerie et condiments","initial":0.2},{"name":"Mayonnaise","unit":"kg","cat":"Épicerie et condiments","initial":0.8},{"name":"Moutarde","unit":"kg","cat":"Épicerie et condiments","initial":0.3},{"name":"Poivre","unit":"kg","cat":"Épicerie et condiments","initial":0.1},{"name":"Sambal","unit":"kg","cat":"Épicerie et condiments","initial":0.6},{"name":"Sauce huître","unit":"L","cat":"Épicerie et condiments","initial":0.3},{"name":"Sauce piment en bouteille","unit":"L","cat":"Épicerie et condiments","initial":0.8},{"name":"Sauce soja salée","unit":"L","cat":"Épicerie et condiments","initial":0.3},{"name":"Sel","unit":"kg","cat":"Épicerie et condiments","initial":1.0},{"name":"Sucre","unit":"kg","cat":"Épicerie et condiments","initial":5.0},{"name":"Vinaigre","unit":"L","cat":"Épicerie et condiments","initial":0.4},{"name":"Épices en poudre (curry, curcuma, cumin, paprika)","unit":"kg","cat":"Épicerie et condiments","initial":0.7},{"name":"Aubergines","unit":"kg","cat":"Légumes fragiles","initial":1.5},{"name":"Concombres","unit":"pièce","cat":"Légumes fragiles","initial":6.0},{"name":"Haricots longs","unit":"kg","cat":"Légumes fragiles","initial":1.5},{"name":"Kangkung / légumes-feuilles","unit":"botte","cat":"Légumes fragiles","initial":8.0},{"name":"Poivrons","unit":"pièce","cat":"Légumes fragiles","initial":4.0},{"name":"Tomates fraîches","unit":"kg","cat":"Légumes fragiles","initial":2.0},{"name":"Ail","unit":"kg","cat":"Légumes robustes et aromates","initial":3.1},{"name":"Carottes","unit":"kg","cat":"Légumes robustes et aromates","initial":11.0},{"name":"Chayote","unit":"pièce","cat":"Légumes robustes et aromates","initial":12.0},{"name":"Chou blanc","unit":"kg","cat":"Légumes robustes et aromates","initial":11.0},{"name":"Citronnelle","unit":"tige","cat":"Légumes robustes et aromates","initial":12.0},{"name":"Citrons verts","unit":"pièce","cat":"Légumes robustes et aromates","initial":90},{"name":"Courge","unit":"kg","cat":"Légumes robustes et aromates","initial":8.5},{"name":"Galanga","unit":"kg","cat":"Légumes robustes et aromates","initial":0.1},{"name":"Gingembre","unit":"kg","cat":"Légumes robustes et aromates","initial":1.4},{"name":"Oignons","unit":"kg","cat":"Légumes robustes et aromates","initial":15.5},{"name":"Pommes de terre","unit":"kg","cat":"Légumes robustes et aromates","initial":14.0},{"name":"Échalotes","unit":"kg","cat":"Légumes robustes et aromates","initial":3.0},{"name":"Ananas","unit":"pièce","cat":"Fruits","initial":12.0},{"name":"Bananes","unit":"pièce","cat":"Fruits","initial":100},{"name":"Mangues","unit":"pièce","cat":"Fruits","initial":24.0},{"name":"Noix de coco","unit":"pièce","cat":"Fruits","initial":10.0},{"name":"Oranges","unit":"pièce","cat":"Fruits","initial":48.0},{"name":"Papayes","unit":"pièce","cat":"Fruits","initial":10.0},{"name":"Pastèques","unit":"pièce","cat":"Fruits","initial":4.0},{"name":"Pommes","unit":"pièce","cat":"Fruits","initial":36.0},{"name":"Biscuits / crackers","unit":"kg","cat":"Collations","initial":4.5},{"name":"Cacahuètes grillées","unit":"kg","cat":"Collations","initial":3.5},{"name":"Chips de banane / coco","unit":"kg","cat":"Collations","initial":2.7},{"name":"Chocolat","unit":"kg","cat":"Collations","initial":0.9},{"name":"Kerupuk","unit":"kg","cat":"Collations","initial":0.9},{"name":"Maïs à popcorn","unit":"kg","cat":"Collations","initial":1.4}],"menu":[{"lunch":{"recipe":"Salade de pâtes thon-maïs-crudités","items":[["Pâtes",1.0],["Thon",4],["Maïs doux",2],["Tomates fraîches",0.6],["Concombres",3],["Échalotes",0.1],["Huile d'olive",0.08],["Citrons verts",3],["Mayonnaise",0.15]]},"dinner":{"recipe":"Curry de poulet coco + riz","items":[["Hauts de cuisse de poulet désossés",1.1],["Lait de coco",3],["Pommes de terre",1.0],["Carottes",0.4],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Bumbu kare / pâte de curry",2],["Riz blanc",1.0],["Huile de cuisson",0.06]]}},{"lunch":{"recipe":"Gado-gado (version fraîche)","items":[["Pommes de terre",1.2],["Haricots longs",0.5],["Kangkung / légumes-feuilles",3],["Chou blanc",0.3],["Concombres",2],["Œufs",10],["Tofu ferme",0.8],["Bumbu pecel",0.25],["Kecap manis",0.05],["Kerupuk",0.2],["Huile de cuisson",0.1]]},"dinner":{"recipe":"Tempeh sambal-kecap + kangkung + riz","items":[["Tempeh",1.0],["Kangkung / légumes-feuilles",3],["Échalotes",0.15],["Ail",0.05],["Sambal",0.08],["Kecap manis",0.08],["Huile de cuisson",0.15],["Riz blanc",1.0]]}},{"lunch":{"recipe":"Wraps galettes + houmous maison + crudités","items":[["Farine de blé",1.0],["Huile de cuisson",0.1],["Pois chiches",4],["Beurre de cacahuète",0.06],["Ail",0.03],["Citrons verts",4],["Huile d'olive",0.08],["Carottes",0.5],["Chou blanc",0.4]]},"dinner":{"recipe":"Pâtes bolognaise bœuf-lentilles","items":[["Bœuf haché",0.6],["Lentilles vertes/brunes",0.35],["Tomates concassées",3],["Concentré de tomate",0.07],["Oignons",0.4],["Carottes",0.4],["Ail",0.04],["Pâtes",1.0],["Fromage",0.15],["Huile d'olive",0.05],["Herbes séchées",0.01]]}},{"lunch":{"recipe":"Salade pommes de terre-sardines-œufs","items":[["Pommes de terre",2.0],["Sardines",6],["Œufs",8],["Oignons",0.2],["Moutarde",0.03],["Huile de cuisson",0.1],["Vinaigre",0.03],["Citrons verts",2]]},"dinner":{"recipe":"Poisson vapeur gingembre-citronnelle + haricots longs + riz","items":[["Filets de poisson",1.4],["Gingembre",0.08],["Citronnelle",4],["Ail",0.04],["Sauce soja salée",0.08],["Citrons verts",4],["Haricots longs",0.6],["Riz blanc",1.0]]}},{"lunch":{"recipe":"Mie goreng légumes + œufs","items":[["Nouilles aux œufs sèches",1.0],["Chou blanc",0.6],["Carottes",0.4],["Œufs",10],["Échalotes",0.15],["Ail",0.05],["Kecap manis",0.1],["Sauce huître",0.05],["Huile de cuisson",0.1]]},"dinner":{"recipe":"Aubergines & tofu sautés + riz","items":[["Aubergines",1.2],["Tofu ferme",0.8],["Sauce soja salée",0.06],["Sauce huître",0.05],["Ail",0.05],["Sambal",0.04],["Huile de cuisson",0.12],["Riz blanc",1.0]]}},{"lunch":{"recipe":"Salade mexicaine riz-haricots-maïs","items":[["Riz blanc",1.0],["Haricots rouges",4],["Maïs doux",2],["Oignons",0.3],["Citrons verts",4],["Épices en poudre (curry, curcuma, cumin, paprika)",0.01],["Huile de cuisson",0.08],["Sauce piment en bouteille",0.05]]},"dinner":{"recipe":"Shakshuka + galettes","items":[["Œufs",18],["Tomates concassées",4],["Oignons",0.4],["Poivrons",3],["Ail",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Farine de blé",0.8],["Huile de cuisson",0.1]]}},{"lunch":{"recipe":"Soupe lentilles corail-coco + riz","items":[["Lentilles corail",1.0],["Lait de coco",2],["Oignons",0.4],["Carottes",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Cubes de bouillon",3],["Citrons verts",2],["Riz blanc",0.6]]},"dinner":{"recipe":"Poulet sauté kecap + chou-carotte + riz","items":[["Hauts de cuisse de poulet désossés",1.1],["Kecap manis",0.15],["Échalotes",0.2],["Ail",0.05],["Gingembre",0.04],["Chou blanc",0.6],["Carottes",0.4],["Riz blanc",1.0],["Huile de cuisson",0.08],["Citrons verts",2]]}},{"lunch":{"recipe":"Gado-gado (version robuste)","items":[["Pommes de terre",1.2],["Chou blanc",0.6],["Carottes",0.5],["Chayote",2],["Œufs",12],["Tofu ferme",0.6],["Bumbu pecel",0.25],["Kecap manis",0.05],["Kerupuk",0.2],["Huile de cuisson",0.1]]},"dinner":{"recipe":"Chili sin carne + riz","items":[["Haricots rouges",6],["Tomates concassées",3],["Maïs doux",2],["Oignons",0.4],["Ail",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.025],["Riz blanc",1.0],["Huile de cuisson",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Wraps galettes + houmous maison + crudités","items":[["Farine de blé",1.0],["Huile de cuisson",0.1],["Pois chiches",4],["Beurre de cacahuète",0.06],["Ail",0.03],["Citrons verts",4],["Huile d'olive",0.08],["Carottes",0.5],["Chou blanc",0.4]]},"dinner":{"recipe":"Sayur lodeh (légumes coco) + tempeh + riz","items":[["Chayote",3],["Courge",0.8],["Chou blanc",0.4],["Carottes",0.3],["Lait de coco",3],["Échalotes",0.15],["Ail",0.04],["Galanga",0.03],["Citronnelle",2],["Tempeh",0.8],["Huile de cuisson",0.12],["Riz blanc",1.0]]}},{"lunch":{"recipe":"Mie goreng légumes + œufs","items":[["Nouilles aux œufs sèches",1.0],["Chou blanc",0.6],["Carottes",0.4],["Œufs",10],["Échalotes",0.15],["Ail",0.05],["Kecap manis",0.1],["Sauce huître",0.05],["Huile de cuisson",0.1]]},"dinner":{"recipe":"Curry pois chiches & courge + riz","items":[["Pois chiches",5],["Courge",1.5],["Lait de coco",2],["Oignons",0.3],["Ail",0.04],["Gingembre",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Tomates concassées",1],["Riz blanc",1.0],["Huile de cuisson",0.05]]}},{"lunch":{"recipe":"Salade pommes de terre-sardines-œufs","items":[["Pommes de terre",2.0],["Sardines",6],["Œufs",8],["Oignons",0.2],["Moutarde",0.03],["Huile de cuisson",0.1],["Vinaigre",0.03],["Citrons verts",2]]},"dinner":{"recipe":"Pâtes tomate-thon-olives","items":[["Pâtes",1.0],["Thon",4],["Tomates concassées",3],["Olives",1],["Oignons",0.3],["Ail",0.04],["Huile d'olive",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Salade mexicaine riz-haricots-maïs","items":[["Riz blanc",1.0],["Haricots rouges",4],["Maïs doux",2],["Oignons",0.3],["Citrons verts",4],["Épices en poudre (curry, curcuma, cumin, paprika)",0.01],["Huile de cuisson",0.08],["Sauce piment en bouteille",0.05]]},"dinner":{"recipe":"Curry de poulet coco + riz","items":[["Hauts de cuisse de poulet désossés",1.1],["Lait de coco",3],["Pommes de terre",1.0],["Carottes",0.4],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Bumbu kare / pâte de curry",2],["Riz blanc",1.0],["Huile de cuisson",0.06]]}},{"lunch":{"recipe":"Soupe lentilles corail-coco + riz","items":[["Lentilles corail",1.0],["Lait de coco",2],["Oignons",0.4],["Carottes",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Cubes de bouillon",3],["Citrons verts",2],["Riz blanc",0.6]]},"dinner":{"recipe":"Nasi goreng tofu-œufs","items":[["Riz blanc",1.0],["Tofu ferme",0.8],["Œufs",10],["Chou blanc",0.5],["Carottes",0.3],["Échalotes",0.2],["Ail",0.05],["Kecap manis",0.1],["Sambal",0.04],["Huile de cuisson",0.12],["Kerupuk",0.2]]}},{"lunch":{"recipe":"Salade de pâtes thon-maïs-carotte-chou","items":[["Pâtes",1.0],["Thon",4],["Maïs doux",2],["Carottes",0.5],["Chou blanc",0.3],["Échalotes",0.1],["Huile d'olive",0.08],["Citrons verts",3],["Mayonnaise",0.15]]},"dinner":{"recipe":"Pâtes bolognaise bœuf-lentilles","items":[["Bœuf haché",0.6],["Lentilles vertes/brunes",0.35],["Tomates concassées",3],["Concentré de tomate",0.07],["Oignons",0.4],["Carottes",0.4],["Ail",0.04],["Pâtes",1.0],["Fromage",0.15],["Huile d'olive",0.05],["Herbes séchées",0.01]]}},{"lunch":{"recipe":"Gado-gado (version robuste)","items":[["Pommes de terre",1.2],["Chou blanc",0.6],["Carottes",0.5],["Chayote",2],["Œufs",12],["Tofu ferme",0.6],["Bumbu pecel",0.25],["Kecap manis",0.05],["Kerupuk",0.2],["Huile de cuisson",0.1]]},"dinner":{"recipe":"Dahl lentilles coco + riz + galettes","items":[["Lentilles corail",1.0],["Lait de coco",2],["Tomates concassées",2],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Riz blanc",1.0],["Farine de blé",0.6],["Huile de cuisson",0.08]]}},{"lunch":{"recipe":"Mie goreng légumes + œufs","items":[["Nouilles aux œufs sèches",1.0],["Chou blanc",0.6],["Carottes",0.4],["Œufs",10],["Échalotes",0.15],["Ail",0.05],["Kecap manis",0.1],["Sauce huître",0.05],["Huile de cuisson",0.1]]},"dinner":{"recipe":"Tempeh orek + chou + riz","items":[["Tempeh",1.0],["Chou blanc",0.7],["Carottes",0.3],["Kecap manis",0.1],["Échalotes",0.15],["Ail",0.05],["Huile de cuisson",0.15],["Riz blanc",1.0]]}},{"lunch":{"recipe":"Wraps galettes + houmous maison + crudités","items":[["Farine de blé",1.0],["Huile de cuisson",0.1],["Pois chiches",4],["Beurre de cacahuète",0.06],["Ail",0.03],["Citrons verts",4],["Huile d'olive",0.08],["Carottes",0.5],["Chou blanc",0.4]]},"dinner":{"recipe":"Poisson vapeur gingembre-citronnelle + chayote + riz","items":[["Filets de poisson",1.4],["Gingembre",0.08],["Citronnelle",4],["Ail",0.04],["Sauce soja salée",0.08],["Citrons verts",4],["Chayote",3],["Riz blanc",1.0]]}},{"lunch":{"recipe":"Salade pommes de terre-sardines-œufs","items":[["Pommes de terre",2.0],["Sardines",6],["Œufs",8],["Oignons",0.2],["Moutarde",0.03],["Huile de cuisson",0.1],["Vinaigre",0.03],["Citrons verts",2]]},"dinner":{"recipe":"Chili sin carne + riz","items":[["Haricots rouges",6],["Tomates concassées",3],["Maïs doux",2],["Oignons",0.4],["Ail",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.025],["Riz blanc",1.0],["Huile de cuisson",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Soupe lentilles corail-coco + riz","items":[["Lentilles corail",1.0],["Lait de coco",2],["Oignons",0.4],["Carottes",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Cubes de bouillon",3],["Citrons verts",2],["Riz blanc",0.6]]},"dinner":{"recipe":"Poulet sauté kecap + chou-carotte + riz","items":[["Hauts de cuisse de poulet désossés",1.1],["Kecap manis",0.15],["Échalotes",0.2],["Ail",0.05],["Gingembre",0.04],["Chou blanc",0.6],["Carottes",0.4],["Riz blanc",1.0],["Huile de cuisson",0.08],["Citrons verts",2]]}},{"lunch":{"recipe":"Salade mexicaine riz-haricots-maïs","items":[["Riz blanc",1.0],["Haricots rouges",4],["Maïs doux",2],["Oignons",0.3],["Citrons verts",4],["Épices en poudre (curry, curcuma, cumin, paprika)",0.01],["Huile de cuisson",0.08],["Sauce piment en bouteille",0.05]]},"dinner":{"recipe":"Curry pois chiches & courge + riz","items":[["Pois chiches",5],["Courge",1.5],["Lait de coco",2],["Oignons",0.3],["Ail",0.04],["Gingembre",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Tomates concassées",1],["Riz blanc",1.0],["Huile de cuisson",0.05]]}},{"lunch":{"recipe":"Soupe de nouilles (mie kuah) œufs-légumes","items":[["Nouilles aux œufs sèches",1.0],["Œufs",10],["Chou blanc",0.5],["Carottes",0.3],["Cubes de bouillon",4],["Ail",0.04],["Échalotes",0.1],["Sauce soja salée",0.05]]},"dinner":{"recipe":"Pâtes tomate-thon-olives","items":[["Pâtes",1.0],["Thon",4],["Tomates concassées",3],["Olives",1],["Oignons",0.3],["Ail",0.04],["Huile d'olive",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Salade mexicaine riz-haricots-maïs","items":[["Riz blanc",1.0],["Haricots rouges",4],["Maïs doux",2],["Oignons",0.3],["Citrons verts",4],["Épices en poudre (curry, curcuma, cumin, paprika)",0.01],["Huile de cuisson",0.08],["Sauce piment en bouteille",0.05]]},"dinner":{"recipe":"Chili sin carne + riz","items":[["Haricots rouges",6],["Tomates concassées",3],["Maïs doux",2],["Oignons",0.4],["Ail",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.025],["Riz blanc",1.0],["Huile de cuisson",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Soupe lentilles corail-coco + riz (sans carottes)","items":[["Lentilles corail",1.0],["Lait de coco",2],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Cubes de bouillon",3],["Citrons verts",2],["Riz blanc",0.6]]},"dinner":{"recipe":"Dahl lentilles coco + riz + galettes","items":[["Lentilles corail",1.0],["Lait de coco",2],["Tomates concassées",2],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Riz blanc",1.0],["Farine de blé",0.6],["Huile de cuisson",0.08]]}},{"lunch":{"recipe":"Salade de pâtes thon-maïs (placard)","items":[["Pâtes",1.0],["Thon",4],["Maïs doux",2],["Oignons",0.15],["Huile d'olive",0.08],["Mayonnaise",0.15],["Sauce piment en bouteille",0.03]]},"dinner":{"recipe":"Curry pois chiches & courge + riz","items":[["Pois chiches",5],["Courge",1.5],["Lait de coco",2],["Oignons",0.3],["Ail",0.04],["Gingembre",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Tomates concassées",1],["Riz blanc",1.0],["Huile de cuisson",0.05]]}},{"lunch":{"recipe":"Wraps galettes + houmous (sans crudités)","items":[["Farine de blé",1.0],["Huile de cuisson",0.1],["Pois chiches",4],["Beurre de cacahuète",0.06],["Ail",0.03],["Citrons verts",4],["Huile d'olive",0.08]]},"dinner":{"recipe":"Pâtes tomate-thon-olives","items":[["Pâtes",1.0],["Thon",4],["Tomates concassées",3],["Olives",1],["Oignons",0.3],["Ail",0.04],["Huile d'olive",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Salade mexicaine riz-haricots-maïs","items":[["Riz blanc",1.0],["Haricots rouges",4],["Maïs doux",2],["Oignons",0.3],["Citrons verts",4],["Épices en poudre (curry, curcuma, cumin, paprika)",0.01],["Huile de cuisson",0.08],["Sauce piment en bouteille",0.05]]},"dinner":{"recipe":"Bolo végé tomate-lentilles","items":[["Lentilles vertes/brunes",0.7],["Tomates concassées",3],["Concentré de tomate",0.07],["Oignons",0.4],["Ail",0.04],["Pâtes",1.0],["Fromage",0.1],["Huile d'olive",0.05],["Herbes séchées",0.01]]}},{"lunch":{"recipe":"Soupe lentilles corail-coco + riz (sans carottes)","items":[["Lentilles corail",1.0],["Lait de coco",2],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Cubes de bouillon",3],["Citrons verts",2],["Riz blanc",0.6]]},"dinner":{"recipe":"Chili sin carne + riz","items":[["Haricots rouges",6],["Tomates concassées",3],["Maïs doux",2],["Oignons",0.4],["Ail",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.025],["Riz blanc",1.0],["Huile de cuisson",0.06],["Fromage",0.1]]}},{"lunch":{"recipe":"Salade de pâtes thon-maïs (placard)","items":[["Pâtes",1.0],["Thon",4],["Maïs doux",2],["Oignons",0.15],["Huile d'olive",0.08],["Mayonnaise",0.15],["Sauce piment en bouteille",0.03]]},"dinner":{"recipe":"Dahl lentilles coco + riz + galettes","items":[["Lentilles corail",1.0],["Lait de coco",2],["Tomates concassées",2],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Riz blanc",1.0],["Farine de blé",0.6],["Huile de cuisson",0.08]]}},{"lunch":{"recipe":"Wraps galettes + houmous (sans crudités)","items":[["Farine de blé",1.0],["Huile de cuisson",0.1],["Pois chiches",4],["Beurre de cacahuète",0.06],["Ail",0.03],["Citrons verts",4],["Huile d'olive",0.08]]},"dinner":{"recipe":"Curry pois chiches & courge + riz","items":[["Pois chiches",5],["Courge",1.5],["Lait de coco",2],["Oignons",0.3],["Ail",0.04],["Gingembre",0.04],["Épices en poudre (curry, curcuma, cumin, paprika)",0.03],["Tomates concassées",1],["Riz blanc",1.0],["Huile de cuisson",0.05]]}},{"lunch":{"recipe":"Soupe lentilles corail-coco + riz (sans carottes)","items":[["Lentilles corail",1.0],["Lait de coco",2],["Oignons",0.4],["Ail",0.04],["Gingembre",0.05],["Épices en poudre (curry, curcuma, cumin, paprika)",0.02],["Cubes de bouillon",3],["Citrons verts",2],["Riz blanc",0.6]]},"dinner":{"recipe":"Pâtes tomate-thon-olives","items":[["Pâtes",1.0],["Thon",4],["Tomates concassées",3],["Olives",1],["Oignons",0.3],["Ail",0.04],["Huile d'olive",0.06],["Fromage",0.1]]}}]};
+const H=3600e3, MIN=60e3, KEY="bord-tiare-v2", KEY_V1="quarts-voilier-v1";
 const COLORS=["#2F7FA6","#D0663F","#4F9A5B","#9B5BB5","#C79A1E","#C2477A","#3E8F8C","#7A6A4F","#5B6FC9","#A1503A","#6E8F2E","#B05AA0"];
 const p2=n=>String(n).padStart(2,"0");
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const keyOf=ms=>{const d=new Date(ms);return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}T${p2(d.getHours())}:${p2(d.getMinutes())}`};
 const parseLocal=s=>{const [d,t]=s.split("T");const [y,mo,da]=d.split("-").map(Number);const [hh,mm]=(t||"00:00").split(":").map(Number);return new Date(y,mo-1,da,hh,mm).getTime()};
 const mod=ms=>{const d=new Date(ms);return d.getHours()*60+d.getMinutes()};
-const hm=s=>{const [a,b]=s.split(":").map(Number);return a*60+b};
+const hm=s=>{const [a,b]=String(s||"0:0").split(":").map(Number);return (a||0)*60+(b||0)};
 const fmtT=ms=>{const d=new Date(ms);return `${p2(d.getHours())}:${p2(d.getMinutes())}`};
 const fmtH=h=>(Math.round(h*10)/10).toLocaleString("fr-FR");
+const fmtQ=q=>{const r=Math.round(q*100)/100;return r.toLocaleString("fr-FR",{maximumFractionDigits:2})};
 const fmtDay=ms=>new Date(ms).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"});
 const uid=()=>Math.random().toString(36).slice(2,9);
+const day0=ms=>{const d=new Date(ms);d.setHours(0,0,0,0);return d.getTime()};
+const dayAt=(ms,k,m)=>{const d=new Date(ms);return new Date(d.getFullYear(),d.getMonth(),d.getDate()+k,Math.floor(m/60),m%60).getTime()};
+const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 
+function defaultDuties(){return [
+  {id:"repas",name:"Repas",meal:true,per:2,occ:[{id:"dej",label:"Déjeuner",time:"12:00",dur:1.5},{id:"din",label:"Dîner",time:"18:30",dur:1.5}],excl:[],overrides:{}},
+  {id:"vaisselle",name:"Vaisselle",meal:false,per:2,occ:[{id:"midi",label:"Après déjeuner",time:"13:30",dur:0.5},{id:"soir",label:"Après dîner",time:"20:00",dur:0.5}],excl:[],overrides:{}},
+  {id:"menage",name:"Ménage",meal:false,per:2,occ:[{id:"matin",label:"Carré et sanitaires",time:"10:00",dur:1}],excl:[],overrides:{}}
+]}
 function defaults(){
   const d=new Date();d.setDate(d.getDate()+1);d.setHours(18,0,0,0);
   const names=["Mehdi","Équipier 2","Équipier 3","Équipier 4","Équipier 5","Équipier 6","Équipier 7","Équipier 8"];
-  return {settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3},
-    crew:names.map((n,i)=>({id:uid(),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8}};
+  return {v:2,tab:"quarts",
+    settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3,nightStart:"18:00",nightEnd:"06:00",nightOnly:false,stag:false},
+    crew:names.map((n,i)=>({id:uid(),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
+    cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8},
+    duties:defaultDuties(),meals:{},inv:SEED.inventory.map(i=>Object.assign({id:uid()},i)),invLog:[],
+    banners:{inv:true,meals:true},fresh:true};
 }
+const DEF=defaults();
 let S;
-try{const raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):null}catch(e){S=null}
-if(!S||!S.settings||!Array.isArray(S.crew))S=defaults();
-S.overrides=S.overrides||{};
-S.cal=Object.assign({who:"",when:"all",alarm:"15",boat:8,agenda:8},S.cal||{});
+try{
+  const raw=localStorage.getItem(KEY);
+  if(raw)S=JSON.parse(raw);
+  else{const old=localStorage.getItem(KEY_V1);if(old){const o=JSON.parse(old);S=defaults();
+    ["settings","crew","overrides","focus","cal"].forEach(k=>{if(o[k])S[k]=k==="settings"||k==="cal"?Object.assign(S[k],o[k]):o[k]})}}
+}catch(e){S=null}
+function normalize(){
+  if(!S||!S.settings||!Array.isArray(S.crew))S=defaults();
+  S.settings=Object.assign({},DEF.settings,S.settings);
+  S.cal=Object.assign({},DEF.cal,S.cal||{});
+  S.overrides=S.overrides||{};
+  if(!Array.isArray(S.duties))S.duties=defaultDuties();
+  S.duties.forEach(d=>{d.occ=d.occ||[];d.excl=d.excl||[];d.overrides=d.overrides||{};d.per=d.per||1});
+  S.meals=S.meals||{};S.inv=Array.isArray(S.inv)?S.inv:[];S.invLog=S.invLog||[];
+  S.banners=Object.assign({inv:false,meals:false},S.banners||{});
+  if(!S.tab)S.tab="quarts";
+}
+normalize();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const crewById=id=>S.crew.find(c=>c.id===id);
+const nameOf=id=>(crewById(id)||{}).name||"?";
 
-let editKey=null, draft=[];
-
-/* ---------- calcul ---------- */
-function buildSlots(st){
-  const start=parseLocal(st.start), end=start+st.days*24*H, SR=hm(st.sunrise), SS=hm(st.sunset);
-  const isNight=m=>SS>SR?(m>=SS||m<SR):(m>=SS&&m<SR);
-  const contains=(a,b,m)=>{const d=new Date(a);d.setHours(0,0,0,0);for(let k=0;k<2;k++){const x=d.getTime()+k*24*H+m*MIN;if(x>=a&&x<b)return true}return false};
+/* ================= MOTEUR DES QUARTS ================= */
+function env(){
+  const st=S.settings, NS=hm(st.nightStart), NE=hm(st.nightEnd), SR=hm(st.sunrise), SS=hm(st.sunset);
+  const inWin=m=>NS===NE?false:(NS<NE?(m>=NS&&m<NE):(m>=NS||m<NE));
+  const nextAt=(t,m,strict)=>{let x=dayAt(t,0,m);if(strict?x<=t:x<t)x=dayAt(t,1,m);return x};
+  const contains=(a,b,m)=>{for(let k=0;k<2;k++){const x=dayAt(a,k,m);if(x>=a&&x<b)return true}return false};
+  const classify=(a,b)=>{let n=0;for(let x=a;x<b;x+=5*MIN)if(inWin(mod(x)))n+=5;const hours=(b-a)/H,nh=Math.min(hours,n/60);
+    const lever=contains(a,b,SR),coucher=contains(a,b,SS);return {hours,nh,type:lever?"lever":coucher?"coucher":(nh>=hours/2?"nuit":"jour")}};
+  return {st,NS,NE,SR,SS,inWin,nextAt,classify};
+}
+function buildSegs(E){
+  const st=E.st,start=parseLocal(st.start),end=start+st.days*24*H,stag=st.stag&&st.per>=2;
   const out=[];let t=start,guard=0;
-  while(t<end&&guard++<2000){
-    const dur=(isNight(mod(t))?st.durNight:st.durDay)*H;
-    const e=Math.min(t+Math.max(dur,0.5*H),end);
-    let n=0;for(let x=t;x<e;x+=5*MIN)if(isNight(mod(x)))n+=5;
-    const hours=(e-t)/H, nh=n/60;
-    const lever=contains(t,e,SR), coucher=contains(t,e,SS);
-    const type=lever?"lever":coucher?"coucher":(nh>=hours/2?"nuit":"jour");
-    out.push({start:t,end:e,hours,nh,type,key:keyOf(t)});t=e;
+  while(t<end&&guard++<5000){
+    if(st.nightOnly&&!E.inWin(mod(t))){if(E.NS===E.NE)break;t=E.nextAt(t,E.NS,false);continue}
+    const dur=(E.inWin(mod(t))?st.durNight:st.durDay)*H, step=Math.max(stag?dur/2:dur,15*MIN);
+    let e=Math.min(t+step,end);
+    if(st.nightOnly)e=Math.min(e,E.nextAt(t,E.NE,true));
+    if(e-t<20*MIN&&out.length&&out[out.length-1].end===t){out[out.length-1].end=e;t=e;continue}
+    out.push({start:t,end:e});t=e;
+  }
+  out.forEach(s=>{s.key=keyOf(s.start);Object.assign(s,E.classify(s.start,s.end))});
+  return out;
+}
+function assignWatches(){
+  const E=env(), st=E.st, stag=st.stag&&st.per>=2, segs=buildSegs(E), ids=new Set(S.crew.map(c=>c.id));
+  const stats={};S.crew.forEach(c=>stats[c.id]={h:0,nh:0,lever:0,coucher:0,n:0,last:-Infinity});
+  const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a, pool=S.crew.filter(c=>c.on), order={};S.crew.forEach((c,i)=>order[c.id]=i);
+  const watches=[];const half=Math.ceil(st.per/2);
+  segs.forEach((sg,i)=>{
+    const prevC=i>0&&segs[i-1].end===sg.start, next=segs[i+1]&&segs[i+1].start===sg.end?segs[i+1]:null;
+    let need,fullEnd;
+    if(!stag){need=st.per;fullEnd=sg.end}else{need=prevC?half:st.per;fullEnd=next?next.end:sg.end}
+    sg.need=need;sg.fullEnd=fullEnd;
+    const w=E.classify(sg.start,fullEnd);
+    let ent;const ov=S.overrides[sg.key];
+    if(ov){ent=ov.filter(id=>ids.has(id));sg.edited=true}
+    else{
+      ent=[];
+      for(let k=0;k<Math.min(need,pool.length);k++){
+        const cands=pool.filter(p=>!ent.includes(p.id));
+        const rested=cands.filter(p=>(sg.start-stats[p.id].last)/H>=st.rest-1e-9);
+        const use=rested.length?rested:cands;
+        const prim=p=>{const s=stats[p.id];return w.type==="lever"?s.lever:w.type==="coucher"?s.coucher:w.type==="nuit"?s.nh:s.h};
+        const team=[...ent,...(stag&&prevC?segs[i-1].carryOn:[])];
+        const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
+        use.sort((a,b)=>prim(a)-prim(b)||pair(a)-pair(b)||stats[a.id].h-stats[b.id].h||stats[a.id].last-stats[b.id].last||order[a.id]-order[b.id]);
+        ent.push(use[0].id);
+      }
+    }
+    sg.entrants=ent;sg.carry=stag&&prevC?segs[i-1].carryOn:[];sg.carryOn=[];
+    ent.forEach((id,j)=>{
+      const wEnd=(stag&&!prevC&&j>=half)?sg.end:fullEnd;
+      const ww=wEnd===fullEnd?w:E.classify(sg.start,wEnd);
+      if(wEnd>sg.end)sg.carryOn.push(id);
+      watches.push({id,start:sg.start,end:wEnd,type:ww.type,hours:ww.hours,nh:ww.nh,key:sg.key});
+      const s=stats[id];if(!s)return;s.h+=ww.hours;s.nh+=ww.nh;if(ww.type==="lever")s.lever++;if(ww.type==="coucher")s.coucher++;s.n++;s.last=wEnd;
+    });
+    sg.team=[...sg.carry,...ent];
+    for(let a=0;a<sg.team.length;a++)for(let b=a+1;b<sg.team.length;b++){const k=pk(sg.team[a],sg.team[b]);pairs[k]=(pairs[k]||0)+1}
+  });
+  const keys=new Set(segs.map(s=>s.key));
+  return {segs,stats,watches,orphans:Object.keys(S.overrides).filter(k=>!keys.has(k)),stag};
+}
+
+/* ================= MOTEUR DES CORVÉES ================= */
+function instancesOf(duty){
+  const st=S.settings,start=parseLocal(st.start),end=start+st.days*24*H,out=[];
+  const occs=[...duty.occ].sort((a,b)=>hm(a.time)-hm(b.time));
+  for(let d=0;d<st.days+1;d++)for(const o of occs){
+    const t=dayAt(start,d,hm(o.time));if(t<start||t>=end)continue;
+    out.push({key:`J${d+1}|${o.id}`,day:d+1,start:t,end:t+Math.max(0.25,+o.dur||0.5)*H,occ:o});
   }
   return out;
 }
-function assign(){
-  const st=S.settings, slots=buildSlots(st), ids=new Set(S.crew.map(c=>c.id));
-  const stats={};S.crew.forEach(c=>stats[c.id]={h:0,nh:0,lever:0,coucher:0,n:0,last:-Infinity});
-  const pairs={};const pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
-  const pool=S.crew.filter(c=>c.on);
-  const order={};S.crew.forEach((c,i)=>order[c.id]=i);
-  for(const sl of slots){
-    let team, ov=S.overrides[sl.key];
-    if(ov){team=ov.filter(id=>ids.has(id));sl.edited=true}
-    else{
-      team=[];
-      for(let i=0;i<Math.min(st.per,pool.length);i++){
-        const cands=pool.filter(p=>!team.includes(p.id));
-        const rested=cands.filter(p=>stats[p.id].last===-Infinity||(sl.start-stats[p.id].last)/H>=st.rest-1e-9);
-        const use=rested.length?rested:cands;
-        const prim=p=>{const s=stats[p.id];return sl.type==="lever"?s.lever:sl.type==="coucher"?s.coucher:sl.type==="nuit"?s.nh:s.h};
-        const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
-        use.sort((a,b)=>prim(a)-prim(b)||pair(a)-pair(b)||stats[a.id].h-stats[b.id].h||stats[a.id].last-stats[b.id].last||order[a.id]-order[b.id]);
-        team.push(use[0].id);
-      }
-    }
-    sl.team=team;
-    team.forEach(id=>{const s=stats[id];if(!s)return;s.h+=sl.hours;s.nh+=sl.nh;if(sl.type==="lever")s.lever++;if(sl.type==="coucher")s.coucher++;s.n++;s.last=sl.end});
-    for(let i=0;i<team.length;i++)for(let j=i+1;j<team.length;j++){const k=pk(team[i],team[j]);pairs[k]=(pairs[k]||0)+1}
-  }
-  const keys=new Set(slots.map(s=>s.key));
-  const orphans=Object.keys(S.overrides).filter(k=>!keys.has(k));
-  return {slots,stats,orphans};
+function assignDuties(RW){
+  const busy={};S.crew.forEach(c=>busy[c.id]=[]);
+  RW.watches.forEach(w=>busy[w.id]&&busy[w.id].push({a:w.start,b:w.end,what:"de quart"}));
+  const total={};S.crew.forEach(c=>total[c.id]=0);const order={};S.crew.forEach((c,i)=>order[c.id]=i);
+  const res={};
+  S.duties.forEach(duty=>{
+    const inst=instancesOf(duty),ids=new Set(S.crew.map(c=>c.id));
+    const pool=S.crew.filter(c=>!duty.excl.includes(c.id)),cnt={};S.crew.forEach(c=>cnt[c.id]=0);
+    const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
+    const isBusy=(id,a,b)=>busy[id].some(x=>x.a<b&&x.b>a);
+    inst.forEach(it=>{
+      let team;const ov=duty.overrides[it.key];
+      if(ov){team=ov.filter(id=>ids.has(id));it.edited=true}
+      else{team=[];
+        for(let k=0;k<Math.min(duty.per,pool.length);k++){
+          const cands=pool.filter(p=>!team.includes(p.id)),free=cands.filter(p=>!isBusy(p.id,it.start,it.end)),use=free.length?free:cands;
+          const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
+          use.sort((a,b)=>cnt[a.id]-cnt[b.id]||pair(a)-pair(b)||total[a.id]-total[b.id]||order[a.id]-order[b.id]);
+          team.push(use[0].id);
+        }}
+      it.team=team;
+      team.forEach(id=>{if(cnt[id]==null)return;cnt[id]++;total[id]++;busy[id].push({a:it.start,b:it.end,what:duty.name.toLowerCase()})});
+      for(let a=0;a<team.length;a++)for(let b=a+1;b<team.length;b++){const k=pk(team[a],team[b]);pairs[k]=(pairs[k]||0)+1}
+    });
+    const keys=new Set(inst.map(i=>i.key));
+    res[duty.id]={inst,cnt,orphans:Object.keys(duty.overrides).filter(k=>!keys.has(k))};
+  });
+  return {res,busy,total};
 }
 
-/* ---------- rendu ---------- */
-const $=id=>document.getElementById(id);
-const crewById=id=>S.crew.find(c=>c.id===id);
-const KIND={nuit:["Nuit","var(--night)"],jour:["Jour","var(--day)"],lever:["Lever","var(--dawn)"],coucher:["Coucher","var(--dusk)"]};
-let R;
+/* ================= INVENTAIRE ================= */
+function invCompute(){
+  const byName={};S.inv.forEach(i=>byName[norm(i.name)]={item:i,used:0,meals:0,res:0,adj:0});
+  const unknown={};
+  const mealKeys=new Set();S.duties.filter(d=>d.meal).forEach(d=>RD.res[d.id].inst.forEach(it=>mealKeys.add(it.key)));
+  Object.entries(S.meals).forEach(([k,m])=>{
+    if(!m||!Array.isArray(m.items))return;
+    const live=mealKeys.has(k);if(!m.done&&!live)return;
+    m.items.forEach(x=>{const q=+x.q||0;if(!x.n||!q)return;const r=byName[norm(x.n)];
+      if(!r){unknown[x.n]=(unknown[x.n]||0)+q;return}
+      if(m.done){r.used+=q;r.meals+=q}else r.res+=q});
+  });
+  S.invLog.forEach(l=>{const r=byName[norm(l.n)];if(r){r.used+=+l.q||0;r.adj+=+l.q||0}});
+  return {byName,unknown};
+}
 
+/* ================= RENDU ================= */
+let RW,RD,editKey=null,draft=[],dutyEdit=null,dutyDraft=[];
+const KIND={nuit:["Nuit","var(--night)"],jour:["Jour","var(--day)"],lever:["Lever","var(--dawn)"],coucher:["Coucher","var(--dusk)"]};
+function compute(){RW=assignWatches();RD=assignDuties(RW)}
+function renderAll(){renderTabs();renderView();$("exportBox").value=JSON.stringify(S)}
+
+function renderTabs(){
+  const t=[["quarts","Quarts"],...S.duties.map(d=>["p-"+d.id,d.name]),["inventaire","Inventaire"]];
+  $("tabs").innerHTML=t.map(([id,l])=>`<button type="button" role="tab" data-tab="${id}" aria-selected="${S.tab===id}">${esc(l)}</button>`).join("")+`<button type="button" class="add" data-act="addDuty" title="Nouveau planning">＋ Planning</button>`;
+  $("invList").innerHTML=S.inv.map(i=>`<option value="${esc(i.name)}">`).join("");
+}
+function renderView(){
+  const t=S.tab, duty=t.startsWith("p-")?S.duties.find(d=>"p-"+d.id===t):null;
+  if(t.startsWith("p-")&&!duty)S.tab="quarts";
+  $("view-quarts").hidden=S.tab!=="quarts";$("view-duty").hidden=!duty;$("view-inv").hidden=S.tab!=="inventaire";
+  $("legend").hidden=S.tab!=="quarts";
+  if(S.tab==="quarts"){renderStats();renderTimeline();renderCal()}
+  else if(duty)renderDuty(duty);
+  else renderInv();
+}
+function go(tab){S.tab=tab;editKey=null;dutyEdit=null;save();renderTabs();renderView();try{if(location.hash!=="#"+tab)history.replaceState(null,"","#"+tab)}catch(e){}window.scrollTo({top:0})}
+
+/* ---------- Quarts ---------- */
 function renderSettings(){
   const s=S.settings;
-  $("sStart").value=s.start;$("sDays").value=s.days;$("sPer").value=s.per;$("sDurDay").value=s.durDay;
-  $("sDurNight").value=s.durNight;$("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;
+  $("sStart").value=s.start;$("sDays").value=s.days;$("sPer").value=s.per;$("sDurDay").value=s.durDay;$("sDurNight").value=s.durNight;
+  $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
+  $("sNightOnly").checked=!!s.nightOnly;$("sStag").checked=!!s.stag;$("sDurDay").disabled=!!s.nightOnly;
 }
-function renderCrew(){setTimeout(()=>{try{renderCal()}catch(e){}},0);
+function renderCrew(){
   $("crewList").innerHTML=S.crew.map(c=>`<li class="${c.on?"":"off"}" data-id="${c.id}">
     <span class="dot" style="background:${c.color}"></span>
     <input type="text" id="n-${c.id}" value="${esc(c.name)}" aria-label="Nom" data-act="rename">
@@ -327,108 +520,281 @@ function renderCrew(){setTimeout(()=>{try{renderCal()}catch(e){}},0);
       <label class="toggle"><input type="checkbox" data-act="on" ${c.on?"checked":""}> de quart</label>
       <button class="btn ghost small" type="button" data-act="del" aria-label="Retirer ${esc(c.name)}">✕</button>
     </span></li>`).join("");
-  const f=$("focusSel"), v=S.focus;
-  f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
-  f.value=crewById(v)?v:"";
+  const f=$("focusSel");f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+  f.value=crewById(S.focus)?S.focus:"";
 }
 function renderStats(){
-  const st=R.stats, on=S.crew.filter(c=>c.on);
-  const vals=k=>on.map(c=>st[c.id][k]);
-  const mx={};["h","nh","lever","coucher"].forEach(k=>mx[k]=Math.max(0,...vals(k)));
-  const mn={};["h","nh","lever","coucher"].forEach(k=>mn[k]=on.length?Math.min(...vals(k)):0);
-  const cell=(c,k,txt)=>`<td class="${c.on&&mx[k]-mn[k]>(k==="h"||k==="nh"?S.settings.durNight:1)&&st[c.id][k]===mx[k]?"hi":""}">${txt}</td>`;
+  const st=RW.stats,on=S.crew.filter(c=>c.on),tol=S.settings.durNight;
+  const ks=["h","nh","lever","coucher"],mx={},mn={};
+  ks.forEach(k=>{const v=on.map(c=>st[c.id][k]);mx[k]=v.length?Math.max(...v):0;mn[k]=v.length?Math.min(...v):0});
+  const cell=(c,k,txt)=>`<td class="${c.on&&mx[k]-mn[k]>(k==="h"||k==="nh"?tol:1)&&st[c.id][k]===mx[k]?"hi":""}">${txt}</td>`;
   $("stats").innerHTML=`<thead><tr><th>Équipier</th><th>Quarts</th><th>Heures</th><th>Nuit h</th><th title="Levers de soleil">Lever</th><th title="Couchers de soleil">Couch.</th></tr></thead><tbody>`+
     S.crew.map(c=>{const s=st[c.id];return `<tr class="${c.on?"":"off"}"><td><span class="row" style="gap:6px;flex-wrap:nowrap"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${c.on?"":" <small>(hors quart)</small>"}</span></td><td>${s.n}</td>${cell(c,"h",fmtH(s.h))}${cell(c,"nh",fmtH(s.nh))}${cell(c,"lever",s.lever)}${cell(c,"coucher",s.coucher)}</tr>`}).join("")+`</tbody>`;
-  const d=k=>mx[k]-mn[k];
-  const pill=(lbl,v,tol,unit)=>`<span class="pill ${v>tol?"warn":"ok"}">${lbl} : écart ${unit?fmtH(v)+" h":v}</span>`;
-  const nOn=on.length;
-  $("spread").innerHTML=nOn?pill("Heures",d("h"),S.settings.durNight,1)+pill("Nuit",d("nh"),S.settings.durNight,1)+pill("Levers",d("lever"),1)+pill("Couchers",d("coucher"),1):`<span class="pill warn">Personne n'est de quart</span>`;
-  const perDay=R.slots.length?fmtH(R.slots.reduce((a,s)=>a+s.hours*s.team.length,0)/Math.max(1,nOn)/S.settings.days):0;
-  $("spread").insertAdjacentHTML("beforeend",`<span class="pill">≈ ${perDay} h de quart / pers / jour</span>`);
+  const pill=(l,v,t,u)=>`<span class="pill ${v>t?"warn":"ok"}">${l} : écart ${u?fmtH(v)+" h":v}</span>`;
+  $("spread").innerHTML=on.length?pill("Heures",mx.h-mn.h,tol,1)+pill("Nuit",mx.nh-mn.nh,tol,1)+pill("Levers",mx.lever-mn.lever,1)+pill("Couchers",mx.coucher-mn.coucher,1)+`<span class="pill">≈ ${fmtH(on.reduce((a,c)=>a+st[c.id].h,0)/on.length/S.settings.days)} h de quart / pers / jour</span>`:`<span class="pill warn">Personne n'est de quart</span>`;
 }
+function stripHtml(g,items,focus,now){
+  const SR=hm(S.settings.sunrise),SS=hm(S.settings.sunset),pct=m=>(m/1440*100).toFixed(3)+"%",tw=60,dayEnd=g.t+24*H;
+  const sky=[];const add=(a,b,c)=>{if(b>a)sky.push(`<i class="sky" style="left:${pct(a)};width:${pct(b-a)};background:${c}"></i>`)};
+  const a1=Math.max(0,SR-tw/2),a2=Math.min(1440,SR+tw/2),b1=Math.max(0,SS-tw/2),b2=Math.min(1440,SS+tw/2);
+  add(0,a1,"var(--night)");add(a1,a2,"var(--dawn)");add(a2,b1,"var(--day)");add(b1,b2,"var(--dusk)");add(b2,1440,"var(--night)");
+  const segs=items.filter(s=>s.end>g.t&&s.start<dayEnd).map(s=>{const a=Math.max(s.start,g.t),b=Math.min(s.end,dayEnd);
+    const cls=["seg","watch"];if(focus&&s.team.includes(focus))cls.push("me");if(now>=s.start&&now<s.end)cls.push("now");
+    return `<span class="${cls.join(" ")}" data-key="${esc(s.key)}" title="${fmtT(s.start)}–${fmtT(s.end)}" style="left:${pct((a-g.t)/MIN)};width:${pct((b-a)/MIN)}"></span>`}).join("");
+  return `<div class="strip" role="img" aria-label="Journée de 24 h">${sky.join("")}${segs}</div><div class="ticks" aria-hidden="true">${[0,6,12,18,24].map(h=>`<span style="left:${pct(h*60)}">${p2(h)}h</span>`).join("")}</div>`;
+}
+function groupDays(list){const days=[];list.forEach(s=>{const k=day0(s.start);let g=days[days.length-1];if(!g||g.t!==k){g={t:k,items:[]};days.push(g)}g.items.push(s)});return days}
+const dayNum=t=>Math.round((t-day0(parseLocal(S.settings.start)))/(24*H))+1;
+function chip(id,focus,cls,extra){const c=crewById(id);if(!c)return "";return `<span class="chip ${id===focus?"me":""} ${cls||""}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${extra?` <small>${extra}</small>`:""}</span>`}
 function renderTimeline(){
-  const focus=crewById(S.focus)?S.focus:"", only=$("onlyMine").checked&&focus, now=Date.now();
-  const SR=hm(S.settings.sunrise), SS=hm(S.settings.sunset);
-  const start=parseLocal(S.settings.start);
-  const d0=new Date(start);d0.setHours(0,0,0,0);
-  const days=[];
-  R.slots.forEach(sl=>{const dd=new Date(sl.start);dd.setHours(0,0,0,0);const k=dd.getTime();let g=days[days.length-1];if(!g||g.t!==k){g={t:k,slots:[]};days.push(g)}g.slots.push(sl)});
-  const pct=m=>(m/1440*100).toFixed(3)+"%";
-  const tw=60;
-  const sky=()=>{
-    const segs=[];const add=(a,b,col)=>{if(b>a)segs.push(`<i class="sky" style="left:${pct(a)};width:${pct(b-a)};background:${col}"></i>`)};
-    const a1=Math.max(0,SR-tw/2), a2=Math.min(1440,SR+tw/2), b1=Math.max(0,SS-tw/2), b2=Math.min(1440,SS+tw/2);
-    add(0,a1,"var(--night)");add(a1,a2,"var(--dawn)");add(a2,b1,"var(--day)");add(b1,b2,"var(--dusk)");add(b2,1440,"var(--night)");
-    return segs.join("");
-  };
-  const skyHtml=sky();
-  const ticks=`<div class="ticks" aria-hidden="true">${[0,6,12,18,24].map(h=>`<span style="left:${pct(h*60)}">${p2(h%24===0&&h?24:h)}h</span>`).join("")}</div>`;
+  const focus=crewById(S.focus)?S.focus:"",only=$("onlyMine").checked&&focus,now=Date.now(),stag=RW.stag;
+  const days=groupDays(RW.segs);
   $("timeline").innerHTML=days.map(g=>{
-    const dayIdx=Math.round((g.t-d0.getTime())/(24*H))+1;
-    const dayEnd=g.t+24*H;
-    const segs=R.slots.filter(s=>s.end>g.t&&s.start<dayEnd).map(s=>{
-      const a=Math.max(s.start,g.t),b=Math.min(s.end,dayEnd);
-      const cls=["seg"];if(focus&&s.team.includes(focus))cls.push("me");if(now>=s.start&&now<s.end)cls.push("now");
-      return `<span class="${cls.join(" ")}" data-key="${s.key}" title="${fmtT(s.start)}–${fmtT(s.end)}" style="left:${pct((a-g.t)/MIN)};width:${pct((b-a)/MIN)}"></span>`}).join("");
-    const mine=focus?g.slots.filter(s=>s.team.includes(focus)).reduce((a,s)=>a+s.hours,0):null;
-    const rows=g.slots.map(sl=>{
-      const isMine=focus&&sl.team.includes(focus);
-      if(only&&!isMine&&editKey!==sl.key)return "";
-      const [kl,kc]=KIND[sl.type];
-      const isNow=now>=sl.start&&now<sl.end;
-      const chips=sl.team.length?sl.team.map(id=>{const c=crewById(id);return c?`<span class="chip ${id===focus?"me":""}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}</span>`:""}).join(""):`<span class="chip empty">Personne</span>`;
+    const mine=focus?RW.watches.filter(w=>w.id===focus&&day0(w.start)===g.t).reduce((a,w)=>a+w.hours,0):0;
+    const rows=g.items.map(sl=>{
+      const isMine=focus&&sl.team.includes(focus);if(only&&!isMine&&editKey!==sl.key)return "";
+      const [kl,kc]=KIND[sl.type],isNow=now>=sl.start&&now<sl.end,open=editKey===sl.key;
+      const chips=sl.team.length?sl.carry.map(id=>chip(id,focus,"out",stag?"finit":"")).join("")+sl.entrants.map(id=>chip(id,focus,"",stag&&sl.carry.length?"prend":"")).join(""):`<span class="chip empty">Personne</span>`;
       const flags=(isNow?`<span class="flag now">En cours</span>`:"")+(sl.edited?`<span class="flag edit">Modifié</span>`:"");
-      const open=editKey===sl.key;
       return `<li class="slot ${isNow?"isnow":""} ${focus&&!isMine&&!only?"dim":""}" id="slot-${sl.key}">
         <button class="slotbtn" type="button" data-key="${sl.key}" aria-expanded="${open}">
-          <span class="time">${fmtT(sl.start)} – ${fmtT(sl.end)}<small>${fmtH(sl.hours)} h</small></span>
+          <span class="time">${fmtT(sl.start)} – ${fmtT(sl.end)}<small>${fmtH(sl.hours)} h${stag&&sl.fullEnd>sl.end?" · quart jusqu'à "+fmtT(sl.fullEnd):""}</small></span>
           <span class="kind"><i class="sw" style="background:${kc}"></i>${kl}</span>
-          <span class="who">${chips}</span>
-          <span class="row" style="gap:4px">${flags}</span>
-        </button>${open?editorHtml(sl):""}</li>`}).join("");
+          <span class="who">${chips}</span><span class="row" style="gap:4px">${flags}</span>
+        </button>${open?watchEditor(sl):""}</li>`}).join("");
     if(only&&!rows.trim())return "";
-    return `<article class="day"><div class="dayhead"><h3>J${dayIdx}<small>${fmtDay(g.t)}</small></h3><span class="meta">${focus?`${esc(crewById(focus).name)} : ${fmtH(mine)} h`:`${g.slots.length} quarts`}</span></div>
-      <div class="strip" role="img" aria-label="Journée de 24 h, quarts et lumière">${skyHtml}${segs}</div>${ticks}
-      <ul class="slots">${rows}</ul></article>`}).join("")||`<p class="hint">Aucun quart pour ce filtre.</p>`;
-  const nEdit=Object.keys(S.overrides).length-R.orphans.length;
+    return `<article class="day"><div class="dayhead"><h3>J${dayNum(g.t)}<small>${fmtDay(g.t)}</small></h3><span class="meta">${focus?`${esc(nameOf(focus))} : ${fmtH(mine)} h`:`${g.items.length} ${stag?"relèves":"quarts"}`}</span></div>
+      ${stripHtml(g,RW.segs,focus,now)}<ul class="slots">${rows}</ul></article>`}).join("")||`<p class="hint">Aucun quart pour ce filtre.</p>`;
+  const nEdit=Object.keys(S.overrides).length-RW.orphans.length;
   $("editCount").textContent=nEdit?`${nEdit} quart${nEdit>1?"s":""} modifié${nEdit>1?"s":""}`:"Planning auto";
-  $("orphans").innerHTML=R.orphans.length?`<div class="notice"><span>${R.orphans.length} modification${R.orphans.length>1?"s":""} ne correspond${R.orphans.length>1?"ent":""} plus à un quart (horaires changés).</span><button class="btn small" type="button" data-act="clearOrphans">Les effacer</button></div>`:"";
+  $("orphans").innerHTML=RW.orphans.length?`<div class="notice"><span>${RW.orphans.length} modification${RW.orphans.length>1?"s":""} ne correspond${RW.orphans.length>1?"ent":""} plus à un quart (horaires changés).</span><button class="btn small" type="button" data-act="clearOrphans">Les effacer</button></div>`:"";
   $("exportBox").value=JSON.stringify(S);
 }
-function editorHtml(sl){
-  const idx=R.slots.indexOf(sl), prev=R.slots[idx-1], next=R.slots[idx+1];
-  const restWarn=id=>{
-    const rest=S.settings.rest*H;let w="";
-    for(let i=idx-1;i>=0&&sl.start-R.slots[i].end<rest;i--)if(R.slots[i].team.includes(id)){w=`sort de quart à ${fmtT(R.slots[i].end)}`;break}
-    if(!w)for(let i=idx+1;i<R.slots.length&&R.slots[i].start-sl.end<rest;i++)if(R.slots[i].team.includes(id)){w=`reprend à ${fmtT(R.slots[i].start)}`;break}
-    return w};
-  const btns=S.crew.map(c=>{const on=draft.includes(c.id),w=restWarn(c.id);
+function restWarn(id,a,b,skipKey){
+  const rest=S.settings.rest*H;
+  const w=RW.watches.find(x=>x.id===id&&x.key!==skipKey&&x.start<b+rest&&x.end>a-rest);
+  if(!w)return "";return w.end<=a?`sort de quart à ${fmtT(w.end)}`:w.start>=b?`reprend à ${fmtT(w.start)}`:`déjà de quart`;
+}
+function watchEditor(sl){
+  const btns=S.crew.map(c=>{const on=draft.includes(c.id),w=restWarn(c.id,sl.start,sl.fullEnd,sl.key);
     return `<button type="button" data-act="pick" data-id="${c.id}" aria-pressed="${on}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${w?` <span class="warnmark">· ${w}</span>`:""}${c.on?"":` <span class="warnmark">· hors quart</span>`}</button>`}).join("");
-  return `<div class="editor"><p>Choisis qui prend ce quart (${S.settings.per} prévu${S.settings.per>1?"s":""}). Les quarts suivants se rééquilibrent automatiquement.</p>
-    <div class="pick">${btns}</div>
-    <div class="row"><button class="btn primary small" type="button" data-act="saveEdit">Enregistrer</button>
-    <button class="btn small" type="button" data-act="cancelEdit">Fermer</button>
+  const what=RW.stag?`Qui prend le quart à ${fmtT(sl.start)} (${sl.need} prévu${sl.need>1?"s":""}, jusqu'à ${fmtT(sl.fullEnd)})`:`Qui prend ce quart (${sl.need} prévu${sl.need>1?"s":""})`;
+  return `<div class="editor"><p>${what}. Les quarts suivants se rééquilibrent automatiquement.</p><div class="pick">${btns}</div>
+    <div class="row"><button class="btn primary small" type="button" data-act="saveEdit">Enregistrer</button><button class="btn small" type="button" data-act="cancelEdit">Fermer</button>
     ${sl.edited?`<button class="btn ghost small" type="button" data-act="resetEdit">Revenir au calcul auto</button>`:""}</div></div>`;
 }
-function recompute(){R=assign();renderStats();renderTimeline();save()}
 
-/* ---------- interactions ---------- */
+/* ---------- Agenda ---------- */
+let DL=null;
+try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DL=d;if(S.tab==="quarts")renderCal()},()=>{})}catch(e){}
+function renderCal(){
+  const c=S.cal,w=$("calWho");
+  if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
+  w.innerHTML=S.crew.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("")+`<option value="all">Tout l'équipage (un événement par quart)</option>`;
+  w.value=c.who;$("calWhen").value=c.when;$("calAlarm").value=c.alarm;$("calBoat").value=c.boat;$("calAgenda").value=c.agenda;
+  $("icsBtn").disabled=!!DL;$("icsBtn").title=DL?"Disponible dans la version hors ligne":"";
+  if(DL&&!$("calMsg").dataset.art){$("calMsg").dataset.art=1;$("calMsg").insertAdjacentHTML("afterbegin","<strong>Ici, seul le .csv se télécharge ; le .ics est dans la version hors ligne.</strong> ")}
+}
+const KLBL={nuit:"de nuit",jour:"de jour",lever:"lever du soleil",coucher:"coucher du soleil"};
+function calEvents(){
+  const c=S.cal,now=Date.now(),keep=e=>c.when==="all"||e.end>now;
+  if(c.who==="all")return RW.segs.filter(keep).map(s=>{const team=s.team.map(nameOf);
+    return {start:s.start,end:s.end,uid:s.key,summary:`Quart ${KLBL[s.type]} : ${team.join(" + ")||"personne"}`,desc:`Quart ${fmtT(s.start)}–${fmtT(s.end)} heure du bord. Équipe : ${team.join(", ")||"personne"}.`}});
+  return RW.watches.filter(w=>w.id===c.who&&keep(w)).map(w=>{
+    const others=[...new Set(RW.segs.filter(s=>s.start<w.end&&s.end>w.start).flatMap(s=>s.team))].filter(i=>i!==w.id).map(nameOf);
+    return {start:w.start,end:w.end,uid:w.key,summary:`Quart ${KLBL[w.type]}${others.length?" avec "+others.join(", "):""}`,desc:`Quart ${fmtT(w.start)}–${fmtT(w.end)} heure du bord (${fmtH(w.hours)} h). Avec : ${others.join(", ")||"personne"}.`}});
+}
+const wall=ms=>{const d=new Date(ms);return [d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes()]};
+const toUTC=(ms,off)=>{const [y,mo,d,h,mi]=wall(ms);return Date.UTC(y,mo,d,h,mi)-off*H};
+const icsDate=u=>{const d=new Date(u);return `${d.getUTCFullYear()}${p2(d.getUTCMonth()+1)}${p2(d.getUTCDate())}T${p2(d.getUTCHours())}${p2(d.getUTCMinutes())}00Z`};
+const icsEsc=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+const fold=l=>{const out=[];let s=l;while(s.length>60){out.push(s.slice(0,60));s=" "+s.slice(60)}out.push(s);return out.join("\r\n")};
+function buildICS(){
+  const c=S.cal,list=calEvents(),stamp=icsDate(Date.now()),seq=Math.floor((Date.now()-Date.UTC(2026,0,1))/60000);
+  const who=c.who==="all"?"équipage":nameOf(c.who);
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Tableau des quarts//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH",`X-WR-CALNAME:${icsEsc("Quarts – "+who)}`];
+  for(const e of list){
+    L.push("BEGIN:VEVENT",`UID:${e.uid.replace(/[-:]/g,"")}-${c.who}@tableau-des-quarts`,`SEQUENCE:${seq}`,`DTSTAMP:${stamp}`,`DTSTART:${icsDate(toUTC(e.start,c.boat))}`,`DTEND:${icsDate(toUTC(e.end,c.boat))}`,`SUMMARY:${icsEsc(e.summary)}`,`DESCRIPTION:${icsEsc(e.desc)}`,"TRANSP:OPAQUE");
+    if(+c.alarm>0)L.push("BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${icsEsc(e.summary)}`,`TRIGGER:-PT${+c.alarm}M`,"END:VALARM");
+    L.push("END:VEVENT");
+  }
+  L.push("END:VCALENDAR");return {text:L.map(fold).join("\r\n")+"\r\n",n:list.length};
+}
+function buildCSV(){
+  const c=S.cal,list=calEvents(),shift=(c.agenda-c.boat)*H,q=v=>`"${String(v).replace(/"/g,'""')}"`;
+  const dt=ms=>{const d=new Date(ms+shift);let h=d.getHours();const ap=h>=12?"PM":"AM";h=h%12||12;return [`${p2(d.getMonth()+1)}/${p2(d.getDate())}/${d.getFullYear()}`,`${p2(h)}:${p2(d.getMinutes())} ${ap}`]};
+  const rows=[["Subject","Start Date","Start Time","End Date","End Time","All Day Event","Description","Private"].join(",")];
+  for(const e of list){const [sd,st]=dt(e.start),[ed,et]=dt(e.end);rows.push([q(e.summary),sd,st,ed,et,"False",q(e.desc),"False"].join(","))}
+  return {text:rows.join("\r\n")+"\r\n",n:list.length};
+}
+const slug=s=>norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"quarts";
+async function offer(ext,mime,built){
+  const msg=$("calMsg");if(!built.n){msg.textContent="Aucun quart à exporter pour ce choix.";return}
+  const filename=`quarts-${S.cal.who==="all"?"equipage":slug(nameOf(S.cal.who))}.${ext}`;
+  if(DL){try{await DL.save({filename,data:built.text});msg.textContent=`${built.n} quarts exportés dans ${filename}.`}catch(e){msg.textContent=e&&e.code==="declined"?"Téléchargement annulé.":"Téléchargement impossible ici : utilise la version hors ligne."}return}
+  try{const url=URL.createObjectURL(new Blob([built.text],{type:mime}));const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent=`${built.n} quarts exportés dans ${filename}.`}
+  catch(e){msg.textContent="Le navigateur a bloqué le téléchargement."}
+}
+
+/* ---------- Plannings (corvées, repas) ---------- */
+function mealOf(key){return S.meals[key]||(S.meals[key]={recipe:"",items:[],done:false})}
+function invItem(n){const k=norm(n);return S.inv.find(i=>norm(i.name)===k)}
+function renderDuty(duty){
+  const R=RD.res[duty.id],focus=crewById(S.focus)?S.focus:"",now=Date.now();
+  const part=S.crew.filter(c=>!duty.excl.includes(c.id));
+  const cnts=part.map(c=>R.cnt[c.id]),mx=cnts.length?Math.max(...cnts):0,mn=cnts.length?Math.min(...cnts):0;
+  const nMeals=duty.meal?R.inst.filter(it=>{const m=S.meals[it.key];return m&&(m.recipe||m.items.length)}).length:0;
+  const nDone=duty.meal?R.inst.filter(it=>(S.meals[it.key]||{}).done).length:0;
+  const firstTwo=[...duty.occ].sort((a,b)=>hm(a.time)-hm(b.time)).slice(0,2);
+  const side=`<aside class="side">
+    <details class="panel" ${dutyEdit==="__settings"||!R.inst.length?"open":""} id="dutySettings">
+      <summary><h2>Réglages · ${esc(duty.name)}</h2></summary>
+      <div class="grid2">
+        <label class="f full">Nom du planning<input type="text" id="dName" value="${esc(duty.name)}"></label>
+        <label class="f">Personnes par occurrence<input type="number" id="dPer" min="1" max="8" step="1" value="${duty.per}"></label>
+        <label class="f">Occurrences par jour<input type="number" id="dOccN" min="1" max="6" step="1" value="${duty.occ.length}"></label>
+        <label class="check"><input type="checkbox" id="dMeal" ${duty.meal?"checked":""}><span>Planning de repas<small>Ajoute recette et ingrédients à chaque occurrence, déduits de l'inventaire.</small></span></label>
+      </div>
+      <h2 style="margin-top:14px">Horaires</h2>
+      <ul class="occs">${duty.occ.map(o=>`<li data-occ="${o.id}">
+        <label class="f">Nom<input type="text" data-of="label" value="${esc(o.label)}"></label>
+        <label class="f">Heure<input type="time" data-of="time" value="${esc(o.time)}"></label>
+        <label class="f">Durée (h)<input type="number" data-of="dur" min="0.25" max="6" step="0.25" value="${o.dur}"></label>
+        <button class="btn ghost small" type="button" data-act="delOcc" aria-label="Supprimer ${esc(o.label)}" ${duty.occ.length<2?"disabled":""}>✕</button></li>`).join("")}</ul>
+      <div class="row" style="margin-top:8px"><button class="btn small" type="button" data-act="addOcc">Ajouter un horaire</button></div>
+      <h2 style="margin-top:14px">Participants</h2>
+      <div class="pick">${S.crew.map(c=>`<button type="button" data-act="toggleExcl" data-id="${c.id}" aria-pressed="${!duty.excl.includes(c.id)}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}</button>`).join("")}</div>
+      <p class="hint">La répartition évite les personnes de quart ou déjà prises par une autre corvée au même moment.</p>
+      <div class="row" style="margin-top:12px" id="delDutyZone"><button class="btn small danger" type="button" data-act="delDuty">Supprimer ce planning</button></div>
+    </details>
+    <section class="panel"><h2>Équité · ${esc(duty.name)}</h2>
+      <div class="tablewrap"><table class="stats"><thead><tr><th>Équipier</th><th>Fois</th><th>Toutes corvées</th></tr></thead><tbody>
+      ${S.crew.map(c=>{const ex=duty.excl.includes(c.id);return `<tr class="${ex?"off":""}"><td><span class="row" style="gap:6px;flex-wrap:nowrap"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${ex?" <small>(exempté)</small>":""}</span></td><td class="${!ex&&mx-mn>1&&R.cnt[c.id]===mx?"hi":""}">${R.cnt[c.id]}</td><td>${RD.total[c.id]}</td></tr>`}).join("")}
+      </tbody></table></div>
+      <div class="spread"><span class="pill ${mx-mn>1?"warn":"ok"}">Écart : ${mx-mn}</span><span class="pill">${R.inst.length} occurrences</span></div>
+    </section>
+    ${duty.meal?`<section class="panel"><h2>Menus</h2>
+      <div class="spread" style="margin-top:0"><span class="pill">${nMeals}/${R.inst.length} recettes renseignées</span><span class="pill ok">${nDone} repas faits</span></div>
+      <p class="hint">Le menu prévu couvre 30 jours (21 j de menus + 9 j de réserve). ${firstTwo.length===2?`« ${esc(firstTwo[0].label)} » reçoit le déjeuner du menu, « ${esc(firstTwo[1].label)} » le dîner.`:"Il faut deux horaires (déjeuner et dîner) pour l'utiliser."}</p>
+      <div class="row" style="margin-top:8px" id="prefillZone"><button class="btn small" type="button" data-act="prefill" ${firstTwo.length<2?"disabled":""}>Remplir les repas vides avec le menu prévu</button></div>
+    </section>`:""}
+  </aside>`;
+  const days=groupDays(R.inst);
+  const banner=duty.meal&&S.banners.meals?`<div class="notice info"><span>Repas pré-remplis avec le menu prévu (quantités pour 8). Modifie-les librement ; coche « Repas fait » après chaque repas pour déduire l'inventaire.</span><button class="btn small" type="button" data-act="hideBanner" data-b="meals">Compris</button></div>`:"";
+  const orph=R.orphans.length?`<div class="notice"><span>${R.orphans.length} modification${R.orphans.length>1?"s":""} ne correspond${R.orphans.length>1?"ent":""} plus à une occurrence.</span><button class="btn small" type="button" data-act="clearDutyOrphans">Les effacer</button></div>`:"";
+  const list=days.map(g=>`<article class="day"><div class="dayhead"><h3>J${dayNum(g.t)}<small>${fmtDay(g.t)}</small></h3><span class="meta">${focus?`${esc(nameOf(focus))} : ${g.items.filter(i=>i.team.includes(focus)).length}`:""}</span></div>
+    <ul class="slots">${g.items.map(it=>{
+      const open=dutyEdit===it.key,isNow=now>=it.start&&now<it.end,isMine=focus&&it.team.includes(focus);
+      const m=duty.meal?S.meals[it.key]:null;
+      const chips=it.team.length?it.team.map(id=>chip(id,focus)).join(""):`<span class="chip empty">Personne</span>`;
+      const recipe=duty.meal?`<span class="recipe">${m&&m.recipe?`<b>${esc(m.recipe)}</b>`:"Recette à définir"}${m&&m.items.length?` · ${m.items.length} ingrédient${m.items.length>1?"s":""}`:""}</span>`:"";
+      const flags=(isNow?`<span class="flag now">En cours</span>`:"")+(it.edited?`<span class="flag edit">Modifié</span>`:"")+(duty.meal?(m&&m.done?`<span class="flag done">Fait</span>`:`<span class="flag todo">Prévu</span>`):"");
+      return `<li class="slot ${isNow?"isnow":""} ${focus&&!isMine?"dim":""}" id="slot-${esc(it.key)}">
+        <button class="slotbtn" type="button" data-dkey="${esc(it.key)}" aria-expanded="${open}">
+          <span class="time">${fmtT(it.start)} – ${fmtT(it.end)}<small>${fmtH((it.end-it.start)/H)} h</small></span>
+          <span class="kind">${esc(it.occ.label)}</span>
+          <span class="who">${chips}${recipe}</span><span class="row" style="gap:4px">${flags}</span>
+        </button>${open?dutyEditor(duty,it):""}</li>`}).join("")}</ul></article>`).join("")||`<div class="panel empty-state"><p>Aucune occurrence : ajoute un horaire dans les réglages.</p></div>`;
+  $("view-duty").innerHTML=side+`<section class="col"><div class="toolbar"><div class="row"><label class="toggle" for="dFocus" style="font-size:.85rem">Suivre</label><select id="dFocus"><option value="">Tout l'équipage</option>${S.crew.map(c=>`<option value="${c.id}" ${c.id===focus?"selected":""}>${esc(c.name)}</option>`).join("")}</select></div>
+    <div class="row"><span class="pill">${Object.keys(duty.overrides).length-R.orphans.length} modifiée(s)</span></div></div>${banner}${orph}<div class="timeline">${list}</div></section>`;
+}
+function dutyWarn(id,it,dutyId){
+  const b=(RD.busy[id]||[]).find(x=>x.a<it.end&&x.b>it.start&&!(x.what===S.duties.find(d=>d.id===dutyId).name.toLowerCase()&&x.a===it.start));
+  return b?`${b.what} ${fmtT(b.a)}–${fmtT(b.b)}`:"";
+}
+function dutyEditor(duty,it){
+  const btns=S.crew.map(c=>{const on=dutyDraft.includes(c.id),w=dutyWarn(c.id,it,duty.id);
+    return `<button type="button" data-act="dpick" data-id="${c.id}" aria-pressed="${on}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${w?` <span class="warnmark">· ${esc(w)}</span>`:""}</button>`}).join("");
+  let meal="";
+  if(duty.meal){const m=mealOf(it.key);
+    meal=`<h4>Recette</h4><input type="text" data-meal="recipe" value="${esc(m.recipe)}" placeholder="Nom de la recette" aria-label="Nom de la recette">
+    <h4>${m.done?"Quantités réellement utilisées":"Ingrédients prévus"}</h4>
+    <ul class="ings">${m.items.map((x,i)=>{const inv=invItem(x.n);
+      return `<li data-ing="${i}"><input type="text" list="invList" data-ing-f="n" value="${esc(x.n)}" placeholder="Denrée" aria-label="Denrée"><input type="number" data-ing-f="q" min="0" step="any" value="${x.q===""?"":x.q}" aria-label="Quantité">
+      <span class="unit ${x.n&&!inv?"unknown":""}" data-unit="${i}">${inv?esc(inv.unit)+` · reste ${fmtQ(invLeft(inv))}`:(x.n?"absent de l'inventaire":"")}</span>
+      <button class="btn ghost small" type="button" data-act="delIng" data-i="${i}" aria-label="Retirer l'ingrédient">✕</button></li>`}).join("")}</ul>
+    <div class="row"><button class="btn small" type="button" data-act="addIng">Ajouter un ingrédient</button></div>
+    <label class="check" style="margin-top:4px"><input type="checkbox" data-meal="done" ${m.done?"checked":""}><span>Repas fait : déduire ces quantités de l'inventaire<small>Après le repas, ajuste les quantités à ce qui a vraiment été utilisé.</small></span></label>`;
+  }
+  return `<div class="editor"><h4>${duty.meal?"Cuisiniers":"Qui s'en charge"} (${duty.per} prévu${duty.per>1?"s":""})</h4><div class="pick">${btns}</div>
+    <div class="row"><button class="btn primary small" type="button" data-act="dsave">Enregistrer l'équipe</button>${it.edited?`<button class="btn ghost small" type="button" data-act="dreset">Revenir au calcul auto</button>`:""}<button class="btn small" type="button" data-act="dclose">Fermer</button></div>${meal}</div>`;
+}
+let INV=null;
+function invLeft(item){if(!INV)INV=invCompute();const r=INV.byName[norm(item.name)];return r?item.initial-r.used:item.initial}
+
+/* ---------- Inventaire ---------- */
+let invFilter="",invAlertsOnly=false,invOpenAdd=false;
+function renderInv(){
+  INV=invCompute();
+  const cats=[];S.inv.forEach(i=>{if(!cats.includes(i.cat||"Autre"))cats.push(i.cat||"Autre")});
+  let nNeg=0,nLow=0,nOut=0;
+  const rowsData=S.inv.map(i=>{const r=INV.byName[norm(i.name)],left=i.initial-r.used,after=left-r.res,ratio=i.initial>0?left/i.initial:0;
+    const st=after<-1e-9?"bad":(left<=1e-9?"bad":(ratio<0.15?"warn":"ok"));if(after<-1e-9)nNeg++;if(left<=1e-9)nOut++;else if(ratio<0.15)nLow++;
+    return {i,r,left,after,ratio,st}});
+  const f=norm(invFilter);
+  const shown=rowsData.filter(x=>(!f||norm(x.i.name).includes(f))&&(!invAlertsOnly||x.st!=="ok"));
+  const body=cats.map(cat=>{const rs=shown.filter(x=>(x.i.cat||"Autre")===cat);if(!rs.length)return "";
+    return `<tr class="cat"><td colspan="8">${esc(cat)}</td></tr>`+rs.map(({i,r,left,after,ratio,st})=>`<tr data-inv="${i.id}">
+      <td><span class="nm">${esc(i.name)}</span><span class="un">${esc(i.unit)}</span></td>
+      <td><input type="number" min="0" step="any" value="${i.initial}" data-inv-f="initial" aria-label="Quantité au départ, ${esc(i.name)}"></td>
+      <td class="num">${fmtQ(r.used)}${r.adj?`<span class="un">dont ${fmtQ(r.adj)} hors repas</span>`:""}</td>
+      <td class="num ${left<=1e-9?"neg":ratio<0.15?"lowv":""}">${fmtQ(left)}</td>
+      <td class="num">${r.res?fmtQ(r.res):"–"}</td>
+      <td class="num ${after<-1e-9?"neg":""}">${after<-1e-9?"manque "+fmtQ(-after):fmtQ(after)}</td>
+      <td><span class="gauge ${st}"><i style="width:${Math.max(0,Math.min(100,ratio*100)).toFixed(0)}%"></i></span></td>
+      <td><span class="take"><input type="number" min="0" step="any" placeholder="qté" data-take="${i.id}" aria-label="Quantité retirée, ${esc(i.name)}"><button class="btn small" type="button" data-act="take" data-id="${i.id}">Retirer</button><button class="btn ghost small" type="button" data-act="delInv" data-id="${i.id}" aria-label="Supprimer ${esc(i.name)}">✕</button></span></td></tr>`).join("")}).join("");
+  const unk=Object.entries(INV.unknown);
+  const recent=[...S.invLog].slice(-15).reverse();
+  const catOpts=[...new Set([...cats,"Autre"])].map(c=>`<option>${esc(c)}</option>`).join("");
+  $("view-inv").innerHTML=`
+    ${S.banners.inv&&S.inv.length?`<div class="notice info"><span>Quantités pré-remplies avec la liste de courses prévue (30 jours). Corrige la colonne « Départ » une fois les courses faites.</span><button class="btn small" type="button" data-act="hideBanner" data-b="inv">C'est fait</button></div>`:""}
+    <div class="invsum">
+      <div class="kpi"><b>${S.inv.length}</b><span>denrées suivies</span></div>
+      <div class="kpi ${nNeg?"bad":""}"><b>${nNeg}</b><span>manqueront pour les menus prévus</span></div>
+      <div class="kpi ${nLow?"warn":""}"><b>${nLow}</b><span>sous 15 % du stock de départ</span></div>
+      <div class="kpi ${nOut?"bad":""}"><b>${nOut}</b><span>épuisées</span></div>
+    </div>
+    ${unk.length?`<div class="notice"><span>Ingrédients des repas absents de l'inventaire : ${unk.map(([n,q])=>`<b>${esc(n)}</b> (${fmtQ(q)})`).join(", ")}.</span></div>`:""}
+    <div class="toolbar"><div class="row" style="flex:1;min-width:0"><input type="search" id="invSearch" placeholder="Chercher une denrée" value="${esc(invFilter)}" style="max-width:18rem" aria-label="Chercher une denrée">
+      <label class="toggle" style="font-size:.85rem"><input type="checkbox" id="invAlerts" ${invAlertsOnly?"checked":""}> alertes seulement</label></div>
+      <div class="row"><button class="btn small primary" type="button" data-act="toggleAdd">Ajouter une denrée</button></div></div>
+    ${invOpenAdd?`<form class="panel grid2" id="invAddForm" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
+      <label class="f">Denrée<input type="text" id="iaName" required></label><label class="f">Unité<input type="text" id="iaUnit" placeholder="kg, pièce, boîte 400 g" required></label>
+      <label class="f">Quantité<input type="number" id="iaQty" min="0" step="any" required></label><label class="f">Rayon<select id="iaCat">${catOpts}</select></label>
+      <div class="row full"><button class="btn primary small" type="submit">Ajouter</button><button class="btn small" type="button" data-act="toggleAdd">Annuler</button><span class="hint" id="iaMsg" style="margin:0"></span></div></form>`:""}
+    ${S.inv.length?`<div class="panel" style="padding:0"><div class="tablewrap"><table class="inv"><thead><tr><th>Denrée</th><th>Départ</th><th>Consommé</th><th>Reste</th><th>Menus prévus</th><th>Après menus</th><th>Stock</th><th>Sortie hors repas</th></tr></thead><tbody>${body||`<tr><td colspan="8" class="hint">Aucune denrée pour ce filtre.</td></tr>`}</tbody></table></div></div>`
+    :`<div class="panel empty-state"><p>L'inventaire est vide. Charge la liste de courses prévue puis corrige les quantités, ou ajoute les denrées une à une.</p><button class="btn primary" type="button" data-act="loadSeed">Charger la liste de courses (${SEED.inventory.length} denrées)</button></div>`}
+    <div class="main" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      <section class="panel"><h2>Sorties hors repas</h2>${recent.length?`<ul class="log">${recent.map(l=>`<li><span>${esc(l.n)} : ${fmtQ(l.q)}${l.note?` · ${esc(l.note)}`:""}</span><span class="row" style="gap:6px;flex-wrap:nowrap"><span class="t">${fmtDay(l.t)} ${fmtT(l.t)}</span><button class="btn ghost small" type="button" data-act="undoLog" data-id="${l.id}" aria-label="Annuler">✕</button></span></li>`).join("")}</ul>`:`<p class="hint" style="margin:0">Petit-déj, collations, pertes : retire-les ici avec le bouton « Retirer » de chaque ligne.</p>`}</section>
+      <section class="panel"><h2>Lecture</h2><p class="hint" style="margin:0"><b>Reste</b> = départ − repas faits − sorties hors repas. <b>Menus prévus</b> = ingrédients des repas pas encore faits. <b>Après menus</b> = ce qui restera si tous les menus prévus sont cuisinés : un chiffre négatif signale un manque.</p>
+      <div class="row" style="margin-top:12px" id="seedZone">${S.inv.length?`<button class="btn small" type="button" data-act="askSeed">Recharger la liste de courses prévue</button>`:""}</div></section>
+    </div>`;
+}
+
+/* ================= ÉVÉNEMENTS ================= */
+function recompute(){compute();INV=null;renderView();save();$("exportBox").value=JSON.stringify(S)}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.act==="addDuty"){const id=uid();S.duties.push({id,name:"Nouveau planning",meal:false,per:1,occ:[{id:uid(),label:"Matin",time:"09:00",dur:0.5}],excl:[],overrides:{}});compute();dutyEdit="__settings";go("p-"+id);dutyEdit="__settings";renderView();setTimeout(()=>{const n=$("dName");n&&(n.focus(),n.select())},0);return}
+  go(b.dataset.tab)});
+
 const bindNum=(id,k,min,max)=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=S.settings[k];v=Math.min(max,Math.max(min,v));S.settings[k]=v;e.target.value=v;editKey=null;recompute()});
 bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);
-["sStart","sSunrise","sSunset"].forEach(id=>$(id).addEventListener("change",e=>{if(!e.target.value)return;const k={sStart:"start",sSunrise:"sunrise",sSunset:"sunset"}[id];S.settings[k]=e.target.value;editKey=null;recompute()}));
+[["sStart","start"],["sSunrise","sunrise"],["sSunset","sunset"],["sNightStart","nightStart"],["sNightEnd","nightEnd"]].forEach(([id,k])=>$(id).addEventListener("change",e=>{if(!e.target.value)return;S.settings[k]=e.target.value;editKey=null;recompute()}));
+$("sNightOnly").addEventListener("change",e=>{S.settings.nightOnly=e.target.checked;$("sDurDay").disabled=e.target.checked;editKey=null;recompute()});
+$("sStag").addEventListener("change",e=>{S.settings.stag=e.target.checked;if(e.target.checked&&S.settings.per<2){S.settings.per=2;$("sPer").value=2}editKey=null;recompute()});
 
 $("crewList").addEventListener("change",e=>{
   const li=e.target.closest("li");if(!li)return;const c=crewById(li.dataset.id);
-  if(e.target.dataset.act==="rename"){c.name=e.target.value.trim()||c.name;e.target.value=c.name;renderCrewSelectOnly();recompute()}
+  if(e.target.dataset.act==="rename"){c.name=e.target.value.trim()||c.name;e.target.value=c.name;const f=$("focusSel"),v=f.value;f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");f.value=v;recompute()}
   if(e.target.dataset.act==="on"){c.on=e.target.checked;li.classList.toggle("off",!c.on);recompute()}
 });
 $("crewList").addEventListener("click",e=>{
   const b=e.target.closest("[data-act=del]");if(!b)return;const id=b.closest("li").dataset.id;
   S.crew=S.crew.filter(c=>c.id!==id);
-  Object.keys(S.overrides).forEach(k=>{S.overrides[k]=S.overrides[k].filter(x=>x!==id);if(!S.overrides[k].length)delete S.overrides[k]});
+  const strip=o=>Object.keys(o).forEach(k=>{o[k]=o[k].filter(x=>x!==id);if(!o[k].length)delete o[k]});
+  strip(S.overrides);S.duties.forEach(d=>{strip(d.overrides);d.excl=d.excl.filter(x=>x!==id)});
   if(S.focus===id)S.focus="";editKey=null;renderCrew();recompute();
 });
-function renderCrewSelectOnly(){const f=$("focusSel"),v=f.value;f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");f.value=v}
 $("addForm").addEventListener("submit",e=>{
   e.preventDefault();const n=$("addName").value.trim();if(!n)return;
   const used=new Set(S.crew.map(c=>c.color));const color=COLORS.find(c=>!used.has(c))||COLORS[S.crew.length%COLORS.length];
@@ -436,133 +802,134 @@ $("addForm").addEventListener("submit",e=>{
 });
 $("focusSel").addEventListener("change",e=>{S.focus=e.target.value;renderTimeline();save()});
 $("onlyMine").addEventListener("change",()=>renderTimeline());
-
 $("timeline").addEventListener("click",e=>{
-  const seg=e.target.closest(".seg");
-  const btn=e.target.closest(".slotbtn");
+  const seg=e.target.closest(".seg"),btn=e.target.closest(".slotbtn");
   if(seg||btn){const k=(seg||btn).dataset.key;
-    if(editKey===k&&btn){editKey=null}else{editKey=k;draft=[...(R.slots.find(s=>s.key===k)?.team||[])]}
+    if(editKey===k&&btn)editKey=null;else{editKey=k;const sl=RW.segs.find(s=>s.key===k);draft=[...(sl?sl.entrants:[])]}
     renderTimeline();if(seg){const el=document.getElementById("slot-"+k);el&&el.scrollIntoView({block:"center"})}return}
-  const a=e.target.closest("[data-act]");if(!a)return;
-  const act=a.dataset.act;
-  if(act==="pick"){const id=a.dataset.id;draft=draft.includes(id)?draft.filter(x=>x!==id):[...draft,id];
-    a.setAttribute("aria-pressed",draft.includes(id));}
+  const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act;
+  if(act==="pick"){const id=a.dataset.id;draft=draft.includes(id)?draft.filter(x=>x!==id):[...draft,id];a.setAttribute("aria-pressed",draft.includes(id))}
   if(act==="cancelEdit"){editKey=null;renderTimeline()}
   if(act==="resetEdit"){delete S.overrides[editKey];editKey=null;recompute()}
-  if(act==="saveEdit"){
-    const sl=R.slots.find(s=>s.key===editKey);
-    delete S.overrides[editKey];const auto=assign().slots.find(s=>s.key===editKey);
-    const same=auto&&auto.team.length===draft.length&&auto.team.every(x=>draft.includes(x));
-    if(!same)S.overrides[editKey]=[...draft];
-    editKey=null;recompute();
-  }
+  if(act==="saveEdit"){delete S.overrides[editKey];const auto=assignWatches().segs.find(s=>s.key===editKey);
+    const same=auto&&auto.entrants.length===draft.length&&auto.entrants.every(x=>draft.includes(x));if(!same)S.overrides[editKey]=[...draft];editKey=null;recompute()}
 });
-$("orphans").addEventListener("click",e=>{if(e.target.closest("[data-act=clearOrphans]")){R.orphans.forEach(k=>delete S.overrides[k]);recompute()}});
-$("nowBtn").addEventListener("click",()=>{
-  const now=Date.now();const sl=R.slots.find(s=>now>=s.start&&now<s.end)||R.slots.find(s=>s.start>now)||R.slots[0];
-  if(!sl)return;$("onlyMine").checked=false;renderTimeline();const el=document.getElementById("slot-"+sl.key);el&&el.scrollIntoView({block:"center",behavior:"smooth"});
-});
-
-$("copyBtn").addEventListener("click",()=>{
-  const t=$("exportBox");
-  const ok=()=>$("copyMsg").textContent="Copié.";
-  const fb=()=>{t.focus();t.select();$("copyMsg").textContent="Texte sélectionné, copie-le manuellement."};
-  try{navigator.clipboard.writeText(t.value).then(ok,fb)}catch(e){fb()}
-});
-$("importBtn").addEventListener("click",()=>{
-  try{const d=JSON.parse($("importBox").value);
-    if(!d.settings||!Array.isArray(d.crew))throw 0;
-    S={settings:d.settings,crew:d.crew,overrides:d.overrides||{},focus:d.focus||"",cal:Object.assign({},S.cal,d.cal||{})};
-    editKey=null;renderSettings();renderCrew();recompute();$("importMsg").textContent="Planning importé.";$("importBox").value="";
-  }catch(e){$("importMsg").textContent="Texte non reconnu : colle l'export complet, sans le modifier."}
-});
-$("resetZone").addEventListener("click",e=>{
-  const z=$("resetZone");
-  if(e.target.id==="resetBtn"){z.innerHTML=`<span class="confirm">Effacer équipage, réglages et modifications ? <button class="btn small" type="button" data-r="yes">Oui, réinitialiser</button><button class="btn ghost small" type="button" data-r="no">Annuler</button></span>`}
-  else if(e.target.dataset.r==="yes"){S=defaults();editKey=null;renderSettings();renderCrew();recompute();z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`}
-  else if(e.target.dataset.r==="no"){z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`}
-});
-
-
-/* ---------- agenda ---------- */
-let DL=null;
-try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DL=d;renderCal()},()=>{})}catch(e){}
-function renderCal(){
-  const c=S.cal, w=$("calWho");
-  if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
-  w.innerHTML=S.crew.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("")+`<option value="all">Tout l'équipage (un événement par quart)</option>`;
-  w.value=c.who;$("calWhen").value=c.when;$("calAlarm").value=c.alarm;$("calBoat").value=c.boat;$("calAgenda").value=c.agenda;
-  const inArtifact=!!DL;
-  $("icsBtn").disabled=inArtifact;
-  $("icsBtn").title=inArtifact?"Disponible dans la version hors ligne (fichier quarts.html)":"";
-  if(inArtifact&&!$("calMsg").dataset.art){$("calMsg").dataset.art=1;$("calMsg").insertAdjacentHTML("afterbegin","<strong>Ici, seul le .csv se télécharge ; le .ics est dans la version hors ligne.</strong> ")}
-}
+$("orphans").addEventListener("click",e=>{if(e.target.closest("[data-act=clearOrphans]")){RW.orphans.forEach(k=>delete S.overrides[k]);recompute()}});
+$("nowBtn").addEventListener("click",()=>{const now=Date.now();const sl=RW.segs.find(s=>now>=s.start&&now<s.end)||RW.segs.find(s=>s.start>now)||RW.segs[0];
+  if(!sl)return;$("onlyMine").checked=false;renderTimeline();const el=document.getElementById("slot-"+sl.key);el&&el.scrollIntoView({block:"center",behavior:"smooth"})});
 ["calWho","calWhen","calAlarm"].forEach(id=>$(id).addEventListener("change",e=>{S.cal[{calWho:"who",calWhen:"when",calAlarm:"alarm"}[id]]=e.target.value;save()}));
 ["calBoat","calAgenda"].forEach(id=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=8;v=Math.max(-12,Math.min(14,v));e.target.value=v;S.cal[id==="calBoat"?"boat":"agenda"]=v;save()}));
-const KLBL={nuit:"de nuit",jour:"de jour",lever:"lever du soleil",coucher:"coucher du soleil"};
-function calSlots(){
-  const c=S.cal, now=Date.now();
-  return R.slots.filter(s=>(c.who==="all"||s.team.includes(c.who))&&(c.when==="all"||s.end>now));
-}
-const wall=ms=>{const d=new Date(ms);return [d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes()]};
-const toUTC=(ms,off)=>{const [y,mo,d,h,mi]=wall(ms);return Date.UTC(y,mo,d,h,mi)-off*H};
-const icsDate=u=>{const d=new Date(u);return `${d.getUTCFullYear()}${p2(d.getUTCMonth()+1)}${p2(d.getUTCDate())}T${p2(d.getUTCHours())}${p2(d.getUTCMinutes())}00Z`};
-const icsEsc=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
-const fold=l=>{const out=[];let s=l;while(s.length>60){out.push(s.slice(0,60));s=" "+s.slice(60)}out.push(s);return out.join("\r\n")};
-const names=ids=>ids.map(i=>(crewById(i)||{}).name).filter(Boolean);
-function eventText(s){
-  const c=S.cal, team=names(s.team);
-  const others=c.who==="all"?team:names(s.team.filter(i=>i!==c.who));
-  const summary=c.who==="all"?`Quart ${KLBL[s.type]} : ${team.join(" + ")||"personne"}`:`Quart ${KLBL[s.type]}${others.length?" avec "+others.join(", "):""}`;
-  const desc=`Quart ${fmtT(s.start)}–${fmtT(s.end)} heure du bord (${fmtH(s.hours)} h). Équipe : ${team.join(", ")||"personne"}.${s.edited?" Quart modifié à la main.":""}`;
-  return {summary,desc};
-}
-function buildICS(){
-  const c=S.cal, list=calSlots(), stamp=icsDate(Date.now()), seq=Math.floor((Date.now()-Date.UTC(2026,0,1))/60000);
-  const who=c.who==="all"?"équipage":(crewById(c.who)||{}).name;
-  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Tableau des quarts//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH",`X-WR-CALNAME:${icsEsc("Quarts – "+who)}`];
-  for(const s of list){
-    const {summary,desc}=eventText(s);
-    L.push("BEGIN:VEVENT",`UID:${s.key.replace(/[-:]/g,"")}-${c.who}@tableau-des-quarts`,`SEQUENCE:${seq}`,`DTSTAMP:${stamp}`,
-      `DTSTART:${icsDate(toUTC(s.start,c.boat))}`,`DTEND:${icsDate(toUTC(s.end,c.boat))}`,`SUMMARY:${icsEsc(summary)}`,`DESCRIPTION:${icsEsc(desc)}`,"TRANSP:OPAQUE");
-    if(+c.alarm>0)L.push("BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${icsEsc(summary)}`,`TRIGGER:-PT${+c.alarm}M`,"END:VALARM");
-    L.push("END:VEVENT");
-  }
-  L.push("END:VCALENDAR");
-  return {text:L.map(fold).join("\r\n")+"\r\n",n:list.length};
-}
-function buildCSV(){
-  const c=S.cal, list=calSlots(), shift=(c.agenda-c.boat)*H;
-  const q=v=>`"${String(v).replace(/"/g,'""')}"`;
-  const dt=ms=>{const d=new Date(ms+shift);let h=d.getHours();const ap=h>=12?"PM":"AM";h=h%12||12;return [`${p2(d.getMonth()+1)}/${p2(d.getDate())}/${d.getFullYear()}`,`${p2(h)}:${p2(d.getMinutes())} ${ap}`]};
-  const rows=[["Subject","Start Date","Start Time","End Date","End Time","All Day Event","Description","Private"].join(",")];
-  for(const s of list){const {summary,desc}=eventText(s);const [sd,st]=dt(s.start),[ed,et]=dt(s.end);rows.push([q(summary),sd,st,ed,et,"False",q(desc),"False"].join(","))}
-  return {text:rows.join("\r\n")+"\r\n",n:list.length};
-}
-const slug=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"quarts";
-async function offer(ext,mime,built){
-  const msg=$("calMsg");
-  if(!built.n){msg.textContent="Aucun quart à exporter pour ce choix.";return}
-  const who=S.cal.who==="all"?"equipage":slug((crewById(S.cal.who)||{}).name||"");
-  const filename=`quarts-${who}.${ext}`;
-  if(DL){
-    try{await DL.save({filename,data:built.text});msg.textContent=`${built.n} quarts exportés dans ${filename}.`}
-    catch(e){msg.textContent=e&&e.code==="declined"?"Téléchargement annulé.":"Téléchargement impossible ici : utilise la version hors ligne."}
-    return;
-  }
-  try{
-    const url=URL.createObjectURL(new Blob([built.text],{type:mime}));
-    const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),4000);
-    msg.textContent=`${built.n} quarts exportés dans ${filename}.`;
-  }catch(e){msg.textContent="Le navigateur a bloqué le téléchargement."}
-}
 $("icsBtn").addEventListener("click",()=>offer("ics","text/calendar",buildICS()));
 $("csvBtn").addEventListener("click",()=>offer("csv","text/csv",buildCSV()));
 
+/* --- plannings --- */
+const curDuty=()=>S.duties.find(d=>"p-"+d.id===S.tab);
+const V=$("view-duty");
+V.addEventListener("change",e=>{
+  const duty=curDuty();if(!duty)return;const t=e.target;
+  if(t.id==="dName"){duty.name=t.value.trim()||duty.name;renderTabs();recompute();return}
+  if(t.id==="dPer"){duty.per=Math.max(1,Math.min(8,parseInt(t.value)||1));recompute();return}
+  if(t.id==="dMeal"){duty.meal=t.checked;recompute();return}
+  if(t.id==="dFocus"){S.focus=t.value;save();renderView();return}
+  if(t.id==="dOccN"){let n=Math.max(1,Math.min(6,parseInt(t.value)||1));
+    while(duty.occ.length<n){const last=duty.occ[duty.occ.length-1];duty.occ.push({id:uid(),label:"Occurrence "+(duty.occ.length+1),time:last?(()=>{const m=(hm(last.time)+180)%1440;return p2(Math.floor(m/60))+":"+p2(m%60)})():"09:00",dur:last?last.dur:0.5})}
+    while(duty.occ.length>n)duty.occ.pop();dutyEdit="__settings";recompute();return}
+  const occLi=t.closest("[data-occ]");
+  if(occLi&&t.dataset.of){const o=duty.occ.find(x=>x.id===occLi.dataset.occ);if(!o)return;const f=t.dataset.of;
+    if(f==="dur")o.dur=Math.max(0.25,Math.min(6,parseFloat(t.value)||0.5));else if(t.value)o[f]=t.value;dutyEdit="__settings";recompute();return}
+  if(t.dataset.meal&&dutyEdit){const m=mealOf(dutyEdit);
+    if(t.dataset.meal==="recipe"){m.recipe=t.value.trim();save();const r=document.querySelector(`[data-dkey="${CSS.escape(dutyEdit)}"] .recipe`);if(r)r.innerHTML=m.recipe?`<b>${esc(m.recipe)}</b>${m.items.length?` · ${m.items.length} ingrédient${m.items.length>1?"s":""}`:""}`:"Recette à définir";return}
+    if(t.dataset.meal==="done"){m.done=t.checked;INV=null;save();renderView();return}}
+  const ing=t.closest("[data-ing]");
+  if(ing&&dutyEdit){const m=mealOf(dutyEdit),i=+ing.dataset.ing,x=m.items[i];if(!x)return;
+    if(t.dataset.ingF==="n"){const inv=invItem(t.value);x.n=inv?inv.name:t.value.trim();t.value=x.n}
+    else x.q=t.value===""?"":Math.max(0,parseFloat(t.value)||0);
+    INV=null;save();const u=V.querySelector(`[data-unit="${i}"]`),inv=invItem(x.n);
+    if(u){u.className="unit"+(x.n&&!inv?" unknown":"");u.textContent=inv?`${inv.unit} · reste ${fmtQ(invLeft(inv))}`:(x.n?"absent de l'inventaire":"")}
+    $("exportBox").value=JSON.stringify(S);}
+});
+V.addEventListener("click",e=>{
+  const duty=curDuty();if(!duty)return;
+  const btn=e.target.closest(".slotbtn");
+  if(btn){const k=btn.dataset.dkey;if(dutyEdit===k)dutyEdit=null;else{dutyEdit=k;const it=RD.res[duty.id].inst.find(x=>x.key===k);dutyDraft=[...(it?it.team:[])]}renderView();
+    const el=document.getElementById("slot-"+k);el&&dutyEdit&&el.scrollIntoView({block:"nearest"});return}
+  const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act;
+  if(act==="dpick"){const id=a.dataset.id;dutyDraft=dutyDraft.includes(id)?dutyDraft.filter(x=>x!==id):[...dutyDraft,id];a.setAttribute("aria-pressed",dutyDraft.includes(id))}
+  if(act==="dclose"){dutyEdit=null;renderView()}
+  if(act==="dreset"){delete duty.overrides[dutyEdit];recompute()}
+  if(act==="dsave"){delete duty.overrides[dutyEdit];const auto=assignDuties(RW).res[duty.id].inst.find(x=>x.key===dutyEdit);
+    const same=auto&&auto.team.length===dutyDraft.length&&auto.team.every(x=>dutyDraft.includes(x));if(!same)duty.overrides[dutyEdit]=[...dutyDraft];recompute()}
+  if(act==="addIng"){mealOf(dutyEdit).items.push({n:"",q:""});save();renderView();const ins=V.querySelectorAll('[data-ing-f="n"]');ins.length&&ins[ins.length-1].focus()}
+  if(act==="delIng"){mealOf(dutyEdit).items.splice(+a.dataset.i,1);INV=null;save();renderView()}
+  if(act==="toggleExcl"){const id=a.dataset.id;duty.excl=duty.excl.includes(id)?duty.excl.filter(x=>x!==id):[...duty.excl,id];dutyEdit="__settings";recompute()}
+  if(act==="addOcc"){const last=duty.occ[duty.occ.length-1];const m=last?(hm(last.time)+180)%1440:540;duty.occ.push({id:uid(),label:"Occurrence "+(duty.occ.length+1),time:p2(Math.floor(m/60))+":"+p2(m%60),dur:last?last.dur:0.5});dutyEdit="__settings";recompute()}
+  if(act==="delOcc"){const id=a.closest("[data-occ]").dataset.occ;if(duty.occ.length>1)duty.occ=duty.occ.filter(o=>o.id!==id);dutyEdit="__settings";recompute()}
+  if(act==="clearDutyOrphans"){RD.res[duty.id].orphans.forEach(k=>delete duty.overrides[k]);recompute()}
+  if(act==="hideBanner"){S.banners[a.dataset.b]=false;save();renderView()}
+  if(act==="delDuty"){$("delDutyZone").innerHTML=`<span class="confirm">Supprimer « ${esc(duty.name)} » et ses modifications ? <button class="btn small danger" type="button" data-act="delDutyYes">Supprimer</button><button class="btn ghost small" type="button" data-act="delDutyNo">Annuler</button></span>`}
+  if(act==="delDutyNo")renderView();
+  if(act==="delDutyYes"){S.duties=S.duties.filter(d=>d!==duty);compute();go("quarts")}
+  if(act==="prefill"){const n=prefillMeals(duty);$("prefillZone").innerHTML=`<span class="hint" style="margin:0">${n} repas remplis.</span>`;INV=null;save();setTimeout(renderView,900)}
+});
+function prefillMeals(duty){
+  const occs=[...duty.occ].sort((a,b)=>hm(a.time)-hm(b.time)).slice(0,2);if(occs.length<2)return 0;
+  let n=0;RD.res[duty.id].inst.forEach(it=>{const menu=SEED.menu[it.day-1];if(!menu)return;
+    const which=it.occ.id===occs[0].id?"lunch":it.occ.id===occs[1].id?"dinner":null;if(!which)return;
+    const m=S.meals[it.key];if(m&&(m.recipe||(m.items&&m.items.length)))return;
+    S.meals[it.key]={recipe:menu[which].recipe,items:menu[which].items.map(([nn,q])=>({n:nn,q})),done:false};n++});
+  return n;
+}
+
+/* --- inventaire --- */
+const VI=$("view-inv");
+VI.addEventListener("input",e=>{if(e.target.id==="invSearch"){invFilter=e.target.value;const pos=e.target.selectionStart;renderInv();const s=$("invSearch");s.focus();try{s.setSelectionRange(pos,pos)}catch(x){}}});
+VI.addEventListener("change",e=>{const t=e.target;
+  if(t.id==="invAlerts"){invAlertsOnly=t.checked;renderInv();return}
+  if(t.dataset.invF==="initial"){const tr=t.closest("[data-inv]"),it=S.inv.find(i=>i.id===tr.dataset.inv);if(it){it.initial=Math.max(0,parseFloat(t.value)||0);save();renderInv();$("exportBox").value=JSON.stringify(S)}}
+});
+VI.addEventListener("submit",e=>{if(e.target.id!=="invAddForm")return;e.preventDefault();
+  const name=$("iaName").value.trim(),unit=$("iaUnit").value.trim(),q=parseFloat($("iaQty").value);
+  if(!name||!unit||isNaN(q)){$("iaMsg").textContent="Renseigne la denrée, l'unité et la quantité.";return}
+  if(invItem(name)){$("iaMsg").textContent="Cette denrée existe déjà : modifie sa quantité de départ dans le tableau.";return}
+  S.inv.push({id:uid(),name,unit,cat:$("iaCat").value,initial:q});invOpenAdd=false;save();renderTabs();renderInv();});
+VI.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act;
+  if(act==="toggleAdd"){invOpenAdd=!invOpenAdd;renderInv();invOpenAdd&&$("iaName").focus()}
+  if(act==="take"){const id=a.dataset.id,inp=VI.querySelector(`[data-take="${id}"]`),q=parseFloat(inp.value),it=S.inv.find(i=>i.id===id);
+    if(!it||!(q>0)){inp.focus();return}S.invLog.push({id:uid(),t:Date.now(),n:it.name,q,note:"hors repas"});save();renderInv()}
+  if(act==="undoLog"){S.invLog=S.invLog.filter(l=>l.id!==a.dataset.id);save();renderInv()}
+  if(act==="delInv"){const id=a.dataset.id;const tr=a.closest("tr");const it=S.inv.find(i=>i.id===id);
+    a.parentElement.innerHTML=`<span class="confirm">Supprimer ? <button class="btn small danger" type="button" data-act="delInvYes" data-id="${id}">Oui</button><button class="btn ghost small" type="button" data-act="cancel">Non</button></span>`}
+  if(act==="delInvYes"){S.inv=S.inv.filter(i=>i.id!==a.dataset.id);save();renderTabs();renderInv()}
+  if(act==="cancel")renderInv();
+  if(act==="hideBanner"){S.banners[a.dataset.b]=false;save();renderInv()}
+  if(act==="loadSeed"){S.inv=SEED.inventory.map(i=>Object.assign({id:uid()},i));S.banners.inv=true;save();renderTabs();renderInv()}
+  if(act==="askSeed"){$("seedZone").innerHTML=`<span class="confirm">Remplacer toutes les quantités de départ par la liste prévue ? Les sorties et les repas sont conservés. <button class="btn small danger" type="button" data-act="loadSeed">Remplacer</button><button class="btn ghost small" type="button" data-act="cancel">Annuler</button></span>`}
+});
+
+/* --- sauvegarde --- */
+$("copyBtn").addEventListener("click",()=>{const t=$("exportBox");const ok=()=>$("copyMsg").textContent="Copié.";const fb=()=>{t.focus();t.select();$("copyMsg").textContent="Texte sélectionné, copie-le manuellement."};
+  try{navigator.clipboard.writeText(t.value).then(ok,fb)}catch(e){fb()}});
+$("importBtn").addEventListener("click",()=>{
+  try{const d=JSON.parse($("importBox").value);if(!d.settings||!Array.isArray(d.crew))throw 0;
+    S=d;if(!S.v){S.duties=defaultDuties();S.inv=SEED.inventory.map(i=>Object.assign({id:uid()},i));S.banners={inv:true,meals:false}}
+    normalize();editKey=null;dutyEdit=null;boot();$("importMsg").textContent="Planning importé.";$("importBox").value="";
+  }catch(e){$("importMsg").textContent="Texte non reconnu : colle l'export complet, sans le modifier."}});
+$("resetZone").addEventListener("click",e=>{const z=$("resetZone");
+  if(e.target.id==="resetBtn")z.innerHTML=`<span class="confirm">Effacer équipage, réglages, corvées, repas et inventaire ? <button class="btn small danger" type="button" data-r="yes">Oui, tout réinitialiser</button><button class="btn ghost small" type="button" data-r="no">Annuler</button></span>`;
+  else if(e.target.dataset.r==="yes"){S=defaults();normalize();editKey=null;dutyEdit=null;boot();z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`}
+  else if(e.target.dataset.r==="no")z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`});
+
+function boot(){
+  compute();
+  if(S.fresh){const m=S.duties.find(d=>d.meal);if(m)prefillMeals(m);S.fresh=false}
+  renderSettings();renderCrew();renderAll();save();
+}
+const h=(location.hash||"").slice(1);if(h&&(h==="quarts"||h==="inventaire"||h.startsWith("p-")))S.tab=h;
 if(window.matchMedia("(max-width:860px)").matches)$("settingsPanel").open=false;
-renderSettings();renderCrew();R=assign();renderStats();renderTimeline();renderCal();
-setInterval(()=>{if(!editKey)renderTimeline()},60000);
+window.addEventListener("hashchange",()=>{const x=location.hash.slice(1);if(x&&x!==S.tab&&(x==="quarts"||x==="inventaire"||S.duties.some(d=>"p-"+d.id===x)))go(x)});
+boot();
+setInterval(()=>{if(!editKey&&!dutyEdit&&S.tab==="quarts")renderTimeline()},60000);
+window.__T={get S(){return S},assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
 })();
 </script>
 
