@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tableau des quarts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout : panneau de bord (réglages, équipage, équité) à gauche, journal de quarts par jour à droite ; une colonne sur téléphone */
+:root{
+  --bg:#ECF0F2; --surface:#FFFFFF; --sunk:#F4F7F8; --ink:#13283A; --muted:#5A6B78; --line:#D2DBE1;
+  --sea:#1E6A86; --sea-ink:#FFFFFF; --sea-soft:#DCEBF1;
+  --night:#1B2B44; --day:#EFE3B0; --dawn:#E3855A; --dusk:#A9567A;
+  --warn:#B4700E; --warn-soft:#F8ECD7; --edit:#7A4FB0; --edit-soft:#EEE6F7;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1720; --surface:#14232F; --sunk:#101D27; --ink:#E2EBF1; --muted:#93A5B3; --line:#263B4C;
+  --sea:#5DB3D0; --sea-ink:#0B1A24; --sea-soft:#17394A;
+  --night:#08111C; --day:#6A6340; --dawn:#E8976B; --dusk:#C47595;
+  --warn:#E3A44A; --warn-soft:#3A2E17; --edit:#B595E0; --edit-soft:#2C2240; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1720; --surface:#14232F; --sunk:#101D27; --ink:#E2EBF1; --muted:#93A5B3; --line:#263B4C;
+  --sea:#5DB3D0; --sea-ink:#0B1A24; --sea-soft:#17394A;
+  --night:#08111C; --day:#6A6340; --dawn:#E8976B; --dusk:#C47595;
+  --warn:#E3A44A; --warn-soft:#3A2E17; --edit:#B595E0; --edit-soft:#2C2240; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:20px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font-family:var(--f-display);font-weight:700;font-size:2.1rem;letter-spacing:.01em;margin:0;line-height:1;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;font-size:.92rem}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+.main{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+.side{display:grid;gap:16px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.panel h2{font-family:var(--f-display);font-weight:600;font-size:1.05rem;text-transform:uppercase;letter-spacing:.08em;margin:0 0 10px;color:var(--muted)}
+details.panel>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.panel>summary::-webkit-details-marker{display:none}
+details.panel>summary h2{margin:0}
+details.panel>summary::after{content:"＋";color:var(--muted);font-size:1rem}
+details.panel[open]>summary::after{content:"－"}
+details.panel[open]>summary{margin-bottom:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+label.f{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+label.f.full{grid-column:1/-1}
+input,select,textarea,button{font:inherit;color:inherit}
+input[type=number],input[type=time],input[type=datetime-local],input[type=text],select,textarea{
+  background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%;min-width:0;color:var(--ink)}
+textarea{font-family:var(--f-mono);font-size:.75rem;min-height:90px;resize:vertical}
+:focus-visible{outline:2px solid var(--sea);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 12px;cursor:pointer;font-size:.88rem;font-weight:500}
+.btn:hover{border-color:var(--sea)}
+.btn.primary{background:var(--sea);color:var(--sea-ink);border-color:var(--sea)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted);padding:5px 8px}
+.btn.ghost:hover{color:var(--ink)}
+.btn.small{padding:4px 9px;font-size:.8rem}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hint{font-size:.78rem;color:var(--muted);margin:8px 0 0}
+.crew{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.crew li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}
+.crew input[type=text]{padding:5px 8px}
+.crew li.off input[type=text]{color:var(--muted);text-decoration:line-through}
+.dot{width:10px;height:10px;border-radius:50%}
+.toggle{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--muted);white-space:nowrap}
+.addrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}
+
+.tablewrap{overflow-x:auto}
+table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.stats th{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;color:var(--muted);text-align:right;padding:4px 6px;border-bottom:1px solid var(--line)}
+.stats th:first-child,.stats td:first-child{text-align:left}
+.stats td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:.8rem}
+.stats td:first-child{font-family:var(--f-body);font-size:.85rem}
+.stats tr.off td{color:var(--muted)}
+.stats td.hi{color:var(--warn);font-weight:600}
+.spread{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pill{font-size:.75rem;border-radius:999px;padding:3px 9px;background:var(--sunk);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.pill.ok{border-color:var(--sea);color:var(--sea)}
+.pill.warn{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.toolbar .row{gap:10px}
+.toolbar select{width:auto}
+.timeline{display:grid;gap:14px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.dayhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:10px 14px 6px}
+.dayhead h3{margin:0;font-family:var(--f-display);font-weight:700;font-size:1.25rem;letter-spacing:.02em}
+.dayhead h3 small{font-family:var(--f-body);font-weight:400;font-size:.85rem;color:var(--muted);margin-left:6px;letter-spacing:0}
+.dayhead .meta{font-size:.78rem;color:var(--muted)}
+.strip{position:relative;height:30px;margin:2px 14px 4px;border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.strip .sky{position:absolute;top:0;bottom:0}
+.strip .seg{position:absolute;top:0;bottom:0;border-left:1px solid color-mix(in srgb,var(--ink) 35%,transparent);cursor:pointer}
+.strip .seg.me{background:color-mix(in srgb,var(--sea) 70%,transparent);box-shadow:inset 0 0 0 2px var(--sea)}
+.strip .seg.now{box-shadow:inset 0 0 0 2px var(--warn)}
+.ticks{position:relative;height:14px;margin:0 14px 6px;font-family:var(--f-mono);font-size:.62rem;color:var(--muted)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+.ticks span:first-child{transform:none}
+.ticks span:last-child{transform:translateX(-100%)}
+.slots{list-style:none;margin:0;padding:0}
+.slot{border-top:1px solid var(--line)}
+.slotbtn{display:grid;grid-template-columns:7.2rem 5.6rem minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;padding:9px 14px;cursor:pointer}
+.slotbtn:hover{background:var(--sunk)}
+@media (max-width:520px){.slotbtn{grid-template-columns:6.6rem minmax(0,1fr) auto;row-gap:4px}.slotbtn .kind{grid-column:1;grid-row:2}.slotbtn .who{grid-column:2/4;grid-row:1/3}}
+.time{font-family:var(--f-mono);font-size:.85rem;font-variant-numeric:tabular-nums}
+.time small{display:block;color:var(--muted);font-size:.7rem}
+.kind{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+.who{display:flex;flex-wrap:wrap;gap:5px;min-width:0}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px 2px 6px;font-size:.82rem;background:var(--sunk);border:1px solid var(--line);white-space:nowrap}
+.chip.me{border-color:var(--sea);background:var(--sea-soft);font-weight:600}
+.chip.empty{color:var(--warn);border-color:var(--warn);background:var(--warn-soft);padding-left:9px}
+.flag{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;border-radius:4px;padding:2px 6px;white-space:nowrap}
+.flag.edit{color:var(--edit);background:var(--edit-soft)}
+.flag.now{color:var(--warn);background:var(--warn-soft)}
+.slot.isnow .slotbtn{background:color-mix(in srgb,var(--warn) 9%,transparent)}
+.slot.dim .slotbtn{opacity:.45}
+.editor{padding:4px 14px 14px;background:var(--sunk);border-top:1px dashed var(--line)}
+.editor p{margin:8px 0;font-size:.82rem;color:var(--muted)}
+.pick{display:flex;flex-wrap:wrap;gap:6px}
+.pick button{border-radius:999px;border:1px solid var(--line);background:var(--surface);padding:5px 11px;font-size:.85rem;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.pick button[aria-pressed="true"]{background:var(--sea);border-color:var(--sea);color:var(--sea-ink);font-weight:600}
+.pick button .warnmark{color:var(--warn);font-size:.72rem}
+.pick button[aria-pressed="true"] .warnmark{color:inherit}
+.editor .row{margin-top:10px}
+.notice{font-size:.82rem;background:var(--warn-soft);color:var(--ink);border:1px solid var(--warn);border-radius:8px;padding:8px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.82rem}
+@media (prefers-reduced-motion:no-preference){.slotbtn,.btn,.pick button{transition:background .15s,border-color .15s}}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Tableau des quarts</h1>
+      <p class="sub">Lombok → Thaïlande · heure du bord · répartition auto équitable, modifiable quart par quart</p>
+    </div>
+    <div class="legend" aria-label="Légende">
+      <span><i class="sw" style="background:var(--night)"></i>Nuit</span>
+      <span><i class="sw" style="background:var(--day)"></i>Jour</span>
+      <span><i class="sw" style="background:var(--dawn)"></i>Lever</span>
+      <span><i class="sw" style="background:var(--dusk)"></i>Coucher</span>
+    </div>
+  </header>
+
+  <div class="main">
+    <aside class="side">
+      <details class="panel" id="settingsPanel" open>
+        <summary><h2>Réglages</h2></summary>
+        <div class="grid2">
+          <label class="f full">Début du premier quart<input type="datetime-local" id="sStart"></label>
+          <label class="f">Durée de la traversée (jours)<input type="number" id="sDays" min="1" max="60" step="1"></label>
+          <label class="f">Équipiers par quart<input type="number" id="sPer" min="1" max="4" step="1"></label>
+          <label class="f">Durée quart de jour (h)<input type="number" id="sDurDay" min="1" max="8" step="0.5"></label>
+          <label class="f">Durée quart de nuit (h)<input type="number" id="sDurNight" min="1" max="8" step="0.5"></label>
+          <label class="f">Lever du soleil<input type="time" id="sSunrise"></label>
+          <label class="f">Coucher du soleil<input type="time" id="sSunset"></label>
+          <label class="f full">Repos minimum entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
+        </div>
+        <p class="hint">Lever et coucher par défaut : ordres de grandeur pour la latitude Lombok–Malacca, à ajuster au fil de la route. Un quart « lever » ou « coucher » est celui pendant lequel le soleil se lève ou se couche.</p>
+      </details>
+
+      <section class="panel">
+        <h2>Équipage</h2>
+        <ul class="crew" id="crewList"></ul>
+        <form class="addrow" id="addForm">
+          <input type="text" id="addName" placeholder="Prénom de l'équipier" aria-label="Prénom du nouvel équipier">
+          <button class="btn primary" type="submit">Ajouter</button>
+        </form>
+        <p class="hint">Décocher « de quart » sort quelqu'un de la rotation (skipper, malade) sans l'effacer.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Équité</h2>
+        <div class="tablewrap"><table class="stats" id="stats"></table></div>
+        <div class="spread" id="spread"></div>
+      </section>
+
+      <section class="panel" id="calPanel">
+        <h2>Agenda</h2>
+        <div class="grid2">
+          <label class="f full">Quarts de<select id="calWho"></select></label>
+          <label class="f">Période<select id="calWhen"><option value="all">Toute la traversée</option><option value="next">À partir de maintenant</option></select></label>
+          <label class="f">Rappel<select id="calAlarm"><option value="0">Aucun</option><option value="10">10 min avant</option><option value="15">15 min avant</option><option value="30">30 min avant</option></select></label>
+          <label class="f">Heure du bord (UTC+)<input type="number" id="calBoat" min="-12" max="14" step="0.5"></label>
+          <label class="f">Agenda Google (UTC+)<input type="number" id="calAgenda" min="-12" max="14" step="0.5"></label>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary small" type="button" id="icsBtn">Fichier .ics</button>
+          <button class="btn small" type="button" id="csvBtn">Fichier .csv Google</button>
+        </div>
+        <p class="hint" id="calMsg">.ics : iPhone (ouvrir le fichier), Google Agenda (import sur ordinateur), Outlook ; inclut les rappels. .csv : import Google Agenda sans rappel, heures converties dans le fuseau de ton agenda. Importe dans un agenda dédié « Quarts » : après un changement, tu le vides et tu réimportes.</p>
+      </section>
+
+      <details class="panel" id="savePanel">
+        <summary><h2>Sauvegarde</h2></summary>
+        <p class="hint" style="margin-top:0">Le planning est gardé sur cet appareil. Pour le transférer sur un autre téléphone, copie ce texte et colle-le de l'autre côté.</p>
+        <label class="f">Export<textarea id="exportBox" readonly></textarea></label>
+        <div class="row" style="margin-top:8px"><button class="btn small" id="copyBtn" type="button">Copier</button><span class="hint" id="copyMsg" style="margin:0"></span></div>
+        <label class="f" style="margin-top:12px">Import<textarea id="importBox" placeholder="Colle ici un export"></textarea></label>
+        <div class="row" style="margin-top:8px"><button class="btn small" id="importBtn" type="button">Importer</button><span class="hint" id="importMsg" style="margin:0"></span></div>
+        <div class="row" style="margin-top:14px" id="resetZone"><button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button></div>
+      </details>
+    </aside>
+
+    <section style="display:grid;gap:14px;min-width:0">
+      <div class="toolbar">
+        <div class="row">
+          <label class="toggle" for="focusSel" style="font-size:.85rem">Suivre</label>
+          <select id="focusSel"></select>
+          <label class="toggle" style="font-size:.85rem"><input type="checkbox" id="onlyMine"> seulement ses quarts</label>
+        </div>
+        <div class="row">
+          <span class="pill" id="editCount"></span>
+          <button class="btn small" id="nowBtn" type="button">Quart en cours</button>
+        </div>
+      </div>
+      <div id="orphans"></div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function(){
+const H=3600e3, MIN=60e3, KEY="quarts-voilier-v1";
+const COLORS=["#2F7FA6","#D0663F","#4F9A5B","#9B5BB5","#C79A1E","#C2477A","#3E8F8C","#7A6A4F","#5B6FC9","#A1503A","#6E8F2E","#B05AA0"];
+const p2=n=>String(n).padStart(2,"0");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const keyOf=ms=>{const d=new Date(ms);return `${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}T${p2(d.getHours())}:${p2(d.getMinutes())}`};
+const parseLocal=s=>{const [d,t]=s.split("T");const [y,mo,da]=d.split("-").map(Number);const [hh,mm]=(t||"00:00").split(":").map(Number);return new Date(y,mo-1,da,hh,mm).getTime()};
+const mod=ms=>{const d=new Date(ms);return d.getHours()*60+d.getMinutes()};
+const hm=s=>{const [a,b]=s.split(":").map(Number);return a*60+b};
+const fmtT=ms=>{const d=new Date(ms);return `${p2(d.getHours())}:${p2(d.getMinutes())}`};
+const fmtH=h=>(Math.round(h*10)/10).toLocaleString("fr-FR");
+const fmtDay=ms=>new Date(ms).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"});
+const uid=()=>Math.random().toString(36).slice(2,9);
+
+function defaults(){
+  const d=new Date();d.setDate(d.getDate()+1);d.setHours(18,0,0,0);
+  const names=["Mehdi","Équipier 2","Équipier 3","Équipier 4","Équipier 5","Équipier 6","Équipier 7","Équipier 8"];
+  return {settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3},
+    crew:names.map((n,i)=>({id:uid(),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8}};
+}
+let S;
+try{const raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):null}catch(e){S=null}
+if(!S||!S.settings||!Array.isArray(S.crew))S=defaults();
+S.overrides=S.overrides||{};
+S.cal=Object.assign({who:"",when:"all",alarm:"15",boat:8,agenda:8},S.cal||{});
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+let editKey=null, draft=[];
+
+/* ---------- calcul ---------- */
+function buildSlots(st){
+  const start=parseLocal(st.start), end=start+st.days*24*H, SR=hm(st.sunrise), SS=hm(st.sunset);
+  const isNight=m=>SS>SR?(m>=SS||m<SR):(m>=SS&&m<SR);
+  const contains=(a,b,m)=>{const d=new Date(a);d.setHours(0,0,0,0);for(let k=0;k<2;k++){const x=d.getTime()+k*24*H+m*MIN;if(x>=a&&x<b)return true}return false};
+  const out=[];let t=start,guard=0;
+  while(t<end&&guard++<2000){
+    const dur=(isNight(mod(t))?st.durNight:st.durDay)*H;
+    const e=Math.min(t+Math.max(dur,0.5*H),end);
+    let n=0;for(let x=t;x<e;x+=5*MIN)if(isNight(mod(x)))n+=5;
+    const hours=(e-t)/H, nh=n/60;
+    const lever=contains(t,e,SR), coucher=contains(t,e,SS);
+    const type=lever?"lever":coucher?"coucher":(nh>=hours/2?"nuit":"jour");
+    out.push({start:t,end:e,hours,nh,type,key:keyOf(t)});t=e;
+  }
+  return out;
+}
+function assign(){
+  const st=S.settings, slots=buildSlots(st), ids=new Set(S.crew.map(c=>c.id));
+  const stats={};S.crew.forEach(c=>stats[c.id]={h:0,nh:0,lever:0,coucher:0,n:0,last:-Infinity});
+  const pairs={};const pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
+  const pool=S.crew.filter(c=>c.on);
+  const order={};S.crew.forEach((c,i)=>order[c.id]=i);
+  for(const sl of slots){
+    let team, ov=S.overrides[sl.key];
+    if(ov){team=ov.filter(id=>ids.has(id));sl.edited=true}
+    else{
+      team=[];
+      for(let i=0;i<Math.min(st.per,pool.length);i++){
+        const cands=pool.filter(p=>!team.includes(p.id));
+        const rested=cands.filter(p=>stats[p.id].last===-Infinity||(sl.start-stats[p.id].last)/H>=st.rest-1e-9);
+        const use=rested.length?rested:cands;
+        const prim=p=>{const s=stats[p.id];return sl.type==="lever"?s.lever:sl.type==="coucher"?s.coucher:sl.type==="nuit"?s.nh:s.h};
+        const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
+        use.sort((a,b)=>prim(a)-prim(b)||pair(a)-pair(b)||stats[a.id].h-stats[b.id].h||stats[a.id].last-stats[b.id].last||order[a.id]-order[b.id]);
+        team.push(use[0].id);
+      }
+    }
+    sl.team=team;
+    team.forEach(id=>{const s=stats[id];if(!s)return;s.h+=sl.hours;s.nh+=sl.nh;if(sl.type==="lever")s.lever++;if(sl.type==="coucher")s.coucher++;s.n++;s.last=sl.end});
+    for(let i=0;i<team.length;i++)for(let j=i+1;j<team.length;j++){const k=pk(team[i],team[j]);pairs[k]=(pairs[k]||0)+1}
+  }
+  const keys=new Set(slots.map(s=>s.key));
+  const orphans=Object.keys(S.overrides).filter(k=>!keys.has(k));
+  return {slots,stats,orphans};
+}
+
+/* ---------- rendu ---------- */
+const $=id=>document.getElementById(id);
+const crewById=id=>S.crew.find(c=>c.id===id);
+const KIND={nuit:["Nuit","var(--night)"],jour:["Jour","var(--day)"],lever:["Lever","var(--dawn)"],coucher:["Coucher","var(--dusk)"]};
+let R;
+
+function renderSettings(){
+  const s=S.settings;
+  $("sStart").value=s.start;$("sDays").value=s.days;$("sPer").value=s.per;$("sDurDay").value=s.durDay;
+  $("sDurNight").value=s.durNight;$("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;
+}
+function renderCrew(){setTimeout(()=>{try{renderCal()}catch(e){}},0);
+  $("crewList").innerHTML=S.crew.map(c=>`<li class="${c.on?"":"off"}" data-id="${c.id}">
+    <span class="dot" style="background:${c.color}"></span>
+    <input type="text" id="n-${c.id}" value="${esc(c.name)}" aria-label="Nom" data-act="rename">
+    <span class="row" style="gap:4px;flex-wrap:nowrap">
+      <label class="toggle"><input type="checkbox" data-act="on" ${c.on?"checked":""}> de quart</label>
+      <button class="btn ghost small" type="button" data-act="del" aria-label="Retirer ${esc(c.name)}">✕</button>
+    </span></li>`).join("");
+  const f=$("focusSel"), v=S.focus;
+  f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+  f.value=crewById(v)?v:"";
+}
+function renderStats(){
+  const st=R.stats, on=S.crew.filter(c=>c.on);
+  const vals=k=>on.map(c=>st[c.id][k]);
+  const mx={};["h","nh","lever","coucher"].forEach(k=>mx[k]=Math.max(0,...vals(k)));
+  const mn={};["h","nh","lever","coucher"].forEach(k=>mn[k]=on.length?Math.min(...vals(k)):0);
+  const cell=(c,k,txt)=>`<td class="${c.on&&mx[k]-mn[k]>(k==="h"||k==="nh"?S.settings.durNight:1)&&st[c.id][k]===mx[k]?"hi":""}">${txt}</td>`;
+  $("stats").innerHTML=`<thead><tr><th>Équipier</th><th>Quarts</th><th>Heures</th><th>Nuit h</th><th title="Levers de soleil">Lever</th><th title="Couchers de soleil">Couch.</th></tr></thead><tbody>`+
+    S.crew.map(c=>{const s=st[c.id];return `<tr class="${c.on?"":"off"}"><td><span class="row" style="gap:6px;flex-wrap:nowrap"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${c.on?"":" <small>(hors quart)</small>"}</span></td><td>${s.n}</td>${cell(c,"h",fmtH(s.h))}${cell(c,"nh",fmtH(s.nh))}${cell(c,"lever",s.lever)}${cell(c,"coucher",s.coucher)}</tr>`}).join("")+`</tbody>`;
+  const d=k=>mx[k]-mn[k];
+  const pill=(lbl,v,tol,unit)=>`<span class="pill ${v>tol?"warn":"ok"}">${lbl} : écart ${unit?fmtH(v)+" h":v}</span>`;
+  const nOn=on.length;
+  $("spread").innerHTML=nOn?pill("Heures",d("h"),S.settings.durNight,1)+pill("Nuit",d("nh"),S.settings.durNight,1)+pill("Levers",d("lever"),1)+pill("Couchers",d("coucher"),1):`<span class="pill warn">Personne n'est de quart</span>`;
+  const perDay=R.slots.length?fmtH(R.slots.reduce((a,s)=>a+s.hours*s.team.length,0)/Math.max(1,nOn)/S.settings.days):0;
+  $("spread").insertAdjacentHTML("beforeend",`<span class="pill">≈ ${perDay} h de quart / pers / jour</span>`);
+}
+function renderTimeline(){
+  const focus=crewById(S.focus)?S.focus:"", only=$("onlyMine").checked&&focus, now=Date.now();
+  const SR=hm(S.settings.sunrise), SS=hm(S.settings.sunset);
+  const start=parseLocal(S.settings.start);
+  const d0=new Date(start);d0.setHours(0,0,0,0);
+  const days=[];
+  R.slots.forEach(sl=>{const dd=new Date(sl.start);dd.setHours(0,0,0,0);const k=dd.getTime();let g=days[days.length-1];if(!g||g.t!==k){g={t:k,slots:[]};days.push(g)}g.slots.push(sl)});
+  const pct=m=>(m/1440*100).toFixed(3)+"%";
+  const tw=60;
+  const sky=()=>{
+    const segs=[];const add=(a,b,col)=>{if(b>a)segs.push(`<i class="sky" style="left:${pct(a)};width:${pct(b-a)};background:${col}"></i>`)};
+    const a1=Math.max(0,SR-tw/2), a2=Math.min(1440,SR+tw/2), b1=Math.max(0,SS-tw/2), b2=Math.min(1440,SS+tw/2);
+    add(0,a1,"var(--night)");add(a1,a2,"var(--dawn)");add(a2,b1,"var(--day)");add(b1,b2,"var(--dusk)");add(b2,1440,"var(--night)");
+    return segs.join("");
+  };
+  const skyHtml=sky();
+  const ticks=`<div class="ticks" aria-hidden="true">${[0,6,12,18,24].map(h=>`<span style="left:${pct(h*60)}">${p2(h%24===0&&h?24:h)}h</span>`).join("")}</div>`;
+  $("timeline").innerHTML=days.map(g=>{
+    const dayIdx=Math.round((g.t-d0.getTime())/(24*H))+1;
+    const dayEnd=g.t+24*H;
+    const segs=R.slots.filter(s=>s.end>g.t&&s.start<dayEnd).map(s=>{
+      const a=Math.max(s.start,g.t),b=Math.min(s.end,dayEnd);
+      const cls=["seg"];if(focus&&s.team.includes(focus))cls.push("me");if(now>=s.start&&now<s.end)cls.push("now");
+      return `<span class="${cls.join(" ")}" data-key="${s.key}" title="${fmtT(s.start)}–${fmtT(s.end)}" style="left:${pct((a-g.t)/MIN)};width:${pct((b-a)/MIN)}"></span>`}).join("");
+    const mine=focus?g.slots.filter(s=>s.team.includes(focus)).reduce((a,s)=>a+s.hours,0):null;
+    const rows=g.slots.map(sl=>{
+      const isMine=focus&&sl.team.includes(focus);
+      if(only&&!isMine&&editKey!==sl.key)return "";
+      const [kl,kc]=KIND[sl.type];
+      const isNow=now>=sl.start&&now<sl.end;
+      const chips=sl.team.length?sl.team.map(id=>{const c=crewById(id);return c?`<span class="chip ${id===focus?"me":""}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}</span>`:""}).join(""):`<span class="chip empty">Personne</span>`;
+      const flags=(isNow?`<span class="flag now">En cours</span>`:"")+(sl.edited?`<span class="flag edit">Modifié</span>`:"");
+      const open=editKey===sl.key;
+      return `<li class="slot ${isNow?"isnow":""} ${focus&&!isMine&&!only?"dim":""}" id="slot-${sl.key}">
+        <button class="slotbtn" type="button" data-key="${sl.key}" aria-expanded="${open}">
+          <span class="time">${fmtT(sl.start)} – ${fmtT(sl.end)}<small>${fmtH(sl.hours)} h</small></span>
+          <span class="kind"><i class="sw" style="background:${kc}"></i>${kl}</span>
+          <span class="who">${chips}</span>
+          <span class="row" style="gap:4px">${flags}</span>
+        </button>${open?editorHtml(sl):""}</li>`}).join("");
+    if(only&&!rows.trim())return "";
+    return `<article class="day"><div class="dayhead"><h3>J${dayIdx}<small>${fmtDay(g.t)}</small></h3><span class="meta">${focus?`${esc(crewById(focus).name)} : ${fmtH(mine)} h`:`${g.slots.length} quarts`}</span></div>
+      <div class="strip" role="img" aria-label="Journée de 24 h, quarts et lumière">${skyHtml}${segs}</div>${ticks}
+      <ul class="slots">${rows}</ul></article>`}).join("")||`<p class="hint">Aucun quart pour ce filtre.</p>`;
+  const nEdit=Object.keys(S.overrides).length-R.orphans.length;
+  $("editCount").textContent=nEdit?`${nEdit} quart${nEdit>1?"s":""} modifié${nEdit>1?"s":""}`:"Planning auto";
+  $("orphans").innerHTML=R.orphans.length?`<div class="notice"><span>${R.orphans.length} modification${R.orphans.length>1?"s":""} ne correspond${R.orphans.length>1?"ent":""} plus à un quart (horaires changés).</span><button class="btn small" type="button" data-act="clearOrphans">Les effacer</button></div>`:"";
+  $("exportBox").value=JSON.stringify(S);
+}
+function editorHtml(sl){
+  const idx=R.slots.indexOf(sl), prev=R.slots[idx-1], next=R.slots[idx+1];
+  const restWarn=id=>{
+    const rest=S.settings.rest*H;let w="";
+    for(let i=idx-1;i>=0&&sl.start-R.slots[i].end<rest;i--)if(R.slots[i].team.includes(id)){w=`sort de quart à ${fmtT(R.slots[i].end)}`;break}
+    if(!w)for(let i=idx+1;i<R.slots.length&&R.slots[i].start-sl.end<rest;i++)if(R.slots[i].team.includes(id)){w=`reprend à ${fmtT(R.slots[i].start)}`;break}
+    return w};
+  const btns=S.crew.map(c=>{const on=draft.includes(c.id),w=restWarn(c.id);
+    return `<button type="button" data-act="pick" data-id="${c.id}" aria-pressed="${on}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${w?` <span class="warnmark">· ${w}</span>`:""}${c.on?"":` <span class="warnmark">· hors quart</span>`}</button>`}).join("");
+  return `<div class="editor"><p>Choisis qui prend ce quart (${S.settings.per} prévu${S.settings.per>1?"s":""}). Les quarts suivants se rééquilibrent automatiquement.</p>
+    <div class="pick">${btns}</div>
+    <div class="row"><button class="btn primary small" type="button" data-act="saveEdit">Enregistrer</button>
+    <button class="btn small" type="button" data-act="cancelEdit">Fermer</button>
+    ${sl.edited?`<button class="btn ghost small" type="button" data-act="resetEdit">Revenir au calcul auto</button>`:""}</div></div>`;
+}
+function recompute(){R=assign();renderStats();renderTimeline();save()}
+
+/* ---------- interactions ---------- */
+const bindNum=(id,k,min,max)=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=S.settings[k];v=Math.min(max,Math.max(min,v));S.settings[k]=v;e.target.value=v;editKey=null;recompute()});
+bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);
+["sStart","sSunrise","sSunset"].forEach(id=>$(id).addEventListener("change",e=>{if(!e.target.value)return;const k={sStart:"start",sSunrise:"sunrise",sSunset:"sunset"}[id];S.settings[k]=e.target.value;editKey=null;recompute()}));
+
+$("crewList").addEventListener("change",e=>{
+  const li=e.target.closest("li");if(!li)return;const c=crewById(li.dataset.id);
+  if(e.target.dataset.act==="rename"){c.name=e.target.value.trim()||c.name;e.target.value=c.name;renderCrewSelectOnly();recompute()}
+  if(e.target.dataset.act==="on"){c.on=e.target.checked;li.classList.toggle("off",!c.on);recompute()}
+});
+$("crewList").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act=del]");if(!b)return;const id=b.closest("li").dataset.id;
+  S.crew=S.crew.filter(c=>c.id!==id);
+  Object.keys(S.overrides).forEach(k=>{S.overrides[k]=S.overrides[k].filter(x=>x!==id);if(!S.overrides[k].length)delete S.overrides[k]});
+  if(S.focus===id)S.focus="";editKey=null;renderCrew();recompute();
+});
+function renderCrewSelectOnly(){const f=$("focusSel"),v=f.value;f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");f.value=v}
+$("addForm").addEventListener("submit",e=>{
+  e.preventDefault();const n=$("addName").value.trim();if(!n)return;
+  const used=new Set(S.crew.map(c=>c.color));const color=COLORS.find(c=>!used.has(c))||COLORS[S.crew.length%COLORS.length];
+  S.crew.push({id:uid(),name:n,on:true,color});$("addName").value="";editKey=null;renderCrew();recompute();
+});
+$("focusSel").addEventListener("change",e=>{S.focus=e.target.value;renderTimeline();save()});
+$("onlyMine").addEventListener("change",()=>renderTimeline());
+
+$("timeline").addEventListener("click",e=>{
+  const seg=e.target.closest(".seg");
+  const btn=e.target.closest(".slotbtn");
+  if(seg||btn){const k=(seg||btn).dataset.key;
+    if(editKey===k&&btn){editKey=null}else{editKey=k;draft=[...(R.slots.find(s=>s.key===k)?.team||[])]}
+    renderTimeline();if(seg){const el=document.getElementById("slot-"+k);el&&el.scrollIntoView({block:"center"})}return}
+  const a=e.target.closest("[data-act]");if(!a)return;
+  const act=a.dataset.act;
+  if(act==="pick"){const id=a.dataset.id;draft=draft.includes(id)?draft.filter(x=>x!==id):[...draft,id];
+    a.setAttribute("aria-pressed",draft.includes(id));}
+  if(act==="cancelEdit"){editKey=null;renderTimeline()}
+  if(act==="resetEdit"){delete S.overrides[editKey];editKey=null;recompute()}
+  if(act==="saveEdit"){
+    const sl=R.slots.find(s=>s.key===editKey);
+    delete S.overrides[editKey];const auto=assign().slots.find(s=>s.key===editKey);
+    const same=auto&&auto.team.length===draft.length&&auto.team.every(x=>draft.includes(x));
+    if(!same)S.overrides[editKey]=[...draft];
+    editKey=null;recompute();
+  }
+});
+$("orphans").addEventListener("click",e=>{if(e.target.closest("[data-act=clearOrphans]")){R.orphans.forEach(k=>delete S.overrides[k]);recompute()}});
+$("nowBtn").addEventListener("click",()=>{
+  const now=Date.now();const sl=R.slots.find(s=>now>=s.start&&now<s.end)||R.slots.find(s=>s.start>now)||R.slots[0];
+  if(!sl)return;$("onlyMine").checked=false;renderTimeline();const el=document.getElementById("slot-"+sl.key);el&&el.scrollIntoView({block:"center",behavior:"smooth"});
+});
+
+$("copyBtn").addEventListener("click",()=>{
+  const t=$("exportBox");
+  const ok=()=>$("copyMsg").textContent="Copié.";
+  const fb=()=>{t.focus();t.select();$("copyMsg").textContent="Texte sélectionné, copie-le manuellement."};
+  try{navigator.clipboard.writeText(t.value).then(ok,fb)}catch(e){fb()}
+});
+$("importBtn").addEventListener("click",()=>{
+  try{const d=JSON.parse($("importBox").value);
+    if(!d.settings||!Array.isArray(d.crew))throw 0;
+    S={settings:d.settings,crew:d.crew,overrides:d.overrides||{},focus:d.focus||"",cal:Object.assign({},S.cal,d.cal||{})};
+    editKey=null;renderSettings();renderCrew();recompute();$("importMsg").textContent="Planning importé.";$("importBox").value="";
+  }catch(e){$("importMsg").textContent="Texte non reconnu : colle l'export complet, sans le modifier."}
+});
+$("resetZone").addEventListener("click",e=>{
+  const z=$("resetZone");
+  if(e.target.id==="resetBtn"){z.innerHTML=`<span class="confirm">Effacer équipage, réglages et modifications ? <button class="btn small" type="button" data-r="yes">Oui, réinitialiser</button><button class="btn ghost small" type="button" data-r="no">Annuler</button></span>`}
+  else if(e.target.dataset.r==="yes"){S=defaults();editKey=null;renderSettings();renderCrew();recompute();z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`}
+  else if(e.target.dataset.r==="no"){z.innerHTML=`<button class="btn small" id="resetBtn" type="button">Tout réinitialiser</button>`}
+});
+
+
+/* ---------- agenda ---------- */
+let DL=null;
+try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DL=d;renderCal()},()=>{})}catch(e){}
+function renderCal(){
+  const c=S.cal, w=$("calWho");
+  if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
+  w.innerHTML=S.crew.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("")+`<option value="all">Tout l'équipage (un événement par quart)</option>`;
+  w.value=c.who;$("calWhen").value=c.when;$("calAlarm").value=c.alarm;$("calBoat").value=c.boat;$("calAgenda").value=c.agenda;
+  const inArtifact=!!DL;
+  $("icsBtn").disabled=inArtifact;
+  $("icsBtn").title=inArtifact?"Disponible dans la version hors ligne (fichier quarts.html)":"";
+  if(inArtifact&&!$("calMsg").dataset.art){$("calMsg").dataset.art=1;$("calMsg").insertAdjacentHTML("afterbegin","<strong>Ici, seul le .csv se télécharge ; le .ics est dans la version hors ligne.</strong> ")}
+}
+["calWho","calWhen","calAlarm"].forEach(id=>$(id).addEventListener("change",e=>{S.cal[{calWho:"who",calWhen:"when",calAlarm:"alarm"}[id]]=e.target.value;save()}));
+["calBoat","calAgenda"].forEach(id=>$(id).addEventListener("change",e=>{let v=parseFloat(e.target.value);if(isNaN(v))v=8;v=Math.max(-12,Math.min(14,v));e.target.value=v;S.cal[id==="calBoat"?"boat":"agenda"]=v;save()}));
+const KLBL={nuit:"de nuit",jour:"de jour",lever:"lever du soleil",coucher:"coucher du soleil"};
+function calSlots(){
+  const c=S.cal, now=Date.now();
+  return R.slots.filter(s=>(c.who==="all"||s.team.includes(c.who))&&(c.when==="all"||s.end>now));
+}
+const wall=ms=>{const d=new Date(ms);return [d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes()]};
+const toUTC=(ms,off)=>{const [y,mo,d,h,mi]=wall(ms);return Date.UTC(y,mo,d,h,mi)-off*H};
+const icsDate=u=>{const d=new Date(u);return `${d.getUTCFullYear()}${p2(d.getUTCMonth()+1)}${p2(d.getUTCDate())}T${p2(d.getUTCHours())}${p2(d.getUTCMinutes())}00Z`};
+const icsEsc=s=>String(s).replace(/\\/g,"\\\\").replace(/;/g,"\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
+const fold=l=>{const out=[];let s=l;while(s.length>60){out.push(s.slice(0,60));s=" "+s.slice(60)}out.push(s);return out.join("\r\n")};
+const names=ids=>ids.map(i=>(crewById(i)||{}).name).filter(Boolean);
+function eventText(s){
+  const c=S.cal, team=names(s.team);
+  const others=c.who==="all"?team:names(s.team.filter(i=>i!==c.who));
+  const summary=c.who==="all"?`Quart ${KLBL[s.type]} : ${team.join(" + ")||"personne"}`:`Quart ${KLBL[s.type]}${others.length?" avec "+others.join(", "):""}`;
+  const desc=`Quart ${fmtT(s.start)}–${fmtT(s.end)} heure du bord (${fmtH(s.hours)} h). Équipe : ${team.join(", ")||"personne"}.${s.edited?" Quart modifié à la main.":""}`;
+  return {summary,desc};
+}
+function buildICS(){
+  const c=S.cal, list=calSlots(), stamp=icsDate(Date.now()), seq=Math.floor((Date.now()-Date.UTC(2026,0,1))/60000);
+  const who=c.who==="all"?"équipage":(crewById(c.who)||{}).name;
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Tableau des quarts//FR","CALSCALE:GREGORIAN","METHOD:PUBLISH",`X-WR-CALNAME:${icsEsc("Quarts – "+who)}`];
+  for(const s of list){
+    const {summary,desc}=eventText(s);
+    L.push("BEGIN:VEVENT",`UID:${s.key.replace(/[-:]/g,"")}-${c.who}@tableau-des-quarts`,`SEQUENCE:${seq}`,`DTSTAMP:${stamp}`,
+      `DTSTART:${icsDate(toUTC(s.start,c.boat))}`,`DTEND:${icsDate(toUTC(s.end,c.boat))}`,`SUMMARY:${icsEsc(summary)}`,`DESCRIPTION:${icsEsc(desc)}`,"TRANSP:OPAQUE");
+    if(+c.alarm>0)L.push("BEGIN:VALARM","ACTION:DISPLAY",`DESCRIPTION:${icsEsc(summary)}`,`TRIGGER:-PT${+c.alarm}M`,"END:VALARM");
+    L.push("END:VEVENT");
+  }
+  L.push("END:VCALENDAR");
+  return {text:L.map(fold).join("\r\n")+"\r\n",n:list.length};
+}
+function buildCSV(){
+  const c=S.cal, list=calSlots(), shift=(c.agenda-c.boat)*H;
+  const q=v=>`"${String(v).replace(/"/g,'""')}"`;
+  const dt=ms=>{const d=new Date(ms+shift);let h=d.getHours();const ap=h>=12?"PM":"AM";h=h%12||12;return [`${p2(d.getMonth()+1)}/${p2(d.getDate())}/${d.getFullYear()}`,`${p2(h)}:${p2(d.getMinutes())} ${ap}`]};
+  const rows=[["Subject","Start Date","Start Time","End Date","End Time","All Day Event","Description","Private"].join(",")];
+  for(const s of list){const {summary,desc}=eventText(s);const [sd,st]=dt(s.start),[ed,et]=dt(s.end);rows.push([q(summary),sd,st,ed,et,"False",q(desc),"False"].join(","))}
+  return {text:rows.join("\r\n")+"\r\n",n:list.length};
+}
+const slug=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"quarts";
+async function offer(ext,mime,built){
+  const msg=$("calMsg");
+  if(!built.n){msg.textContent="Aucun quart à exporter pour ce choix.";return}
+  const who=S.cal.who==="all"?"equipage":slug((crewById(S.cal.who)||{}).name||"");
+  const filename=`quarts-${who}.${ext}`;
+  if(DL){
+    try{await DL.save({filename,data:built.text});msg.textContent=`${built.n} quarts exportés dans ${filename}.`}
+    catch(e){msg.textContent=e&&e.code==="declined"?"Téléchargement annulé.":"Téléchargement impossible ici : utilise la version hors ligne."}
+    return;
+  }
+  try{
+    const url=URL.createObjectURL(new Blob([built.text],{type:mime}));
+    const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    msg.textContent=`${built.n} quarts exportés dans ${filename}.`;
+  }catch(e){msg.textContent="Le navigateur a bloqué le téléchargement."}
+}
+$("icsBtn").addEventListener("click",()=>offer("ics","text/calendar",buildICS()));
+$("csvBtn").addEventListener("click",()=>offer("csv","text/csv",buildCSV()));
+
+if(window.matchMedia("(max-width:860px)").matches)$("settingsPanel").open=false;
+renderSettings();renderCrew();R=assign();renderStats();renderTimeline();renderCal();
+setInterval(()=>{if(!editKey)renderTimeline()},60000);
+})();
+</script>
+
+</body>
+</html>
