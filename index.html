@@ -81,8 +81,11 @@ textarea{font-family:var(--f-mono);font-size:.75rem;min-height:90px;resize:verti
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .hint{font-size:.78rem;color:var(--muted);margin:8px 0 0}
 .crew{display:grid;gap:6px;margin:0;padding:0;list-style:none}
-.crew li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}
+.crew li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;padding-bottom:6px;border-bottom:1px solid var(--line);gap:8px;align-items:center}
 .crew input[type=text]{padding:5px 8px}
+.crew li{row-gap:4px}
+.crew .tasks{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:4px 12px}
+.crew .tasks .toggle{font-size:.76rem}
 .crew li.off input[type=text]{color:var(--muted);text-decoration:line-through}
 .dot{width:10px;height:10px;border-radius:50%;flex:none}
 .toggle{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;color:var(--muted);white-space:nowrap}
@@ -119,6 +122,14 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
 .strip .seg.watch{background:color-mix(in srgb,var(--surface) 22%,transparent)}
 .strip .seg.me{background:color-mix(in srgb,var(--sea) 70%,transparent);box-shadow:inset 0 0 0 2px var(--sea)}
 .strip .seg.now{box-shadow:inset 0 0 0 2px var(--warn)}
+.lanes{position:relative;margin:2px 14px 4px;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--sunk)}
+.lanes .sky{position:absolute;top:0;bottom:0;opacity:.3}
+.lanes .bar{position:absolute;height:19px;border-radius:4px;font-size:.7rem;line-height:17px;padding:0 5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--ink);cursor:pointer;border:1px solid;border-left-width:4px;font-weight:500}
+.lanes .bar.me{box-shadow:0 0 0 2px var(--sea)}
+.lanes .bar.dimbar{opacity:.4}
+.lanes .nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--warn)}
+.relay{display:block;font-size:.8rem;color:var(--muted);flex-basis:100%}
+.relay b{color:var(--ink);font-weight:500}
 .ticks{position:relative;height:14px;margin:0 14px 6px;font-family:var(--f-mono);font-size:.62rem;color:var(--muted)}
 .ticks span{position:absolute;transform:translateX(-50%)}
 .ticks span:first-child{transform:none}
@@ -232,6 +243,7 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
           <label class="f">Durée quart de nuit (h)<input type="number" id="sDurNight" min="1" max="8" step="0.5"></label>
           <label class="check"><input type="checkbox" id="sNightOnly"><span>Programmer uniquement les quarts de nuit<small>La journée, la veille se fait de façon informelle.</small></span></label>
           <label class="check"><input type="checkbox" id="sStag"><span>Quarts décalés (relève à mi-quart)<small>Un quart de 3 h = 1 h 30 avec celui qui finit, puis 1 h 30 avec celui qui arrive. Nécessite 2 équipiers par quart ou plus.</small></span></label>
+          <label class="check" id="stagSoloRow"><input type="checkbox" id="sStagSolo"><span>Premier et dernier quart à une seule personne<small>En début et en fin de plage, le premier entre seul et le dernier finit seul, au lieu d'un renfort d'un demi-quart.</small></span></label>
           <label class="f">Lever du soleil<input type="time" id="sSunrise"></label>
           <label class="f">Coucher du soleil<input type="time" id="sSunset"></label>
           <label class="f full">Repos minimum entre deux quarts (h)<input type="number" id="sRest" min="0" max="12" step="0.5"></label>
@@ -279,7 +291,7 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
         <input type="text" id="addName" placeholder="Prénom de l'équipier" aria-label="Prénom du nouvel équipier">
         <button class="btn primary" type="submit">Ajouter</button>
       </form>
-      <p class="hint">Décocher « de quart » sort quelqu'un de la rotation des quarts (skipper, malade) sans l'effacer. Les participants aux corvées se règlent dans chaque planning.</p>
+      <p class="hint">Décoche une tâche pour en exempter quelqu'un (skipper hors quart, malade, cuisinier attitré) sans l'effacer. Les mêmes réglages se retrouvent dans chaque planning.</p>
     </section>
     <div id="genDyn" style="display:contents"></div>
     <section class="panel" id="savePanel">
@@ -324,7 +336,7 @@ function defaults(){
   const d=new Date();d.setDate(d.getDate()+1);d.setHours(18,0,0,0);
   const names=["Mehdi","Équipier 2","Équipier 3","Équipier 4","Équipier 5","Équipier 6","Équipier 7","Équipier 8"];
   return {v:2,tab:"quarts",
-    settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3,gap:1,nightStart:"18:00",nightEnd:"06:00",nightOnly:false,stag:false},
+    settings:{start:keyOf(d.getTime()),days:21,per:2,durDay:3,durNight:3,sunrise:"06:10",sunset:"18:15",rest:3,gap:1,nightStart:"18:00",nightEnd:"06:00",nightOnly:false,stag:false,stagSolo:false},
     crew:names.map((n,i)=>({id:uid(),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
     cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8},
     duties:defaultDuties(),meals:{},inv:SEED.inventory.map(i=>Object.assign({id:uid()},i)),invLog:[],
@@ -384,10 +396,16 @@ function assignWatches(){
   const stats={};S.crew.forEach(c=>stats[c.id]={h:0,nh:0,lever:0,coucher:0,n:0,last:-Infinity});
   const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a, pool=S.crew.filter(c=>c.on), order={};S.crew.forEach((c,i)=>order[c.id]=i);
   const watches=[];const half=Math.ceil(st.per/2);
+  let run=0;
   segs.forEach((sg,i)=>{
     const prevC=i>0&&segs[i-1].end===sg.start, next=segs[i+1]&&segs[i+1].start===sg.end?segs[i+1]:null;
     let need,fullEnd;
-    if(!stag){need=st.per;fullEnd=sg.end}else{need=prevC?half:st.per;fullEnd=next?next.end:sg.end}
+    run=prevC?run+1:0;sg.run=run;
+    if(!stag){need=st.per;fullEnd=sg.end}
+    else{fullEnd=next?next.end:sg.end;
+      if(!prevC)need=st.stagSolo?half:st.per;
+      else if(!next&&st.stagSolo&&segs[i-1].carryOn.length)need=0;
+      else need=half}
     sg.need=need;sg.fullEnd=fullEnd;
     const w=E.classify(sg.start,fullEnd);
     let ent;const ov=S.overrides[sg.key];
@@ -405,19 +423,20 @@ function assignWatches(){
         ent.push(use[0].id);
       }
     }
-    sg.entrants=ent;sg.carry=stag&&prevC?segs[i-1].carryOn:[];sg.carryOn=[];
+    sg.wtype=w.type;sg.entrants=ent;sg.carry=stag&&prevC?segs[i-1].carryOn:[];sg.carryOn=[];
     ent.forEach((id,j)=>{
       const wEnd=(stag&&!prevC&&j>=half)?sg.end:fullEnd;
       const ww=wEnd===fullEnd?w:E.classify(sg.start,wEnd);
       if(wEnd>sg.end)sg.carryOn.push(id);
-      watches.push({id,start:sg.start,end:wEnd,type:ww.type,hours:ww.hours,nh:ww.nh,key:sg.key});
+      watches.push({id,start:sg.start,end:wEnd,type:ww.type,hours:ww.hours,nh:ww.nh,key:sg.key,lane:stag?(run%2)*half+j:j});
       const s=stats[id];if(!s)return;s.h+=ww.hours;s.nh+=ww.nh;if(ww.type==="lever")s.lever++;if(ww.type==="coucher")s.coucher++;s.n++;s.last=wEnd;
     });
     sg.team=[...sg.carry,...ent];
     for(let a=0;a<sg.team.length;a++)for(let b=a+1;b<sg.team.length;b++){const k=pk(sg.team[a],sg.team[b]);pairs[k]=(pairs[k]||0)+1}
   });
   const keys=new Set(segs.map(s=>s.key));
-  return {segs,stats,watches,orphans:Object.keys(S.overrides).filter(k=>!keys.has(k)),stag};
+  segs.forEach((sg,i)=>{const nx=segs[i+1];sg.nextEnt=nx&&nx.start===sg.end?nx.entrants:[]});
+  return {segs,stats,watches,orphans:Object.keys(S.overrides).filter(k=>!keys.has(k)),stag,lanes:stag?2*half:st.per};
 }
 
 /* ================= MOTEUR DES CORVÉES ================= */
@@ -504,16 +523,16 @@ function renderSettings(){
   const s=S.settings;
   $("sStart").value=s.start;$("sDays").value=s.days;$("sPer").value=s.per;$("sDurDay").value=s.durDay;$("sDurNight").value=s.durNight;
   $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
-  $("sNightOnly").checked=!!s.nightOnly;$("sStag").checked=!!s.stag;$("sDurDay").disabled=!!s.nightOnly;
+  $("sNightOnly").checked=!!s.nightOnly;$("sStag").checked=!!s.stag;$("sStagSolo").checked=!!s.stagSolo;$("sStagSolo").disabled=!s.stag;$("stagSoloRow").style.opacity=s.stag?"":".5";$("sDurDay").disabled=!!s.nightOnly;
 }
+let crewSig="";const sigOf=()=>JSON.stringify([S.crew.map(c=>[c.id,c.name,c.on]),S.duties.map(d=>[d.id,d.name,d.excl])]);
 function renderCrew(){
   $("crewList").innerHTML=S.crew.map(c=>`<li class="${c.on?"":"off"}" data-id="${c.id}">
     <span class="dot" style="background:${c.color}"></span>
     <input type="text" id="n-${c.id}" value="${esc(c.name)}" aria-label="Nom" data-act="rename">
-    <span class="row" style="gap:4px;flex-wrap:nowrap">
-      <label class="toggle"><input type="checkbox" data-act="on" ${c.on?"checked":""}> de quart</label>
-      <button class="btn ghost small" type="button" data-act="del" aria-label="Retirer ${esc(c.name)}">✕</button>
-    </span></li>`).join("");
+    <button class="btn ghost small" type="button" data-act="del" aria-label="Retirer ${esc(c.name)}">✕</button>
+    <span class="tasks"><label class="toggle"><input type="checkbox" data-act="on" ${c.on?"checked":""}> Quarts</label>${S.duties.map(d=>`<label class="toggle"><input type="checkbox" data-act="duty" data-duty="${d.id}" ${d.excl.includes(c.id)?"":"checked"}> ${esc(d.name)}</label>`).join("")}</span></li>`).join("");
+  crewSig=sigOf();
   const f=$("focusSel");f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
   f.value=crewById(S.focus)?S.focus:"";
 }
@@ -537,6 +556,17 @@ function stripHtml(g,items,focus,now){
     return `<span class="${cls.join(" ")}" data-key="${esc(s.key)}" title="${fmtT(s.start)}–${fmtT(s.end)}" style="left:${pct((a-g.t)/MIN)};width:${pct((b-a)/MIN)}"></span>`}).join("");
   return `<div class="strip" role="img" aria-label="Journée de 24 h">${sky.join("")}${segs}</div><div class="ticks" aria-hidden="true">${[0,6,12,18,24].map(h=>`<span style="left:${pct(h*60)}">${p2(h)}h</span>`).join("")}</div>`;
 }
+function lanesHtml(g,focus,now){
+  const SR=hm(S.settings.sunrise),SS=hm(S.settings.sunset),pct=m=>(m/1440*100).toFixed(3)+"%",tw=60,dayEnd=g.t+24*H,L=RW.lanes;
+  const sky=[];const add=(a,b,c)=>{if(b>a)sky.push(`<i class="sky" style="left:${pct(a)};width:${pct(b-a)};background:${c}"></i>`)};
+  const a1=Math.max(0,SR-tw/2),a2=Math.min(1440,SR+tw/2),b1=Math.max(0,SS-tw/2),b2=Math.min(1440,SS+tw/2);
+  add(0,a1,"var(--night)");add(a1,a2,"var(--dawn)");add(a2,b1,"var(--day)");add(b1,b2,"var(--dusk)");add(b2,1440,"var(--night)");
+  const bars=RW.watches.filter(w=>w.end>g.t&&w.start<dayEnd).map(w=>{const c=crewById(w.id);if(!c)return "";
+    const a=Math.max(w.start,g.t),b=Math.min(w.end,dayEnd),cls=["bar"];if(focus)cls.push(w.id===focus?"me":"dimbar");
+    return `<span class="${cls.join(" ")}" data-key="${w.key}" title="${esc(c.name)} ${fmtT(w.start)}–${fmtT(w.end)}" style="top:${3+w.lane*22}px;left:${pct((a-g.t)/MIN)};width:calc(${pct((b-a)/MIN)} - 2px);background:color-mix(in srgb,${c.color} 26%,var(--surface));border-color:${c.color}">${esc(c.name)}</span>`}).join("");
+  const nl=now>=g.t&&now<dayEnd?`<i class="nowline" style="left:${pct((now-g.t)/MIN)}"></i>`:"";
+  return `<div class="lanes" style="height:${L*22+5}px" role="img" aria-label="Quarts décalés de la journée">${sky.join("")}${bars}${nl}</div><div class="ticks" aria-hidden="true">${[0,6,12,18,24].map(h=>`<span style="left:${pct(h*60)}">${p2(h)}h</span>`).join("")}</div>`;
+}
 function groupDays(list){const days=[];list.forEach(s=>{const k=day0(s.start);let g=days[days.length-1];if(!g||g.t!==k){g={t:k,items:[]};days.push(g)}g.items.push(s)});return days}
 const dayNum=t=>Math.round((t-day0(parseLocal(S.settings.start)))/(24*H))+1;
 function chip(id,focus,cls,extra){const c=crewById(id);if(!c)return "";return `<span class="chip ${id===focus?"me":""} ${cls||""}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${extra?` <small>${extra}</small>`:""}</span>`}
@@ -545,7 +575,25 @@ function renderTimeline(){
   const days=groupDays(RW.segs);
   $("timeline").innerHTML=days.map(g=>{
     const mine=focus?RW.watches.filter(w=>w.id===focus&&day0(w.start)===g.t).reduce((a,w)=>a+w.hours,0):0;
-    const rows=g.items.map(sl=>{
+    const rows=stag?g.items.map(sl=>{
+      const involved=[...sl.entrants,...sl.carry,...sl.nextEnt];
+      const isMine=focus&&sl.entrants.includes(focus);if(only&&!isMine&&editKey!==sl.key)return "";
+      const [kl,kc]=KIND[sl.wtype||sl.type],isNow=now>=sl.start&&now<sl.fullEnd&&sl.entrants.length,open=editKey===sl.key;
+      const names=ids=>ids.map(id=>`<b>${esc(nameOf(id))}</b>`).join(" et ");
+      let relay;
+      if(!sl.entrants.length)relay=sl.carry.length?`Pas de relève : ${names(sl.carry)} termine seul jusqu'à ${fmtT(sl.end)}.`:"Personne de quart.";
+      else{const parts=[];
+        parts.push(sl.carry.length?`avec ${names(sl.carry)} jusqu'à ${fmtT(sl.end)}`:`seul jusqu'à ${fmtT(sl.end)}`);
+        if(sl.fullEnd>sl.end)parts.push(sl.nextEnt.length?`puis avec ${names(sl.nextEnt)} jusqu'à ${fmtT(sl.fullEnd)}`:`puis seul jusqu'à ${fmtT(sl.fullEnd)}`);
+        relay=parts.join(", ")+".";}
+      const chips=sl.entrants.length?sl.entrants.map(id=>chip(id,focus)).join(""):`<span class="chip empty">Pas de relève</span>`;
+      const flags=(isNow?`<span class="flag now">En cours</span>`:"")+(sl.edited?`<span class="flag edit">Modifié</span>`:"");
+      return `<li class="slot ${isNow?"isnow":""} ${focus&&!isMine&&!involved.includes(focus)&&!only?"dim":""}" id="slot-${sl.key}">
+        <button class="slotbtn" type="button" data-key="${sl.key}" aria-expanded="${open}">
+          <span class="time">${fmtT(sl.start)} – ${fmtT(sl.entrants.length?sl.fullEnd:sl.end)}<small>${sl.entrants.length?"prise de quart · "+fmtH((sl.fullEnd-sl.start)/H)+" h":"fin de quart"}</small></span>
+          <span class="kind"><i class="sw" style="background:${kc}"></i>${kl}</span>
+          <span class="who">${chips}<span class="relay">${relay}</span></span><span class="row" style="gap:4px">${flags}</span>
+        </button>${open?watchEditor(sl):""}</li>`}).join(""):g.items.map(sl=>{
       const isMine=focus&&sl.team.includes(focus);if(only&&!isMine&&editKey!==sl.key)return "";
       const [kl,kc]=KIND[sl.type],isNow=now>=sl.start&&now<sl.end,open=editKey===sl.key;
       const chips=sl.team.length?sl.carry.map(id=>chip(id,focus,"out",stag?"finit":"")).join("")+sl.entrants.map(id=>chip(id,focus,"",stag&&sl.carry.length?"prend":"")).join(""):`<span class="chip empty">Personne</span>`;
@@ -557,8 +605,8 @@ function renderTimeline(){
           <span class="who">${chips}</span><span class="row" style="gap:4px">${flags}</span>
         </button>${open?watchEditor(sl):""}</li>`}).join("");
     if(only&&!rows.trim())return "";
-    return `<article class="day"><div class="dayhead"><h3>J${dayNum(g.t)}<small>${fmtDay(g.t)}</small></h3><span class="meta">${focus?`${esc(nameOf(focus))} : ${fmtH(mine)} h`:`${g.items.length} ${stag?"relèves":"quarts"}`}</span></div>
-      ${stripHtml(g,RW.segs,focus,now)}<ul class="slots">${rows}</ul></article>`}).join("")||`<p class="hint">Aucun quart pour ce filtre.</p>`;
+    return `<article class="day"><div class="dayhead"><h3>J${dayNum(g.t)}<small>${fmtDay(g.t)}</small></h3><span class="meta">${focus?`${esc(nameOf(focus))} : ${fmtH(mine)} h`:`${stag?g.items.filter(x=>x.entrants.length).length+" prises de quart":g.items.length+" quarts"}`}</span></div>
+      ${stag?lanesHtml(g,focus,now):stripHtml(g,RW.segs,focus,now)}<ul class="slots">${rows}</ul></article>`}).join("")||`<p class="hint">Aucun quart pour ce filtre.</p>`;
   const nEdit=Object.keys(S.overrides).length-RW.orphans.length;
   $("editCount").textContent=nEdit?`${nEdit} quart${nEdit>1?"s":""} modifié${nEdit>1?"s":""}`:"Planning auto";
   $("orphans").innerHTML=RW.orphans.length?`<div class="notice"><span>${RW.orphans.length} modification${RW.orphans.length>1?"s":""} ne correspond${RW.orphans.length>1?"ent":""} plus à un quart (horaires changés).</span><button class="btn small" type="button" data-act="clearOrphans">Les effacer</button></div>`:"";
@@ -572,7 +620,7 @@ function restWarn(id,a,b,skipKey){
 function watchEditor(sl){
   const btns=S.crew.map(c=>{const on=draft.includes(c.id),w=restWarn(c.id,sl.start,sl.fullEnd,sl.key);
     return `<button type="button" data-act="pick" data-id="${c.id}" aria-pressed="${on}"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${w?` <span class="warnmark">· ${w}</span>`:""}${c.on?"":` <span class="warnmark">· hors quart</span>`}</button>`}).join("");
-  const what=RW.stag?`Qui prend le quart à ${fmtT(sl.start)} (${sl.need} prévu${sl.need>1?"s":""}, jusqu'à ${fmtT(sl.fullEnd)})`:`Qui prend ce quart (${sl.need} prévu${sl.need>1?"s":""})`;
+  const what=RW.stag?(sl.need===0?`Personne ne prend la relève à ${fmtT(sl.start)} (fin de plage) : tu peux quand même ajouter quelqu'un`:`Qui prend le quart à ${fmtT(sl.start)} (${sl.need} prévu${sl.need>1?"s":""}, jusqu'à ${fmtT(sl.fullEnd)})`):`Qui prend ce quart (${sl.need} prévu${sl.need>1?"s":""})`;
   return `<div class="editor"><p>${what}. Les quarts suivants se rééquilibrent automatiquement.</p><div class="pick">${btns}</div>
     <div class="row"><button class="btn primary small" type="button" data-act="saveEdit">Enregistrer</button><button class="btn small" type="button" data-act="cancelEdit">Fermer</button>
     ${sl.edited?`<button class="btn ghost small" type="button" data-act="resetEdit">Revenir au calcul auto</button>`:""}</div></div>`;
@@ -583,6 +631,7 @@ let DL=null;
 try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DL=d;if(S.tab==="general")renderGen()},()=>{})}catch(e){}
 const kindOn=k=>S.cal.kinds?S.cal.kinds[k]!==false:true;
 function renderGen(){
+  if(sigOf()!==crewSig)renderCrew();
   const c=S.cal;if(!crewById(c.who)&&c.who!=="all")c.who=(S.crew[0]||{}).id||"all";
   const n=calEvents().length;
   const kinds=[["quarts","Quarts",RW.watches.length+" quarts"],...S.duties.map(d=>[d.id,d.name,RD.res[d.id].inst.length+" occurrences"+(d.meal?", avec la recette":"")])];
@@ -810,12 +859,14 @@ const bindNum=(id,k,min,max)=>$(id).addEventListener("change",e=>{let v=parseFlo
 bindNum("sDays","days",1,60);bindNum("sPer","per",1,4);bindNum("sDurDay","durDay",1,8);bindNum("sDurNight","durNight",1,8);bindNum("sRest","rest",0,12);
 [["sStart","start"],["sSunrise","sunrise"],["sSunset","sunset"],["sNightStart","nightStart"],["sNightEnd","nightEnd"]].forEach(([id,k])=>$(id).addEventListener("change",e=>{if(!e.target.value)return;S.settings[k]=e.target.value;editKey=null;recompute()}));
 $("sNightOnly").addEventListener("change",e=>{S.settings.nightOnly=e.target.checked;$("sDurDay").disabled=e.target.checked;editKey=null;recompute()});
-$("sStag").addEventListener("change",e=>{S.settings.stag=e.target.checked;if(e.target.checked&&S.settings.per<2){S.settings.per=2;$("sPer").value=2}editKey=null;recompute()});
+$("sStagSolo").addEventListener("change",e=>{S.settings.stagSolo=e.target.checked;editKey=null;recompute()});
+$("sStag").addEventListener("change",e=>{S.settings.stag=e.target.checked;$("sStagSolo").disabled=!e.target.checked;$("stagSoloRow").style.opacity=e.target.checked?"":".5";if(e.target.checked&&S.settings.per<2){S.settings.per=2;$("sPer").value=2}editKey=null;recompute()});
 
 $("crewList").addEventListener("change",e=>{
   const li=e.target.closest("li");if(!li)return;const c=crewById(li.dataset.id);
   if(e.target.dataset.act==="rename"){c.name=e.target.value.trim()||c.name;e.target.value=c.name;const f=$("focusSel"),v=f.value;f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");f.value=v;recompute()}
   if(e.target.dataset.act==="on"){c.on=e.target.checked;li.classList.toggle("off",!c.on);recompute()}
+  if(e.target.dataset.act==="duty"){const d=S.duties.find(x=>x.id===e.target.dataset.duty);if(!d)return;d.excl=e.target.checked?d.excl.filter(x=>x!==c.id):[...d.excl,c.id];crewSig=sigOf();recompute()}
 });
 $("crewList").addEventListener("click",e=>{
   const b=e.target.closest("[data-act=del]");if(!b)return;const id=b.closest("li").dataset.id;
@@ -832,7 +883,7 @@ $("addForm").addEventListener("submit",e=>{
 $("focusSel").addEventListener("change",e=>{S.focus=e.target.value;renderTimeline();save()});
 $("onlyMine").addEventListener("change",()=>renderTimeline());
 $("timeline").addEventListener("click",e=>{
-  const seg=e.target.closest(".seg"),btn=e.target.closest(".slotbtn");
+  const seg=e.target.closest(".seg,.bar"),btn=e.target.closest(".slotbtn");
   if(seg||btn){const k=(seg||btn).dataset.key;
     if(editKey===k&&btn)editKey=null;else{editKey=k;const sl=RW.segs.find(s=>s.key===k);draft=[...(sl?sl.entrants:[])]}
     renderTimeline();if(seg){const el=document.getElementById("slot-"+k);el&&el.scrollIntoView({block:"center"})}return}
