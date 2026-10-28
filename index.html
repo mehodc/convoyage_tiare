@@ -180,7 +180,10 @@ table.stats{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nu
 .kpi b{display:block;font-family:var(--f-display);font-size:1.8rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
 .kpi span{font-size:.78rem;color:var(--muted)}
 .kpi.bad b{color:var(--bad)}.kpi.warn b{color:var(--warn)}
-table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums;min-width:760px}
+table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums;min-width:900px}
+.inv input.store{width:9.5rem;padding:4px 6px;font-size:.8rem}
+.inv input.store:placeholder-shown{border-style:dashed}
+.store-tag{color:var(--muted)}
 .inv th{font-family:var(--f-display);font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:.74rem;color:var(--muted);text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface);position:sticky;top:0}
 .inv th:first-child,.inv td:first-child{text-align:left}
 .inv td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
@@ -213,6 +216,7 @@ table.inv{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-nume
 
 
 <datalist id="invList"></datalist>
+<datalist id="storeList"></datalist>
 <div class="wrap">
   <header>
     <div>
@@ -922,7 +926,7 @@ function dutyEditor(duty,it){
     <h4>${m.done?"Quantités réellement utilisées":"Ingrédients prévus"}</h4>
     <ul class="ings">${m.items.map((x,i)=>{const inv=invItem(x.n);
       return `<li data-ing="${i}"><input type="text" list="invList" data-ing-f="n" value="${esc(x.n)}" placeholder="Denrée" aria-label="Denrée"><input type="number" data-ing-f="q" min="0" step="any" value="${x.q===""?"":x.q}" aria-label="Quantité">
-      <span class="unit ${x.n&&!inv?"unknown":""}" data-unit="${i}">${inv?esc(inv.unit)+` · reste ${fmtQ(invLeft(inv))}`:(x.n?"absent de l'inventaire":"")}</span>
+      <span class="unit ${x.n&&!inv?"unknown":""}" data-unit="${i}">${inv?esc(inv.unit)+` · reste ${fmtQ(invLeft(inv))}`+(inv.store?` · ${esc(inv.store)}`:""):(x.n?"absent de l'inventaire":"")}</span>
       <button class="btn ghost small" type="button" data-act="delIng" data-i="${i}" aria-label="Retirer l'ingrédient">✕</button></li>`}).join("")}</ul>
     <div class="row"><button class="btn small" type="button" data-act="addIng">Ajouter un ingrédient</button></div>
     <label class="check" style="margin-top:4px"><input type="checkbox" data-meal="done" ${m.done?"checked":""}><span>Repas fait : déduire ces quantités de l'inventaire<small>Après le repas, ajuste les quantités à ce qui a vraiment été utilisé.</small></span></label>`;
@@ -934,7 +938,9 @@ let INV=null;
 function invLeft(item){if(!INV)INV=invCompute();const r=INV.byName[norm(item.name)];return r?item.initial-r.used:item.initial}
 
 /* ---------- Inventaire ---------- */
-let invFilter="",invAlertsOnly=false,invOpenAdd=false;
+let invFilter="",invAlertsOnly=false,invOpenAdd=false,invStore="";
+const STORE_SUGG=["Congélateur","Frigo"];
+const storesUsed=()=>[...new Set(S.inv.map(i=>(i.store||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
 function renderInv(){
   INV=invCompute();
   const cats=[];S.inv.forEach(i=>{if(!cats.includes(i.cat||"Autre"))cats.push(i.cat||"Autre")});
@@ -943,10 +949,13 @@ function renderInv(){
     const st=after<-1e-9?"bad":(left<=1e-9?"bad":(ratio<0.15?"warn":"ok"));if(after<-1e-9)nNeg++;if(left<=1e-9)nOut++;else if(ratio<0.15)nLow++;
     return {i,r,left,after,ratio,st}});
   const f=norm(invFilter);
-  const shown=rowsData.filter(x=>(!f||norm(x.i.name).includes(f))&&(!invAlertsOnly||x.st!=="ok"));
+  const shown=rowsData.filter(x=>(!f||norm(x.i.name).includes(f)||norm(x.i.store).includes(f))&&(!invAlertsOnly||x.st!=="ok")&&(!invStore||(invStore==="__none"?!(x.i.store||"").trim():norm(x.i.store)===norm(invStore))));
+  const stores=storesUsed();$("storeList").innerHTML=[...new Set([...stores,...STORE_SUGG])].map(x=>`<option value="${esc(x)}">`).join("");
+  const nNoStore=S.inv.filter(i=>!(i.store||"").trim()).length;
   const body=cats.map(cat=>{const rs=shown.filter(x=>(x.i.cat||"Autre")===cat);if(!rs.length)return "";
-    return `<tr class="cat"><td colspan="8">${esc(cat)}</td></tr>`+rs.map(({i,r,left,after,ratio,st})=>`<tr data-inv="${i.id}">
+    return `<tr class="cat"><td colspan="9">${esc(cat)}</td></tr>`+rs.map(({i,r,left,after,ratio,st})=>`<tr data-inv="${i.id}">
       <td><span class="nm">${esc(i.name)}</span><span class="un">${esc(i.unit)}</span></td>
+      <td><input type="text" class="store" list="storeList" value="${esc(i.store||"")}" placeholder="Où ?" data-inv-f="store" aria-label="Rangement, ${esc(i.name)}"></td>
       <td><input type="number" min="0" step="any" value="${i.initial}" data-inv-f="initial" aria-label="Quantité au départ, ${esc(i.name)}"></td>
       <td class="num">${fmtQ(r.used)}${r.adj?`<span class="un">dont ${fmtQ(r.adj)} hors repas</span>`:""}</td>
       <td class="num ${left<=1e-9?"neg":ratio<0.15?"lowv":""}">${fmtQ(left)}</td>
@@ -966,14 +975,15 @@ function renderInv(){
       <div class="kpi ${nOut?"bad":""}"><b>${nOut}</b><span>épuisées</span></div>
     </div>
     ${unk.length?`<div class="notice"><span>Ingrédients des repas absents de l'inventaire : ${unk.map(([n,q])=>`<b>${esc(n)}</b> (${fmtQ(q)})`).join(", ")}.</span></div>`:""}
-    <div class="toolbar"><div class="row" style="flex:1;min-width:0"><input type="search" id="invSearch" placeholder="Chercher une denrée" value="${esc(invFilter)}" style="max-width:18rem" aria-label="Chercher une denrée">
+    <div class="toolbar"><div class="row" style="flex:1;min-width:0"><input type="search" id="invSearch" placeholder="Chercher une denrée ou un rangement" value="${esc(invFilter)}" style="max-width:18rem" aria-label="Chercher une denrée">
+      <select id="invStore" aria-label="Filtrer par rangement" style="width:auto;max-width:12rem"><option value="">Tous les rangements</option>${stores.map(x=>`<option value="${esc(x)}" ${norm(invStore)===norm(x)?"selected":""}>${esc(x)}</option>`).join("")}<option value="__none" ${invStore==="__none"?"selected":""}>Sans rangement (${nNoStore})</option></select>
       <label class="toggle" style="font-size:.85rem"><input type="checkbox" id="invAlerts" ${invAlertsOnly?"checked":""}> alertes seulement</label></div>
       <div class="row"><button class="btn small primary" type="button" data-act="toggleAdd">Ajouter une denrée</button></div></div>
     ${invOpenAdd?`<form class="panel grid2" id="invAddForm" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr))">
       <label class="f">Denrée<input type="text" id="iaName" required></label><label class="f">Unité<input type="text" id="iaUnit" placeholder="kg, pièce, boîte 400 g" required></label>
-      <label class="f">Quantité<input type="number" id="iaQty" min="0" step="any" required></label><label class="f">Rayon<select id="iaCat">${catOpts}</select></label>
+      <label class="f">Quantité<input type="number" id="iaQty" min="0" step="any" required></label><label class="f">Rayon<select id="iaCat">${catOpts}</select></label><label class="f">Rangement<input type="text" id="iaStore" list="storeList" placeholder="Coffre bâbord…"></label>
       <div class="row full"><button class="btn primary small" type="submit">Ajouter</button><button class="btn small" type="button" data-act="toggleAdd">Annuler</button><span class="hint" id="iaMsg" style="margin:0"></span></div></form>`:""}
-    ${S.inv.length?`<div class="panel" style="padding:0"><div class="tablewrap"><table class="inv"><thead><tr><th>Denrée</th><th>Départ</th><th>Consommé</th><th>Reste</th><th>Menus prévus</th><th>Après menus</th><th>Stock</th><th>Sortie hors repas</th></tr></thead><tbody>${body||`<tr><td colspan="8" class="hint">Aucune denrée pour ce filtre.</td></tr>`}</tbody></table></div></div>`
+    ${S.inv.length?`<div class="panel" style="padding:0"><div class="tablewrap"><table class="inv"><thead><tr><th>Denrée</th><th style="text-align:left">Rangement</th><th>Départ</th><th>Consommé</th><th>Reste</th><th>Menus prévus</th><th>Après menus</th><th>Stock</th><th>Sortie hors repas</th></tr></thead><tbody>${body||`<tr><td colspan="9" class="hint">Aucune denrée pour ce filtre.</td></tr>`}</tbody></table></div></div>`
     :`<div class="panel empty-state"><p>L'inventaire est vide. Charge l'inventaire du ticket du 28/10, ou ajoute les denrées une à une.</p><button class="btn primary" type="button" data-act="loadSeed">Charger le ticket du 28/10 (${SEED.inventory.length} denrées)</button></div>`}
     <div class="main" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
       <section class="panel"><h2>Sorties hors repas</h2>${recent.length?`<ul class="log">${recent.map(l=>`<li><span>${esc(l.n)} : ${fmtQ(l.q)}${l.note?` · ${esc(l.note)}`:""}</span><span class="row" style="gap:6px;flex-wrap:nowrap"><span class="t">${fmtDay(l.t)} ${fmtT(l.t)}</span><button class="btn ghost small" type="button" data-act="undoLog" data-id="${l.id}" aria-label="Annuler">✕</button></span></li>`).join("")}</ul>`:`<p class="hint" style="margin:0">Petit-déj, collations, pertes : retire-les ici avec le bouton « Retirer » de chaque ligne.</p>`}</section>
@@ -1066,7 +1076,7 @@ V.addEventListener("change",e=>{
     if(t.dataset.ingF==="n"){const inv=invItem(t.value);x.n=inv?inv.name:t.value.trim();t.value=x.n}
     else x.q=t.value===""?"":Math.max(0,parseFloat(t.value)||0);
     INV=null;save();const u=V.querySelector(`[data-unit="${i}"]`),inv=invItem(x.n);
-    if(u){u.className="unit"+(x.n&&!inv?" unknown":"");u.textContent=inv?`${inv.unit} · reste ${fmtQ(invLeft(inv))}`:(x.n?"absent de l'inventaire":"")}
+    if(u){u.className="unit"+(x.n&&!inv?" unknown":"");u.textContent=inv?`${inv.unit} · reste ${fmtQ(invLeft(inv))}`+(inv.store?` · ${inv.store}`:""):(x.n?"absent de l'inventaire":"")}
     updExport();}
 });
 V.addEventListener("click",e=>{
@@ -1107,13 +1117,15 @@ const VI=$("view-inv");
 VI.addEventListener("input",e=>{if(e.target.id==="invSearch"){invFilter=e.target.value;const pos=e.target.selectionStart;renderInv();const s=$("invSearch");s.focus();try{s.setSelectionRange(pos,pos)}catch(x){}}});
 VI.addEventListener("change",e=>{const t=e.target;
   if(t.id==="invAlerts"){invAlertsOnly=t.checked;renderInv();return}
+  if(t.id==="invStore"){invStore=t.value;renderInv();return}
+  if(t.dataset.invF==="store"){const tr=t.closest("[data-inv]"),it=S.inv.find(i=>i.id===tr.dataset.inv);if(it){const v=t.value.trim().replace(/\s+/g," ");const m=storesUsed().find(x=>norm(x)===norm(v));it.store=m||v;save();renderInv();updExport()}return}
   if(t.dataset.invF==="initial"){const tr=t.closest("[data-inv]"),it=S.inv.find(i=>i.id===tr.dataset.inv);if(it){it.initial=Math.max(0,parseFloat(t.value)||0);save();renderInv();updExport()}}
 });
 VI.addEventListener("submit",e=>{if(e.target.id!=="invAddForm")return;e.preventDefault();
   const name=$("iaName").value.trim(),unit=$("iaUnit").value.trim(),q=parseFloat($("iaQty").value);
   if(!name||!unit||isNaN(q)){$("iaMsg").textContent="Renseigne la denrée, l'unité et la quantité.";return}
   if(invItem(name)){$("iaMsg").textContent="Cette denrée existe déjà : modifie sa quantité de départ dans le tableau.";return}
-  S.inv.push({id:uid(),name,unit,cat:$("iaCat").value,initial:q});invOpenAdd=false;save();renderTabs();renderInv();});
+  S.inv.push({id:uid(),name,unit,cat:$("iaCat").value,initial:q,store:$("iaStore").value.trim()});invOpenAdd=false;save();renderTabs();renderInv();});
 VI.addEventListener("click",e=>{const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act;
   if(act==="toggleAdd"){invOpenAdd=!invOpenAdd;renderInv();invOpenAdd&&$("iaName").focus()}
   if(act==="take"){const id=a.dataset.id,inp=VI.querySelector(`[data-take="${id}"]`),q=parseFloat(inp.value),it=S.inv.find(i=>i.id===id);

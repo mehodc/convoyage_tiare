@@ -6,7 +6,7 @@ Outil de bord pour la traversée Lombok → Thaïlande, en une seule page sans s
 - **Plannings de corvées** (vaisselle, ménage, repas, et tout planning ajouté) : personnes par occurrence, horaires, participants, répartition qui évite les personnes de quart.
 - **Repas** : recette et ingrédients par repas, avec autocomplétion depuis l'inventaire ; pré-remplissage possible avec le menu prévu (30 jours).
 - **Général** : équipage, battement minimum entre deux tâches (toutes tâches confondues) et export agenda (.ics / .csv Google) en choisissant quoi exporter (quarts, repas, corvées), sauvegarde et transfert entre téléphones.
-- **Inventaire** : stock de départ, consommé (repas faits + sorties hors repas), reste, besoins des menus prévus et alertes de manque.
+- **Inventaire** : rangement de chaque denrée (avec filtre), stock de départ, consommé (repas faits + sorties hors repas), reste, besoins des menus prévus et alertes de manque.
 
 Les données sont gardées dans le navigateur de chaque téléphone et la page fonctionne hors ligne. Pour travailler à plusieurs, l'onglet **Général › Partage entre téléphones** propose deux voies, qui fusionnent les changements de chacun : pour chaque élément (équipier, repas, quart modifié, denrée…), la modification la plus récente l'emporte.
 
