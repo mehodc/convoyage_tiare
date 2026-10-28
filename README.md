@@ -29,3 +29,7 @@ Ensuite : « Enregistrer les changements » envoie les siens et récupère ceux 
 Sécurité : la table n'est accessible qu'au travers de deux fonctions qui exigent le code du bateau. Toute personne qui connaît l'adresse, la clé publique et le code peut lire et modifier le planning : ne les publie pas (ils ne sont pas dans ce dépôt).
 
 Sur un téléphone neuf, commencer par récupérer ou intégrer avant de modifier quoi que ce soit. La synchronisation en ligne ne fonctionne pas depuis la version claude.ai de la page (le partage par fichier, si).
+
+## Inventaire de départ
+
+L'inventaire de l'outil vient du ticket Pepito Senggigi du 28/10/2026, transcrit ligne par ligne dans [`courses/ticket-pepito-2026-10-28.csv`](courses/ticket-pepito-2026-10-28.csv). `python3 courses/inventaire_depuis_ticket.py` vérifie la transcription contre le pied du ticket (109 lignes, 21 822 947 IDR, 256 250 IDR de remises) et produit `courses/inventaire.json`. Le regroupement des articles en denrées (unités, rayons) est dans [`courses/denrees.csv`](courses/denrees.csv). Les articles hors alimentation (papier toilette, crème solaire, sacs, javel, brosse à dents) sont exclus.

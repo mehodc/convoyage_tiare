@@ -1,0 +1,464 @@
+[
+ {
+  "name": "Pâtes",
+  "unit": "kg",
+  "cat": "Féculents",
+  "initial": 3.0
+ },
+ {
+  "name": "Farine de blé",
+  "unit": "kg",
+  "cat": "Féculents",
+  "initial": 5.0
+ },
+ {
+  "name": "Flocons d'avoine",
+  "unit": "kg",
+  "cat": "Féculents",
+  "initial": 6.4
+ },
+ {
+  "name": "Muesli / granola",
+  "unit": "kg",
+  "cat": "Féculents",
+  "initial": 1.2
+ },
+ {
+  "name": "Granola chocolat",
+  "unit": "paquet",
+  "cat": "Féculents",
+  "initial": 1.0
+ },
+ {
+  "name": "Quinoa blanc",
+  "unit": "paquet (poids non lisible)",
+  "cat": "Féculents",
+  "initial": 5.0
+ },
+ {
+  "name": "Quinoa rouge",
+  "unit": "paquet (poids non lisible)",
+  "cat": "Féculents",
+  "initial": 5.0
+ },
+ {
+  "name": "Nouilles de riz",
+  "unit": "paquet 400 g",
+  "cat": "Féculents",
+  "initial": 9.0
+ },
+ {
+  "name": "Nouilles aux œufs (Atom Bulan)",
+  "unit": "paquet",
+  "cat": "Féculents",
+  "initial": 3.0
+ },
+ {
+  "name": "Vermicelles de soja (Longkou)",
+  "unit": "paquet 500 g",
+  "cat": "Féculents",
+  "initial": 1.0
+ },
+ {
+  "name": "Galettes de riz (feuilles)",
+  "unit": "paquet 500 g",
+  "cat": "Féculents",
+  "initial": 2.0
+ },
+ {
+  "name": "Préparation pancakes au fromage",
+  "unit": "sachet 250 g",
+  "cat": "Féculents",
+  "initial": 3.0
+ },
+ {
+  "name": "Pois chiches",
+  "unit": "boîte 400 g",
+  "cat": "Légumineuses",
+  "initial": 9.0
+ },
+ {
+  "name": "Lentilles en conserve",
+  "unit": "boîte 400 g",
+  "cat": "Légumineuses",
+  "initial": 10.0
+ },
+ {
+  "name": "Thon",
+  "unit": "boîte (à l'huile)",
+  "cat": "Conserves",
+  "initial": 15.0
+ },
+ {
+  "name": "Sardines (grande boîte)",
+  "unit": "boîte 425 g",
+  "cat": "Conserves",
+  "initial": 8.0
+ },
+ {
+  "name": "Maquereau",
+  "unit": "boîte 425 g",
+  "cat": "Conserves",
+  "initial": 8.0
+ },
+ {
+  "name": "Tomates concassées",
+  "unit": "boîte 400 g",
+  "cat": "Conserves",
+  "initial": 8.0
+ },
+ {
+  "name": "Tomates pelées",
+  "unit": "boîte 400 g",
+  "cat": "Conserves",
+  "initial": 6.0
+ },
+ {
+  "name": "Lait de coco",
+  "unit": "brique 400 ml (équiv. ",
+  "cat": " acheté 7 × 1 L)",
+  "initial": 17.5
+ },
+ {
+  "name": "Olives noires",
+  "unit": "bocal 450 g",
+  "cat": "Conserves",
+  "initial": 2.0
+ },
+ {
+  "name": "Olives vertes dénoyautées",
+  "unit": "bocal 290 g",
+  "cat": "Conserves",
+  "initial": 1.0
+ },
+ {
+  "name": "Câpres",
+  "unit": "bocal 450 g",
+  "cat": "Conserves",
+  "initial": 1.0
+ },
+ {
+  "name": "Blanc de poulet",
+  "unit": "kg",
+  "cat": "Protéines (congélo)",
+  "initial": 10.26
+ },
+ {
+  "name": "Filets de poisson",
+  "unit": "kg (longe de thon saku)",
+  "cat": "Protéines (congélo)",
+  "initial": 4.466
+ },
+ {
+  "name": "Tofu soyeux",
+  "unit": "barquette",
+  "cat": "Œufs et frais",
+  "initial": 15.0
+ },
+ {
+  "name": "Cheddar",
+  "unit": "kg",
+  "cat": "Œufs et frais",
+  "initial": 0.4
+ },
+ {
+  "name": "Parmesan râpé",
+  "unit": "kg",
+  "cat": "Œufs et frais",
+  "initial": 0.75
+ },
+ {
+  "name": "Mozzarella râpée",
+  "unit": "kg",
+  "cat": "Œufs et frais",
+  "initial": 1.0
+ },
+ {
+  "name": "Yaourt nature",
+  "unit": "L",
+  "cat": "Œufs et frais",
+  "initial": 3.0
+ },
+ {
+  "name": "Yaourt grec",
+  "unit": "L",
+  "cat": "Œufs et frais",
+  "initial": 1.0
+ },
+ {
+  "name": "Margarine",
+  "unit": "kg",
+  "cat": "Œufs et frais",
+  "initial": 1.5
+ },
+ {
+  "name": "Lait UHT entier",
+  "unit": "L",
+  "cat": "Petit-déj et boissons",
+  "initial": 14.0
+ },
+ {
+  "name": "Lait d'avoine",
+  "unit": "L",
+  "cat": "Petit-déj et boissons",
+  "initial": 4.0
+ },
+ {
+  "name": "Lait d'amande",
+  "unit": "L",
+  "cat": "Petit-déj et boissons",
+  "initial": 2.0
+ },
+ {
+  "name": "Lait de riz",
+  "unit": "L",
+  "cat": "Petit-déj et boissons",
+  "initial": 3.0
+ },
+ {
+  "name": "Thé (Lipton)",
+  "unit": "boîte",
+  "cat": "Petit-déj et boissons",
+  "initial": 4.0
+ },
+ {
+  "name": "Cacao en poudre",
+  "unit": "boîte 165 g",
+  "cat": "Petit-déj et boissons",
+  "initial": 2.0
+ },
+ {
+  "name": "Miel",
+  "unit": "kg (910 g + 2 × 450 ml)",
+  "cat": "Petit-déj et boissons",
+  "initial": 2.19
+ },
+ {
+  "name": "Nutella",
+  "unit": "pot 650 g",
+  "cat": "Petit-déj et boissons",
+  "initial": 2.0
+ },
+ {
+  "name": "Beurre de cacahuète",
+  "unit": "kg",
+  "cat": "Petit-déj et boissons",
+  "initial": 0.5
+ },
+ {
+  "name": "Beurre cacahuète-amande",
+  "unit": "pot 300 g",
+  "cat": "Petit-déj et boissons",
+  "initial": 1.0
+ },
+ {
+  "name": "Graines de chia",
+  "unit": "kg",
+  "cat": "Petit-déj et boissons",
+  "initial": 0.4
+ },
+ {
+  "name": "Sirop de coco",
+  "unit": "flacon 250 ml",
+  "cat": "Petit-déj et boissons",
+  "initial": 1.0
+ },
+ {
+  "name": "Huile de cuisson",
+  "unit": "L",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Huile d'olive vierge extra",
+  "unit": "bouteille (contenance non lisible)",
+  "cat": "Épicerie et condiments",
+  "initial": 5.0
+ },
+ {
+  "name": "Sucre",
+  "unit": "kg",
+  "cat": "Épicerie et condiments",
+  "initial": 2.0
+ },
+ {
+  "name": "Sucre de coco",
+  "unit": "kg",
+  "cat": "Épicerie et condiments",
+  "initial": 2.45
+ },
+ {
+  "name": "Fécule de maïs (Maïzena)",
+  "unit": "kg",
+  "cat": "Épicerie et condiments",
+  "initial": 0.4
+ },
+ {
+  "name": "Lait de coco en poudre",
+  "unit": "sachet 250 g",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Copeaux de coco séchés",
+  "unit": "sachet",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Graines de sésame",
+  "unit": "kg",
+  "cat": "Épicerie et condiments",
+  "initial": 0.5
+ },
+ {
+  "name": "Sambal",
+  "unit": "kg",
+  "cat": "Épicerie et condiments",
+  "initial": 0.38
+ },
+ {
+  "name": "Sauce sweet chili (Flying Goose)",
+  "unit": "bouteille",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Sauce Bangkok (Kokita)",
+  "unit": "flacon 400 g",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Moutarde forte",
+  "unit": "pot 250 g",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Graines de moutarde jaune",
+  "unit": "sachet 80 g",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Graines de moutarde noire",
+  "unit": "sachet 80 g",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Herbes italiennes",
+  "unit": "pot 30 g",
+  "cat": "Épicerie et condiments",
+  "initial": 2.0
+ },
+ {
+  "name": "Mélange d'épices indien",
+  "unit": "pot 50 g",
+  "cat": "Épicerie et condiments",
+  "initial": 1.0
+ },
+ {
+  "name": "Curry de Madras en poudre",
+  "unit": "boîte 225 g",
+  "cat": "Épicerie et condiments",
+  "initial": 2.0
+ },
+ {
+  "name": "Mangoustans",
+  "unit": "kg",
+  "cat": "Fruits",
+  "initial": 3.953
+ },
+ {
+  "name": "Mangue séchée",
+  "unit": "sachet 120 g",
+  "cat": "Fruits",
+  "initial": 4.0
+ },
+ {
+  "name": "Abricots secs",
+  "unit": "sachet 150 g",
+  "cat": "Fruits",
+  "initial": 2.0
+ },
+ {
+  "name": "Raisins secs",
+  "unit": "kg",
+  "cat": "Fruits",
+  "initial": 0.085
+ },
+ {
+  "name": "Baies séchées mélangées",
+  "unit": "sachet 85 g",
+  "cat": "Fruits",
+  "initial": 4.0
+ },
+ {
+  "name": "Baies de goji",
+  "unit": "sachet 85 g",
+  "cat": "Fruits",
+  "initial": 1.0
+ },
+ {
+  "name": "Noix de cajou grillées",
+  "unit": "kg",
+  "cat": "Collations",
+  "initial": 0.5
+ },
+ {
+  "name": "Noix de cajou nature",
+  "unit": "kg",
+  "cat": "Collations",
+  "initial": 1.0
+ },
+ {
+  "name": "Amandes grillées",
+  "unit": "kg",
+  "cat": "Collations",
+  "initial": 0.9
+ },
+ {
+  "name": "Chips de coco grillées",
+  "unit": "sachet 100 g",
+  "cat": "Collations",
+  "initial": 1.0
+ },
+ {
+  "name": "Chips de coco pandan",
+  "unit": "sachet 100 g",
+  "cat": "Collations",
+  "initial": 3.0
+ },
+ {
+  "name": "Chips de tempeh",
+  "unit": "sachet",
+  "cat": "Collations",
+  "initial": 2.0
+ },
+ {
+  "name": "Biscuits sans sucre ajouté (Bogutti)",
+  "unit": "paquet",
+  "cat": "Collations",
+  "initial": 5.0
+ },
+ {
+  "name": "Biscuits Lotus",
+  "unit": "paquet 250 g",
+  "cat": "Collations",
+  "initial": 4.0
+ },
+ {
+  "name": "Pépites de chocolat",
+  "unit": "sachet 150 g",
+  "cat": "Collations",
+  "initial": 3.0
+ },
+ {
+  "name": "Bière Bali Hai",
+  "unit": "pack (nombre de canettes non lisible)",
+  "cat": "Boissons",
+  "initial": 9.0
+ }
+]
