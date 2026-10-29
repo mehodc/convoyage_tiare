@@ -36,7 +36,11 @@
      0.1
     ]
    ],
-   "steps": "Cuire les pâtes al dente (moitié eau de mer, moitié eau douce), égoutter et refroidir. Griller les épis à sec dans une poêle 8 à 10 min en les tournant, puis les égrener. Couper concombre et tomates en dés, émincer finement l'oignon. Vinaigrette : huile d'olive, 1 c. à s. de moutarde, sel, poivre. Mélanger le tout avec le thon égoutté."
+   "steps": "Cuire les pâtes al dente (moitié eau de mer, moitié eau douce), égoutter et refroidir. Griller les épis à sec dans une poêle 8 à 10 min en les tournant, puis les égrener. Couper concombre et tomates en dés, émincer finement l'oignon. Vinaigrette : huile d'olive, 1 c. à s. de moutarde, sel, poivre. Mélanger le tout avec le thon égoutté.",
+   "time": [
+    25,
+    15
+   ]
   },
   "dinner": {
    "recipe": "Curry de poulet coco et pommes de terre, riz",
@@ -82,7 +86,11 @@
      0.05
     ]
    ],
-   "steps": "Lancer le riz au multicuiseur. Faire revenir oignons, ail et gingembre hachés 5 min, ajouter 3 c. à s. de curry et laisser 1 min. Ajouter le poulet en cubes et le dorer 5 min, puis les pommes de terre en dés, les tomates et le lait de coco. Couvrir et mijoter 20 min, jusqu'à ce que les pommes de terre soient tendres. Saler."
+   "steps": "Lancer le riz au multicuiseur. Faire revenir oignons, ail et gingembre hachés 5 min, ajouter 3 c. à s. de curry et laisser 1 min. Ajouter le poulet en cubes et le dorer 5 min, puis les pommes de terre en dés, les tomates et le lait de coco. Couvrir et mijoter 20 min, jusqu'à ce que les pommes de terre soient tendres. Saler.",
+   "time": [
+    20,
+    30
+   ]
   }
  },
  {
@@ -126,7 +134,11 @@
      0.03
     ]
    ],
-   "steps": "Décongeler le thon au frigo la veille. Rincer le quinoa, le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Couper le thon en cubes de 2 cm et le mariner 10 min dans le jus des citrons, le gingembre râpé, l'huile et 2 c. à s. de sauce sweet chili. S'il n'a pas été congelé dès l'achat, le saisir 30 s par face. Blanchir les haricots longs coupés 3 min, rafraîchir. Dresser en bols avec le concombre en dés et le sésame grillé à sec."
+   "steps": "Décongeler le thon au frigo la veille. Rincer le quinoa, le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Couper le thon en cubes de 2 cm et le mariner 10 min dans le jus des citrons, le gingembre râpé, l'huile et 2 c. à s. de sauce sweet chili. S'il n'a pas été congelé dès l'achat, le saisir 30 s par face. Blanchir les haricots longs coupés 3 min, rafraîchir. Dresser en bols avec le concombre en dés et le sésame grillé à sec.",
+   "time": [
+    25,
+    15
+   ]
   },
   "dinner": {
    "recipe": "Tofu soyeux sambal, haricots longs sautés et riz",
@@ -168,7 +180,11 @@
      0.05
     ]
    ],
-   "steps": "Lancer le riz. Faire revenir oignon, ail et gingembre, ajouter 2 c. à s. de sambal, la sauce Bangkok et un verre d'eau. Glisser le tofu en gros cubes et laisser chauffer 5 min sans remuer : il est fragile, l'arroser de sauce à la cuillère. À côté, sauter les haricots longs coupés 5 min à feu vif avec un peu d'ail."
+   "steps": "Lancer le riz. Faire revenir oignon, ail et gingembre, ajouter 2 c. à s. de sambal, la sauce Bangkok et un verre d'eau. Glisser le tofu en gros cubes et laisser chauffer 5 min sans remuer : il est fragile, l'arroser de sauce à la cuillère. À côté, sauter les haricots longs coupés 5 min à feu vif avec un peu d'ail.",
+   "time": [
+    15,
+    20
+   ]
   }
  },
  {
@@ -216,7 +232,11 @@
      0.02
     ]
    ],
-   "steps": "Tremper les nouilles de riz 10 min dans l'eau chaude, égoutter. Faire une omelette fine avec les 8 œufs et la couper en lanières. Couper concombre, carotte et chou en fine julienne. Sauce au mixeur : beurre cacahuète-amande, jus du citron, sweet chili et un peu d'eau chaude. Chacun roule ses galettes après les avoir trempées 5 s dans l'eau tiède."
+   "steps": "Tremper les nouilles de riz 10 min dans l'eau chaude, égoutter. Faire une omelette fine avec les 8 œufs et la couper en lanières. Couper concombre, carotte et chou en fine julienne. Sauce au mixeur : beurre cacahuète-amande, jus du citron, sweet chili et un peu d'eau chaude. Chacun roule ses galettes après les avoir trempées 5 s dans l'eau tiède.",
+   "time": [
+    45,
+    10
+   ]
   },
   "dinner": {
    "recipe": "Haricots rouges mijotés tomate-sambal, maïs et cheddar, riz",
@@ -262,7 +282,11 @@
      0.04
     ]
    ],
-   "steps": "La veille au soir (J2), tremper 2 kg de haricots rouges : 1,2 kg pour ce soir, 0,8 kg pour demain midi. Les égoutter, couvrir d'eau neuve, bouillir 10 min à gros bouillons (indispensable pour les haricots rouges), puis cuire 1 h à 1 h 30 jusqu'à ce qu'ils soient tendres. Réserver la part de demain. Faire revenir oignons et ail, ajouter curry, sambal, tomates, maïs égrené et les haricots, mijoter 20 min. Servir avec le riz et le cheddar râpé."
+   "steps": "La veille au soir (J2), tremper 2 kg de haricots rouges : 1,2 kg pour ce soir, 0,8 kg pour demain midi. Les égoutter, couvrir d'eau neuve, bouillir 10 min à gros bouillons (indispensable pour les haricots rouges), puis cuire 1 h à 1 h 30 jusqu'à ce qu'ils soient tendres. Réserver la part de demain. Faire revenir oignons et ail, ajouter curry, sambal, tomates, maïs égrené et les haricots, mijoter 20 min. Servir avec le riz et le cheddar râpé.",
+   "time": [
+    15,
+    105
+   ]
   }
  },
  {
@@ -310,7 +334,11 @@
      0.01
     ]
    ],
-   "steps": "Réchauffer les haricots cuits hier avec un peu d'eau. Cuire le riz. Griller les épis et les égrener. Salsa : concombre, tomate et oignon en petits dés, la moitié du citron, sel. Sauce : yaourt, reste du citron, sel. Monter les bols et parsemer de cheddar râpé."
+   "steps": "Réchauffer les haricots cuits hier avec un peu d'eau. Cuire le riz. Griller les épis et les égrener. Salsa : concombre, tomate et oignon en petits dés, la moitié du citron, sel. Sauce : yaourt, reste du citron, sel. Monter les bols et parsemer de cheddar râpé.",
+   "time": [
+    20,
+    15
+   ]
   },
   "dinner": {
    "recipe": "Soupe au tofu soyeux, vermicelles et citronnelle, œufs pochés",
@@ -360,7 +388,11 @@
      0.4
     ]
    ],
-   "steps": "Bouillon : 4 L d'eau, citronnelle écrasée, gingembre en lamelles et ail, 15 min à frémissement (ajouter un cube ou de la sauce soja si vous en avez, sinon saler). Ajouter carottes et chou émincés 5 min, les haricots longs 3 min, puis les vermicelles trempés. Pocher les œufs 3 min dans le bouillon frémissant et glisser le tofu en cubes à la fin. Riz à part, sambal à table."
+   "steps": "Bouillon : 4 L d'eau, citronnelle écrasée, gingembre en lamelles et ail, 15 min à frémissement (ajouter un cube ou de la sauce soja si vous en avez, sinon saler). Ajouter carottes et chou émincés 5 min, les haricots longs 3 min, puis les vermicelles trempés. Pocher les œufs 3 min dans le bouillon frémissant et glisser le tofu en cubes à la fin. Riz à part, sambal à table.",
+   "time": [
+    20,
+    30
+   ]
   }
  },
  {
@@ -404,7 +436,11 @@
      0.1
     ]
    ],
-   "steps": "Tremper les haricots blancs la veille au soir. Le matin, les cuire 1 h à 1 h 15 dans de l'eau non salée, saler en fin de cuisson et laisser refroidir. Les mélanger avec le thon, le concombre et la tomate en dés et l'oignon émincé. Vinaigrette : citron, huile, moutarde, herbes, sel, poivre."
+   "steps": "Tremper les haricots blancs la veille au soir. Le matin, les cuire 1 h à 1 h 15 dans de l'eau non salée, saler en fin de cuisson et laisser refroidir. Les mélanger avec le thon, le concombre et la tomate en dés et l'oignon émincé. Vinaigrette : citron, huile, moutarde, herbes, sel, poivre.",
+   "time": [
+    20,
+    75
+   ]
   },
   "dinner": {
    "recipe": "Pizzas à la poêle (pâte au yaourt), tomate, mozzarella, olives et maïs",
@@ -450,7 +486,11 @@
      0.05
     ]
    ],
-   "steps": "Pâte : 1 kg de farine, 600 ml de yaourt, 1 c. à c. de sel, un peu d'eau si besoin ; pétrir 5 min et laisser reposer 20 min. Sauce : tomates, oignon et herbes réduits 10 min. Diviser la pâte en 8 et l'étaler finement. Cuire dans une poêle huilée, couvercle fermé, 3 min à feu moyen, retourner, garnir (sauce, mozzarella, olives, câpres, maïs grillé égrené) et couvrir 4 à 5 min jusqu'à ce que le fromage fonde. Sans four, c'est le couvercle qui fait le travail."
+   "steps": "Pâte : 1 kg de farine, 600 ml de yaourt, 1 c. à c. de sel, un peu d'eau si besoin ; pétrir 5 min et laisser reposer 20 min. Sauce : tomates, oignon et herbes réduits 10 min. Diviser la pâte en 8 et l'étaler finement. Cuire dans une poêle huilée, couvercle fermé, 3 min à feu moyen, retourner, garnir (sauce, mozzarella, olives, câpres, maïs grillé égrené) et couvrir 4 à 5 min jusqu'à ce que le fromage fonde. Sans four, c'est le couvercle qui fait le travail.",
+   "time": [
+    40,
+    40
+   ]
   }
  },
  {
@@ -486,7 +526,11 @@
      0.08
     ]
    ],
-   "steps": "Couper les pommes de terre en fines lamelles et émincer les oignons ; les cuire doucement 20 min à couvert dans l'huile en remuant. Battre les 12 œufs avec du sel, ajouter les pommes de terre égouttées. Cuire en 2 poêles 8 min à feu doux et couvert, retourner sur une assiette, puis 3 min de l'autre côté. Salade : chou et carotte râpés, moutarde, un filet d'huile."
+   "steps": "Couper les pommes de terre en fines lamelles et émincer les oignons ; les cuire doucement 20 min à couvert dans l'huile en remuant. Battre les 12 œufs avec du sel, ajouter les pommes de terre égouttées. Cuire en 2 poêles 8 min à feu doux et couvert, retourner sur une assiette, puis 3 min de l'autre côté. Salade : chou et carotte râpés, moutarde, un filet d'huile.",
+   "time": [
+    20,
+    40
+   ]
   },
   "dinner": {
    "recipe": "Curry de tofu soyeux et patate douce au lait de coco, riz",
@@ -532,7 +576,11 @@
      0.04
     ]
    ],
-   "steps": "Riz. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter 3 c. à s. de curry. Ajouter la patate douce en cubes de 2 cm, le lait de coco et un verre d'eau, mijoter 15 min. Glisser le tofu en cubes et laisser 5 min sans remuer. C'est le dernier tofu : ne pas le garder au-delà de ce jour."
+   "steps": "Riz. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter 3 c. à s. de curry. Ajouter la patate douce en cubes de 2 cm, le lait de coco et un verre d'eau, mijoter 15 min. Glisser le tofu en cubes et laisser 5 min sans remuer. C'est le dernier tofu : ne pas le garder au-delà de ce jour.",
+   "time": [
+    15,
+    30
+   ]
   }
  },
  {
@@ -584,7 +632,11 @@
      0.06
     ]
    ],
-   "steps": "Tremper les nouilles 10 min dans l'eau chaude. Saisir le poulet en lanières à feu vif, réserver. Brouiller les œufs, réserver. Faire sauter ail, oignon, chou et carotte 3 min, ajouter les nouilles égouttées, la sauce Bangkok, le sambal et un peu d'eau, remuer 2 min. Remettre poulet et œufs. Parsemer de cajou concassés."
+   "steps": "Tremper les nouilles 10 min dans l'eau chaude. Saisir le poulet en lanières à feu vif, réserver. Brouiller les œufs, réserver. Faire sauter ail, oignon, chou et carotte 3 min, ajouter les nouilles égouttées, la sauce Bangkok, le sambal et un peu d'eau, remuer 2 min. Remettre poulet et œufs. Parsemer de cajou concassés.",
+   "time": [
+    25,
+    20
+   ]
   },
   "dinner": {
    "recipe": "Dahl de lentilles au lait de coco, chapatis",
@@ -634,7 +686,11 @@
      0.04
     ]
    ],
-   "steps": "Chapatis : 750 g de farine, environ 450 ml d'eau tiède et du sel ; pétrir, laisser reposer 20 min, faire 16 boules, les étaler et les cuire à sec 1 min par face ; badigeonner de margarine. Dahl : chauffer l'huile, y jeter les graines de moutarde jusqu'à ce qu'elles sautent, ajouter oignon, ail et gingembre, puis les épices 1 min. Ajouter les tomates, les lentilles égouttées et le lait de coco, mijoter 15 min et écraser un peu."
+   "steps": "Chapatis : 750 g de farine, environ 450 ml d'eau tiède et du sel ; pétrir, laisser reposer 20 min, faire 16 boules, les étaler et les cuire à sec 1 min par face ; badigeonner de margarine. Dahl : chauffer l'huile, y jeter les graines de moutarde jusqu'à ce qu'elles sautent, ajouter oignon, ail et gingembre, puis les épices 1 min. Ajouter les tomates, les lentilles égouttées et le lait de coco, mijoter 15 min et écraser un peu.",
+   "time": [
+    40,
+    40
+   ]
   }
  },
  {
@@ -674,7 +730,11 @@
      0.02
     ]
    ],
-   "steps": "Tremper les haricots la veille au soir, puis les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mélanger les haricots chauds avec le riz cuit, l'ail et le sel. Guacamole : avocats écrasés, citron, oignon haché fin, sambal, sel. Servir avec le chou émincé finement."
+   "steps": "Tremper les haricots la veille au soir, puis les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mélanger les haricots chauds avec le riz cuit, l'ail et le sel. Guacamole : avocats écrasés, citron, oignon haché fin, sambal, sel. Servir avec le chou émincé finement.",
+   "time": [
+    20,
+    105
+   ]
   },
   "dinner": {
    "recipe": "Poulet sauté citronnelle-gingembre et chayote, riz",
@@ -716,7 +776,11 @@
      0.05
     ]
    ],
-   "steps": "Riz. Hacher finement la citronnelle (le cœur tendre), le gingembre et l'ail. Saisir le poulet en lanières à feu vif 4 min, réserver. Faire sauter la chayote épluchée en bâtonnets avec l'oignon 5 min, ajouter le hachis et le poulet, la sauce Bangkok et un trait d'eau, 2 min."
+   "steps": "Riz. Hacher finement la citronnelle (le cœur tendre), le gingembre et l'ail. Saisir le poulet en lanières à feu vif 4 min, réserver. Faire sauter la chayote épluchée en bâtonnets avec l'oignon 5 min, ajouter le hachis et le poulet, la sauce Bangkok et un trait d'eau, 2 min.",
+   "time": [
+    20,
+    20
+   ]
   }
  },
  {
@@ -760,7 +824,11 @@
      0.1
     ]
    ],
-   "steps": "Cuire les pâtes. Faire revenir ail et oignon dans l'huile, ajouter les tomates et laisser réduire 10 min. Ajouter les sardines en morceaux, les câpres et les olives coupées, 3 min. Mélanger avec les pâtes et servir avec le parmesan."
+   "steps": "Cuire les pâtes. Faire revenir ail et oignon dans l'huile, ajouter les tomates et laisser réduire 10 min. Ajouter les sardines en morceaux, les câpres et les olives coupées, 3 min. Mélanger avec les pâtes et servir avec le parmesan.",
+   "time": [
+    10,
+    20
+   ]
   },
   "dinner": {
    "recipe": "Thon poêlé, purée de patate douce et chou sauté au gingembre",
@@ -794,7 +862,11 @@
      0.04
     ]
    ],
-   "steps": "Décongeler le thon au frigo la veille. Cuire les patates douces à la vapeur (multicuiseur) 20 min, les écraser avec la margarine et du sel. Couper le thon en pavés de 2 cm d'épaisseur, saler, saisir 1 à 2 min par face à feu très vif. Faire sauter le chou émincé avec le gingembre et l'ail 4 min."
+   "steps": "Décongeler le thon au frigo la veille. Cuire les patates douces à la vapeur (multicuiseur) 20 min, les écraser avec la margarine et du sel. Couper le thon en pavés de 2 cm d'épaisseur, saler, saisir 1 à 2 min par face à feu très vif. Faire sauter le chou émincé avec le gingembre et l'ail 4 min.",
+   "time": [
+    20,
+    25
+   ]
   }
  },
  {
@@ -834,7 +906,11 @@
      0.05
     ]
    ],
-   "steps": "Rincer le quinoa et le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Ajouter les pois chiches rincés, la carotte râpée, l'oignon émincé et l'avocat en dés. Assaisonner avec citron, huile, sel et sésame grillé à sec."
+   "steps": "Rincer le quinoa et le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Ajouter les pois chiches rincés, la carotte râpée, l'oignon émincé et l'avocat en dés. Assaisonner avec citron, huile, sel et sésame grillé à sec.",
+   "time": [
+    20,
+    15
+   ]
   },
   "dinner": {
    "recipe": "Curry de soja et courge au lait de coco, riz",
@@ -876,7 +952,11 @@
      0.04
     ]
    ],
-   "steps": "Le soja est long : le tremper 12 h la veille (2 kg : 1,1 kg pour ce soir, 0,9 kg pour les galettes de demain midi), puis le cuire 2 h 30 à 3 h jusqu'à ce qu'il soit tendre, idéalement dès le matin. Faire revenir oignon, ail et gingembre, ajouter le curry, la courge en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter 1,1 kg (poids sec) de soja cuit, 10 min. Servir avec le riz."
+   "steps": "Le soja est long : le tremper 12 h la veille (2 kg : 1,1 kg pour ce soir, 0,9 kg pour les galettes de demain midi), puis le cuire 2 h 30 à 3 h jusqu'à ce qu'il soit tendre, idéalement dès le matin. Faire revenir oignon, ail et gingembre, ajouter le curry, la courge en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter 1,1 kg (poids sec) de soja cuit, 10 min. Servir avec le riz.",
+   "time": [
+    15,
+    210
+   ]
   }
  },
  {
@@ -920,7 +1000,11 @@
      0.1
     ]
    ],
-   "steps": "Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Cuire le quinoa 15 min dans 2 volumes d'eau et servir avec."
+   "steps": "Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Cuire le quinoa 15 min dans 2 volumes d'eau et servir avec.",
+   "time": [
+    30,
+    25
+   ]
   },
   "dinner": {
    "recipe": "Minestrone de haricots blancs, courge et pommes de terre, parmesan",
@@ -966,7 +1050,11 @@
      0.05
     ]
    ],
-   "steps": "Tremper les haricots la veille et les cuire 1 h le matin. Faire revenir oignon et ail dans l'huile, ajouter courge et pommes de terre en dés, les tomates, les herbes et 4 L d'eau, 20 min. Ajouter le chou et les haricots cuits, 10 min. Saler, servir avec le parmesan."
+   "steps": "Tremper les haricots la veille et les cuire 1 h le matin. Faire revenir oignon et ail dans l'huile, ajouter courge et pommes de terre en dés, les tomates, les herbes et 4 L d'eau, 20 min. Ajouter le chou et les haricots cuits, 10 min. Saler, servir avec le parmesan.",
+   "time": [
+    20,
+    90
+   ]
   }
  },
  {
@@ -1010,7 +1098,11 @@
      0.05
     ]
    ],
-   "steps": "Même méthode que les pizzas du J5 : pâte farine-yaourt reposée 20 min, sauce tomate réduite aux herbes, cuisson à la poêle couverte 3 min, retourner, garnir de sauce, thon émietté, oignon, olives et mozzarella, couvrir 4 à 5 min. Ouvrir le second sachet de mozzarella aujourd'hui."
+   "steps": "Même méthode que les pizzas du J5 : pâte farine-yaourt reposée 20 min, sauce tomate réduite aux herbes, cuisson à la poêle couverte 3 min, retourner, garnir de sauce, thon émietté, oignon, olives et mozzarella, couvrir 4 à 5 min. Ouvrir le second sachet de mozzarella aujourd'hui.",
+   "time": [
+    40,
+    40
+   ]
   },
   "dinner": {
    "recipe": "Maquereau à la tomate, gingembre et chayote, riz",
@@ -1052,7 +1144,11 @@
      0.04
     ]
    ],
-   "steps": "Riz. Faire revenir oignon, ail et gingembre, ajouter la chayote en dés 5 min, puis les tomates et le sambal, 10 min. Ajouter le maquereau en gros morceaux avec un peu de son jus et réchauffer 3 min sans trop remuer."
+   "steps": "Riz. Faire revenir oignon, ail et gingembre, ajouter la chayote en dés 5 min, puis les tomates et le sambal, 10 min. Ajouter le maquereau en gros morceaux avec un peu de son jus et réchauffer 3 min sans trop remuer.",
+   "time": [
+    15,
+    25
+   ]
   }
  },
  {
@@ -1096,7 +1192,11 @@
      0.06
     ]
    ],
-   "steps": "Décongeler le tempeh la veille. Le couper en bâtonnets et le dorer 6 à 8 min à la poêle. Tremper les nouilles 10 min. Faire sauter ail, oignon et chou 3 min, ajouter nouilles, sauce Bangkok, sambal et un trait d'eau, puis le tempeh et les cajou."
+   "steps": "Décongeler le tempeh la veille. Le couper en bâtonnets et le dorer 6 à 8 min à la poêle. Tremper les nouilles 10 min. Faire sauter ail, oignon et chou 3 min, ajouter nouilles, sauce Bangkok, sambal et un trait d'eau, puis le tempeh et les cajou.",
+   "time": [
+    20,
+    20
+   ]
   },
   "dinner": {
    "recipe": "Haricots rouges façon rendang (coco, citronnelle, coco grillée), riz",
@@ -1146,7 +1246,11 @@
      0.04
     ]
    ],
-   "steps": "Tremper les haricots la veille, les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mixer oignon, ail, gingembre, citronnelle et sambal en pâte, la faire revenir 5 min avec le curry. Ajouter le lait de coco et les haricots, mijoter à découvert 25 min jusqu'à ce que la sauce épaississe. Griller les copeaux de coco à sec et les parsemer dessus."
+   "steps": "Tremper les haricots la veille, les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mixer oignon, ail, gingembre, citronnelle et sambal en pâte, la faire revenir 5 min avec le curry. Ajouter le lait de coco et les haricots, mijoter à découvert 25 min jusqu'à ce que la sauce épaississe. Griller les copeaux de coco à sec et les parsemer dessus.",
+   "time": [
+    20,
+    120
+   ]
   }
  },
  {
@@ -1178,7 +1282,11 @@
      0.05
     ]
    ],
-   "steps": "Cuire les pommes de terre en robe 20 min à la vapeur, les couper en morceaux tièdes. Cuire les œufs 10 min. Vinaigrette : moutarde, huile, sel, poivre. Mélanger pommes de terre, maquereau émietté, œufs en quartiers et oignon émincé."
+   "steps": "Cuire les pommes de terre en robe 20 min à la vapeur, les couper en morceaux tièdes. Cuire les œufs 10 min. Vinaigrette : moutarde, huile, sel, poivre. Mélanger pommes de terre, maquereau émietté, œufs en quartiers et oignon émincé.",
+   "time": [
+    20,
+    25
+   ]
   },
   "dinner": {
    "recipe": "Poulet à l'ail, aux herbes et aux câpres, quinoa et chayote poêlée",
@@ -1212,7 +1320,11 @@
      0.06
     ]
    ],
-   "steps": "Cuire le quinoa 15 min. Couper le poulet en aiguillettes, le saisir dans l'huile avec l'ail haché et les herbes 6 à 8 min, ajouter les câpres et un trait d'eau pour déglacer. Faire poêler la chayote épluchée en fines tranches 6 min."
+   "steps": "Cuire le quinoa 15 min. Couper le poulet en aiguillettes, le saisir dans l'huile avec l'ail haché et les herbes 6 à 8 min, ajouter les câpres et un trait d'eau pour déglacer. Faire poêler la chayote épluchée en fines tranches 6 min.",
+   "time": [
+    15,
+    20
+   ]
   }
  },
  {
@@ -1252,7 +1364,11 @@
      0.25
     ]
    ],
-   "steps": "Griller le sésame à sec et le mixer avec un peu d'huile en pâte (tahini). Mixer les pois chiches égouttés avec ce tahini, l'ail, le citron, l'huile, du sel et un peu d'eau jusqu'à ce que ce soit lisse. Chapatis comme au J7 (750 g de farine). Cuire les œufs 10 min. Servir avec le chou en lanières."
+   "steps": "Griller le sésame à sec et le mixer avec un peu d'huile en pâte (tahini). Mixer les pois chiches égouttés avec ce tahini, l'ail, le citron, l'huile, du sel et un peu d'eau jusqu'à ce que ce soit lisse. Chapatis comme au J7 (750 g de farine). Cuire les œufs 10 min. Servir avec le chou en lanières.",
+   "time": [
+    40,
+    30
+   ]
   },
   "dinner": {
    "recipe": "Curry de thon et patate douce au lait de coco, riz",
@@ -1294,7 +1410,11 @@
      0.04
     ]
    ],
-   "steps": "Décongeler le thon au frigo la veille. Riz. Faire revenir oignon, ail, gingembre et curry, ajouter la patate douce en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter le thon en gros cubes et cuire 4 min à frémissement, sans remuer pour qu'il reste moelleux."
+   "steps": "Décongeler le thon au frigo la veille. Riz. Faire revenir oignon, ail, gingembre et curry, ajouter la patate douce en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter le thon en gros cubes et cuire 4 min à frémissement, sans remuer pour qu'il reste moelleux.",
+   "time": [
+    15,
+    25
+   ]
   }
  },
  {
@@ -1342,7 +1462,11 @@
      0.04
     ]
    ],
-   "steps": "Tremper 2 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1,2 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais."
+   "steps": "Tremper 2 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1,2 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais.",
+   "time": [
+    15,
+    210
+   ]
   },
   "dinner": {
    "recipe": "Poulet poêlé à l'ail et aux herbes, pommes de terre sautées, chou",
@@ -1380,7 +1504,11 @@
      0.06
     ]
    ],
-   "steps": "Précuire les pommes de terre en morceaux 10 min à la vapeur, puis les faire sauter dans l'huile 15 min jusqu'à ce qu'elles dorent. Saisir le poulet en morceaux avec l'ail et les herbes 8 min, finir avec la margarine et la moutarde. Faire poêler le chou 4 min."
+   "steps": "Précuire les pommes de terre en morceaux 10 min à la vapeur, puis les faire sauter dans l'huile 15 min jusqu'à ce qu'elles dorent. Saisir le poulet en morceaux avec l'ail et les herbes 8 min, finir avec la margarine et la moutarde. Faire poêler le chou 4 min.",
+   "time": [
+    20,
+    35
+   ]
   }
  },
  {
@@ -1428,7 +1556,11 @@
      0.02
     ]
    ],
-   "steps": "Décongeler le tempeh la veille. Bien égoutter et sécher le soja cuit hier ; faire frire séparément le soja et le tempeh en petits dés, en 2 fois, 8 à 10 min jusqu'à ce qu'ils croustillent. Faire revenir ail et oignon, ajouter le sambal et la sauce Bangkok, enrober le soja. Chou sauté 4 min, riz."
+   "steps": "Décongeler le tempeh la veille. Bien égoutter et sécher le soja cuit hier ; faire frire séparément le soja et le tempeh en petits dés, en 2 fois, 8 à 10 min jusqu'à ce qu'ils croustillent. Faire revenir ail et oignon, ajouter le sambal et la sauce Bangkok, enrober le soja. Chou sauté 4 min, riz.",
+   "time": [
+    15,
+    25
+   ]
   },
   "dinner": {
    "recipe": "Dahl de lentilles et courge aux graines de moutarde, riz",
@@ -1474,7 +1606,11 @@
      0.04
     ]
    ],
-   "steps": "Riz. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices. Ajouter la courge en petits dés et un verre d'eau, 12 min, puis les lentilles égouttées et le lait de coco, 10 min. Écraser grossièrement."
+   "steps": "Riz. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices. Ajouter la courge en petits dés et un verre d'eau, 12 min, puis les lentilles égouttées et le lait de coco, 10 min. Écraser grossièrement.",
+   "time": [
+    15,
+    30
+   ]
   }
  },
  {
@@ -1506,7 +1642,11 @@
      0.1
     ]
    ],
-   "steps": "Tremper les haricots la veille, les cuire 1 h le matin et les refroidir. Mélanger avec le thon et l'oignon émincé. Vinaigrette : huile, moutarde, herbes, sel, poivre."
+   "steps": "Tremper les haricots la veille, les cuire 1 h le matin et les refroidir. Mélanger avec le thon et l'oignon émincé. Vinaigrette : huile, moutarde, herbes, sel, poivre.",
+   "time": [
+    15,
+    60
+   ]
   },
   "dinner": {
    "recipe": "Mie goreng au tempeh, œufs et légumes",
@@ -1552,7 +1692,11 @@
      0.06
     ]
    ],
-   "steps": "Décongeler le tempeh la veille, le couper en dés et le dorer 6 min. Cuire les nouilles aux œufs 3 min, tremper les nouilles de riz 10 min, égoutter. Brouiller 4 œufs, réserver. Faire sauter ail, oignon et chou, ajouter les nouilles, la sauce Bangkok et le sambal, puis le tempeh et les œufs brouillés. Servir avec les 4 autres œufs au plat."
+   "steps": "Décongeler le tempeh la veille, le couper en dés et le dorer 6 min. Cuire les nouilles aux œufs 3 min, tremper les nouilles de riz 10 min, égoutter. Brouiller 4 œufs, réserver. Faire sauter ail, oignon et chou, ajouter les nouilles, la sauce Bangkok et le sambal, puis le tempeh et les œufs brouillés. Servir avec les 4 autres œufs au plat.",
+   "time": [
+    20,
+    20
+   ]
   }
  },
  {
@@ -1580,7 +1724,11 @@
      0.05
     ]
    ],
-   "steps": "Cuire ensemble le quinoa rincé et le riz dans 2 volumes d'eau, 15 min, laisser tiédir. Mélanger avec les sardines émiettées, l'oignon émincé, l'huile, du sel et du poivre."
+   "steps": "Cuire ensemble le quinoa rincé et le riz dans 2 volumes d'eau, 15 min, laisser tiédir. Mélanger avec les sardines émiettées, l'oignon émincé, l'huile, du sel et du poivre.",
+   "time": [
+    10,
+    15
+   ]
   },
   "dinner": {
    "recipe": "Poulet coco-citronnelle et patate douce (lait de coco en poudre), riz",
@@ -1626,7 +1774,11 @@
      0.04
     ]
    ],
-   "steps": "Délayer le sachet de lait de coco en poudre dans 1 L d'eau tiède. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter le poulet en cubes 5 min, puis la patate douce, le lait de coco et le sambal, 15 min. Servir avec le riz."
+   "steps": "Délayer le sachet de lait de coco en poudre dans 1 L d'eau tiède. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter le poulet en cubes 5 min, puis la patate douce, le lait de coco et le sambal, 15 min. Servir avec le riz.",
+   "time": [
+    15,
+    25
+   ]
   }
  },
  {
@@ -1666,7 +1818,11 @@
      0.03
     ]
    ],
-   "steps": "Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30) : 1,3 kg pour une soupe qui tient au corps. Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié pour épaissir, saler."
+   "steps": "Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30) : 1,3 kg pour une soupe qui tient au corps. Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié pour épaissir, saler.",
+   "time": [
+    15,
+    120
+   ]
   },
   "dinner": {
    "recipe": "Curry de poulet aux pommes de terre, riz",
@@ -1708,7 +1864,11 @@
      0.04
     ]
    ],
-   "steps": "Riz. Faire revenir oignon, ail et gingembre, ajouter le curry, puis le poulet en cubes 5 min. Ajouter les pommes de terre en dés et deux verres d'eau, mijoter 20 min. Finir avec la margarine."
+   "steps": "Riz. Faire revenir oignon, ail et gingembre, ajouter le curry, puis le poulet en cubes 5 min. Ajouter les pommes de terre en dés et deux verres d'eau, mijoter 20 min. Finir avec la margarine.",
+   "time": [
+    15,
+    30
+   ]
   }
  },
  {
@@ -1736,7 +1896,11 @@
      0.06
     ]
    ],
-   "steps": "Tremper 1,2 kg de soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé."
+   "steps": "Tremper 1,2 kg de soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé.",
+   "time": [
+    15,
+    180
+   ]
   },
   "dinner": {
    "recipe": "Dîner d'arrivée : poulet grillé sambal-citron, riz au coco grillé, salade de chou",
@@ -1774,7 +1938,11 @@
      0.05
     ]
    ],
-   "steps": "Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citron. Griller à la poêle très chaude 3 à 4 min par face. Griller les copeaux de coco à sec et les mélanger au riz chaud. Salade de chou émincé, huile et sel."
+   "steps": "Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citron. Griller à la poêle très chaude 3 à 4 min par face. Griller les copeaux de coco à sec et les mélanger au riz chaud. Salade de chou émincé, huile et sel.",
+   "time": [
+    40,
+    15
+   ]
   }
  }
 ]

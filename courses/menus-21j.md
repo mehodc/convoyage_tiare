@@ -4,11 +4,15 @@ Généré par `menus_21j.py` à partir de `inventaire.json`. Quantités pour 8, 
 
 ## J1 · Déjeuner : Salade de pâtes au thon, maïs grillé et concombre
 
+8 personnes · préparation 25 min · cuisson 15 min
+
 Ingrédients : Pâtes 1 kg, Thon 3 boîte (à l'huile), Maïs (épis) 6 épi, Concombres 1 kg, Tomates fraîches 0.5 kg, Oignons 0.1 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml), Moutarde forte 0.1 pot 250 g.
 
 Cuire les pâtes al dente (moitié eau de mer, moitié eau douce), égoutter et refroidir. Griller les épis à sec dans une poêle 8 à 10 min en les tournant, puis les égrener. Couper concombre et tomates en dés, émincer finement l'oignon. Vinaigrette : huile d'olive, 1 c. à s. de moutarde, sel, poivre. Mélanger le tout avec le thon égoutté.
 
 ## J1 · Dîner : Curry de poulet coco et pommes de terre, riz
+
+8 personnes · préparation 20 min · cuisson 30 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Pommes de terre 1.2 kg, Tomates fraîches 0.4 kg, Oignons 0.25 kg, Ail 0.03 kg, Gingembre 0.05 kg, Curry de Madras en poudre 0.1 boîte 225 g, Riz 0.4 kg, Huile de cuisson 0.05 L.
 
@@ -16,11 +20,15 @@ Lancer le riz au multicuiseur. Faire revenir oignons, ail et gingembre hachés 5
 
 ## J2 · Déjeuner : Poke bowl de thon, quinoa, concombre et haricots longs
 
+8 personnes · préparation 25 min · cuisson 15 min
+
 Ingrédients : Filets de poisson 1 kg (longe de thon saku), Quinoa blanc 2 paquet 500 g, Concombres 1 kg, Haricots longs 1 botte, Graines de sésame 0.05 kg, Citrons verts 3 pièce, Gingembre 0.03 kg, Sauce sweet chili (Flying Goose) 0.15 bouteille, Huile d'olive vierge extra 0.03 L (bouteilles de 750 ml).
 
 Décongeler le thon au frigo la veille. Rincer le quinoa, le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Couper le thon en cubes de 2 cm et le mariner 10 min dans le jus des citrons, le gingembre râpé, l'huile et 2 c. à s. de sauce sweet chili. S'il n'a pas été congelé dès l'achat, le saisir 30 s par face. Blanchir les haricots longs coupés 3 min, rafraîchir. Dresser en bols avec le concombre en dés et le sésame grillé à sec.
 
 ## J2 · Dîner : Tofu soyeux sambal, haricots longs sautés et riz
+
+8 personnes · préparation 15 min · cuisson 20 min
 
 Ingrédients : Tofu soyeux 5 barquette, Haricots longs 2 botte, Sambal 0.03 kg, Sauce Bangkok (Kokita) 0.15 flacon 400 g, Oignons 0.15 kg, Ail 0.03 kg, Gingembre 0.03 kg, Riz 0.6 kg, Huile de cuisson 0.05 L.
 
@@ -28,11 +36,15 @@ Lancer le riz. Faire revenir oignon, ail et gingembre, ajouter 2 c. à s. de sam
 
 ## J3 · Déjeuner : Rouleaux de printemps, omelette et crudités, sauce cacahuète
 
+8 personnes · préparation 45 min · cuisson 10 min
+
 Ingrédients : Galettes de riz (feuilles) 1 paquet 500 g, Nouilles de riz 1 paquet 400 g, Œufs 8 pièce, Concombres 1 kg, Carottes 0.3 kg, Chou blanc 0.25 gros chou, Beurre cacahuète-amande 0.5 pot 300 g, Citrons verts 1 pièce, Sauce sweet chili (Flying Goose) 0.1 bouteille, Huile de cuisson 0.02 L.
 
 Tremper les nouilles de riz 10 min dans l'eau chaude, égoutter. Faire une omelette fine avec les 8 œufs et la couper en lanières. Couper concombre, carotte et chou en fine julienne. Sauce au mixeur : beurre cacahuète-amande, jus du citron, sweet chili et un peu d'eau chaude. Chacun roule ses galettes après les avoir trempées 5 s dans l'eau tiède.
 
 ## J3 · Dîner : Haricots rouges mijotés tomate-sambal, maïs et cheddar, riz
+
+8 personnes · préparation 15 min · cuisson 105 min
 
 Ingrédients : Haricots rouges secs 1.2 kg, Tomates concassées 1.5 boîte 400 g, Maïs (épis) 6 épi, Oignons 0.25 kg, Ail 0.04 kg, Sambal 0.02 kg, Curry de Madras en poudre 0.05 boîte 225 g, Cheddar 0.15 kg, Riz 0.3 kg, Huile de cuisson 0.04 L.
 
@@ -40,11 +52,15 @@ La veille au soir (J2), tremper 2 kg de haricots rouges : 1,2 kg pour ce soir, 0
 
 ## J4 · Déjeuner : Bol burrito : haricots rouges, riz, salsa concombre-tomate, yaourt citronné
 
+8 personnes · préparation 20 min · cuisson 15 min
+
 Ingrédients : Haricots rouges secs 0.8 kg, Riz 0.3 kg, Concombres 1 kg, Tomates fraîches 0.6 kg, Maïs (épis) 4 épi, Yaourt nature 0.5 L, Citrons verts 1 pièce, Oignons 0.1 kg, Cheddar 0.1 kg, Sambal 0.01 kg.
 
 Réchauffer les haricots cuits hier avec un peu d'eau. Cuire le riz. Griller les épis et les égrener. Salsa : concombre, tomate et oignon en petits dés, la moitié du citron, sel. Sauce : yaourt, reste du citron, sel. Monter les bols et parsemer de cheddar râpé.
 
 ## J4 · Dîner : Soupe au tofu soyeux, vermicelles et citronnelle, œufs pochés
+
+8 personnes · préparation 20 min · cuisson 30 min
 
 Ingrédients : Tofu soyeux 5 barquette, Vermicelles de soja (Longkou) 1 paquet 500 g, Haricots longs 2 botte, Carottes 0.2 kg, Chou blanc 0.25 gros chou, Citronnelle 2 tige, Gingembre 0.06 kg, Ail 0.03 kg, Œufs 8 pièce, Sambal 0.02 kg, Riz 0.4 kg.
 
@@ -52,11 +68,15 @@ Bouillon : 4 L d'eau, citronnelle écrasée, gingembre en lamelles et ail, 15 mi
 
 ## J5 · Déjeuner : Salade de haricots blancs, thon, concombre et tomate
 
+8 personnes · préparation 20 min · cuisson 75 min
+
 Ingrédients : Haricots blancs secs 0.8 kg, Thon 3 boîte (à l'huile), Concombres 1 kg, Tomates fraîches 0.5 kg, Oignons 0.1 kg, Citrons verts 2 pièce, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml), Herbes italiennes 0.2 pot 30 g, Moutarde forte 0.1 pot 250 g.
 
 Tremper les haricots blancs la veille au soir. Le matin, les cuire 1 h à 1 h 15 dans de l'eau non salée, saler en fin de cuisson et laisser refroidir. Les mélanger avec le thon, le concombre et la tomate en dés et l'oignon émincé. Vinaigrette : citron, huile, moutarde, herbes, sel, poivre.
 
 ## J5 · Dîner : Pizzas à la poêle (pâte au yaourt), tomate, mozzarella, olives et maïs
+
+8 personnes · préparation 40 min · cuisson 40 min
 
 Ingrédients : Farine de blé 1 kg, Yaourt nature 0.6 L, Mozzarella râpée 0.5 kg, Tomates concassées 1.5 boîte 400 g, Olives noires 1 bocal 450 g, Câpres 0.25 bocal 450 g, Maïs (épis) 4 épi, Oignons 0.15 kg, Herbes italiennes 0.2 pot 30 g, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
@@ -64,11 +84,15 @@ Pâte : 1 kg de farine, 600 ml de yaourt, 1 c. à c. de sel, un peu d'eau si bes
 
 ## J6 · Déjeuner : Tortilla de pommes de terre et oignons, salade de chou-carotte
 
+8 personnes · préparation 20 min · cuisson 40 min
+
 Ingrédients : Œufs 12 pièce, Pommes de terre 1.5 kg, Oignons 0.3 kg, Chou blanc 0.25 gros chou, Carottes 0.2 kg, Moutarde forte 0.1 pot 250 g, Huile de cuisson 0.08 L.
 
 Couper les pommes de terre en fines lamelles et émincer les oignons ; les cuire doucement 20 min à couvert dans l'huile en remuant. Battre les 12 œufs avec du sel, ajouter les pommes de terre égouttées. Cuire en 2 poêles 8 min à feu doux et couvert, retourner sur une assiette, puis 3 min de l'autre côté. Salade : chou et carotte râpés, moutarde, un filet d'huile.
 
 ## J6 · Dîner : Curry de tofu soyeux et patate douce au lait de coco, riz
+
+8 personnes · préparation 15 min · cuisson 30 min
 
 Ingrédients : Tofu soyeux 5 barquette, Patates douces 1.2 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Citronnelle 1 tige, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Riz 0.4 kg, Huile de cuisson 0.04 L.
 
@@ -76,11 +100,15 @@ Riz. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter 3 c.
 
 ## J7 · Déjeuner : Nouilles de riz sautées au poulet façon pad thaï, cajou
 
+8 personnes · préparation 25 min · cuisson 20 min
+
 Ingrédients : Nouilles de riz 2 paquet 400 g, Blanc de poulet 0.9 kg, Œufs 8 pièce, Chou blanc 0.25 gros chou, Carottes 0.2 kg, Noix de cajou grillées 0.12 kg, Sauce Bangkok (Kokita) 0.15 flacon 400 g, Sambal 0.02 kg, Ail 0.03 kg, Oignons 0.1 kg, Huile de cuisson 0.06 L.
 
 Tremper les nouilles 10 min dans l'eau chaude. Saisir le poulet en lanières à feu vif, réserver. Brouiller les œufs, réserver. Faire sauter ail, oignon, chou et carotte 3 min, ajouter les nouilles égouttées, la sauce Bangkok, le sambal et un peu d'eau, remuer 2 min. Remettre poulet et œufs. Parsemer de cajou concassés.
 
 ## J7 · Dîner : Dahl de lentilles au lait de coco, chapatis
+
+8 personnes · préparation 40 min · cuisson 40 min
 
 Ingrédients : Lentilles en conserve 3 boîte 400 g, Lait de coco 1.5 brique 400 ml (équiv., acheté 7 × 1 L), Tomates pelées 1 boîte 400 g, Oignons 0.25 kg, Ail 0.03 kg, Gingembre 0.05 kg, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde noire 0.2 sachet 80 g, Farine de blé 0.75 kg, Margarine 0.05 kg, Huile de cuisson 0.04 L.
 
@@ -88,11 +116,15 @@ Chapatis : 750 g de farine, environ 450 ml d'eau tiède et du sel ; pétrir, lai
 
 ## J8 · Déjeuner : Riz aux haricots rouges, guacamole et chou croquant
 
+8 personnes · préparation 20 min · cuisson 105 min
+
 Ingrédients : Haricots rouges secs 1.3 kg, Riz 0.5 kg, Avocats 1.5 kg, Citrons verts 2 pièce, Oignons 0.1 kg, Chou blanc 0.25 gros chou, Sambal 0.02 kg, Ail 0.02 kg.
 
 Tremper les haricots la veille au soir, puis les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mélanger les haricots chauds avec le riz cuit, l'ail et le sel. Guacamole : avocats écrasés, citron, oignon haché fin, sambal, sel. Servir avec le chou émincé finement.
 
 ## J8 · Dîner : Poulet sauté citronnelle-gingembre et chayote, riz
+
+8 personnes · préparation 20 min · cuisson 20 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Chayote 1 kg, Citronnelle 2 tige, Gingembre 0.08 kg, Ail 0.03 kg, Oignons 0.15 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Riz 0.6 kg, Huile de cuisson 0.05 L.
 
@@ -100,11 +132,15 @@ Riz. Hacher finement la citronnelle (le cœur tendre), le gingembre et l'ail. Sa
 
 ## J9 · Déjeuner : Pâtes aux sardines, tomate, câpres et olives vertes
 
+8 personnes · préparation 10 min · cuisson 20 min
+
 Ingrédients : Pâtes 1 kg, Sardines (grande boîte) 3 boîte 425 g, Tomates concassées 1.5 boîte 400 g, Câpres 0.25 bocal 450 g, Olives vertes dénoyautées 1 bocal 290 g, Ail 0.03 kg, Oignons 0.1 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml), Parmesan râpé 0.1 kg.
 
 Cuire les pâtes. Faire revenir ail et oignon dans l'huile, ajouter les tomates et laisser réduire 10 min. Ajouter les sardines en morceaux, les câpres et les olives coupées, 3 min. Mélanger avec les pâtes et servir avec le parmesan.
 
 ## J9 · Dîner : Thon poêlé, purée de patate douce et chou sauté au gingembre
+
+8 personnes · préparation 20 min · cuisson 25 min
 
 Ingrédients : Filets de poisson 1 kg (longe de thon saku), Patates douces 1.5 kg, Margarine 0.08 kg, Chou blanc 0.5 gros chou, Gingembre 0.03 kg, Ail 0.02 kg, Huile de cuisson 0.04 L.
 
@@ -112,11 +148,15 @@ Décongeler le thon au frigo la veille. Cuire les patates douces à la vapeur (m
 
 ## J10 · Déjeuner : Salade de quinoa rouge, pois chiches, avocat et carotte
 
+8 personnes · préparation 20 min · cuisson 15 min
+
 Ingrédients : Quinoa rouge 2 paquet 500 g, Pois chiches 3 boîte 400 g, Avocats 1.5 kg, Carottes 0.1 kg, Oignons 0.1 kg, Citrons verts 2 pièce, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml), Graines de sésame 0.05 kg.
 
 Rincer le quinoa et le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Ajouter les pois chiches rincés, la carotte râpée, l'oignon émincé et l'avocat en dés. Assaisonner avec citron, huile, sel et sésame grillé à sec.
 
 ## J10 · Dîner : Curry de soja et courge au lait de coco, riz
+
+8 personnes · préparation 15 min · cuisson 210 min
 
 Ingrédients : Graines de soja sèches 1.1 kg, Courge 0.5 pièce, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.2 kg, Riz 0.4 kg, Huile de cuisson 0.04 L.
 
@@ -124,11 +164,15 @@ Le soja est long : le tremper 12 h la veille (2 kg : 1,1 kg pour ce soir, 0,9 kg
 
 ## J11 · Déjeuner : Galettes de soja aux oignons, sauce yaourt, quinoa
 
+8 personnes · préparation 30 min · cuisson 25 min
+
 Ingrédients : Graines de soja sèches 0.9 kg, Œufs 4 pièce, Farine de blé 0.1 kg, Oignons 0.15 kg, Ail 0.03 kg, Gingembre 0.03 kg, Yaourt nature 0.4 L, Quinoa rouge 1 paquet 500 g, Huile de cuisson 0.1 L.
 
 Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Cuire le quinoa 15 min dans 2 volumes d'eau et servir avec.
 
 ## J11 · Dîner : Minestrone de haricots blancs, courge et pommes de terre, parmesan
+
+8 personnes · préparation 20 min · cuisson 90 min
 
 Ingrédients : Haricots blancs secs 0.8 kg, Courge 0.5 pièce, Pommes de terre 1 kg, Chou blanc 0.25 gros chou, Tomates pelées 1 boîte 400 g, Oignons 0.2 kg, Ail 0.03 kg, Herbes italiennes 0.2 pot 30 g, Parmesan râpé 0.1 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
@@ -136,11 +180,15 @@ Tremper les haricots la veille et les cuire 1 h le matin. Faire revenir oignon e
 
 ## J12 · Déjeuner : Pizzas à la poêle au thon, oignon et olives
 
+8 personnes · préparation 40 min · cuisson 40 min
+
 Ingrédients : Farine de blé 1 kg, Yaourt nature 0.6 L, Mozzarella râpée 0.5 kg, Tomates concassées 1.5 boîte 400 g, Thon 1.5 boîte (à l'huile), Olives noires 0.5 bocal 450 g, Oignons 0.15 kg, Herbes italiennes 0.2 pot 30 g, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
 Même méthode que les pizzas du J5 : pâte farine-yaourt reposée 20 min, sauce tomate réduite aux herbes, cuisson à la poêle couverte 3 min, retourner, garnir de sauce, thon émietté, oignon, olives et mozzarella, couvrir 4 à 5 min. Ouvrir le second sachet de mozzarella aujourd'hui.
 
 ## J12 · Dîner : Maquereau à la tomate, gingembre et chayote, riz
+
+8 personnes · préparation 15 min · cuisson 25 min
 
 Ingrédients : Maquereau 3 boîte 425 g, Tomates pelées 1 boîte 400 g, Chayote 1 kg, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Sambal 0.02 kg, Riz 0.5 kg, Huile de cuisson 0.04 L.
 
@@ -148,11 +196,15 @@ Riz. Faire revenir oignon, ail et gingembre, ajouter la chayote en dés 5 min, p
 
 ## J13 · Déjeuner : Nouilles de riz sautées au tempeh, chou et cajou
 
+8 personnes · préparation 20 min · cuisson 20 min
+
 Ingrédients : Nouilles de riz 2 paquet 400 g, Tempeh 0.7 kg, Chou blanc 0.25 gros chou, Oignons 0.1 kg, Ail 0.03 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Sambal 0.02 kg, Noix de cajou grillées 0.1 kg, Huile de cuisson 0.06 L.
 
 Décongeler le tempeh la veille. Le couper en bâtonnets et le dorer 6 à 8 min à la poêle. Tremper les nouilles 10 min. Faire sauter ail, oignon et chou 3 min, ajouter nouilles, sauce Bangkok, sambal et un trait d'eau, puis le tempeh et les cajou.
 
 ## J13 · Dîner : Haricots rouges façon rendang (coco, citronnelle, coco grillée), riz
+
+8 personnes · préparation 20 min · cuisson 120 min
 
 Ingrédients : Haricots rouges secs 1.2 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Citronnelle 1 tige, Gingembre 0.06 kg, Ail 0.04 kg, Oignons 0.2 kg, Sambal 0.02 kg, Copeaux de coco séchés 0.5 sachet, Curry de Madras en poudre 0.05 boîte 225 g, Riz 0.5 kg, Huile de cuisson 0.04 L.
 
@@ -160,11 +212,15 @@ Tremper les haricots la veille, les cuire le matin (10 min à gros bouillons, pu
 
 ## J14 · Déjeuner : Salade de pommes de terre, maquereau et œufs durs à la moutarde
 
+8 personnes · préparation 20 min · cuisson 25 min
+
 Ingrédients : Pommes de terre 1.5 kg, Maquereau 3 boîte 425 g, Œufs 8 pièce, Oignons 0.1 kg, Moutarde forte 0.2 pot 250 g, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
 Cuire les pommes de terre en robe 20 min à la vapeur, les couper en morceaux tièdes. Cuire les œufs 10 min. Vinaigrette : moutarde, huile, sel, poivre. Mélanger pommes de terre, maquereau émietté, œufs en quartiers et oignon émincé.
 
 ## J14 · Dîner : Poulet à l'ail, aux herbes et aux câpres, quinoa et chayote poêlée
+
+8 personnes · préparation 15 min · cuisson 20 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Quinoa blanc 2 paquet 500 g, Ail 0.04 kg, Herbes italiennes 0.2 pot 30 g, Câpres 0.2 bocal 450 g, Chayote 1 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml).
 
@@ -172,11 +228,15 @@ Cuire le quinoa 15 min. Couper le poulet en aiguillettes, le saisir dans l'huile
 
 ## J15 · Déjeuner : Houmous maison, œufs durs, chapatis et crudités
 
+8 personnes · préparation 40 min · cuisson 30 min
+
 Ingrédients : Pois chiches 3 boîte 400 g, Graines de sésame 0.1 kg, Citrons verts 2 pièce, Ail 0.02 kg, Huile d'olive vierge extra 0.08 L (bouteilles de 750 ml), Farine de blé 0.75 kg, Œufs 8 pièce, Chou blanc 0.25 gros chou.
 
 Griller le sésame à sec et le mixer avec un peu d'huile en pâte (tahini). Mixer les pois chiches égouttés avec ce tahini, l'ail, le citron, l'huile, du sel et un peu d'eau jusqu'à ce que ce soit lisse. Chapatis comme au J7 (750 g de farine). Cuire les œufs 10 min. Servir avec le chou en lanières.
 
 ## J15 · Dîner : Curry de thon et patate douce au lait de coco, riz
+
+8 personnes · préparation 15 min · cuisson 25 min
 
 Ingrédients : Filets de poisson 1 kg (longe de thon saku), Patates douces 1.5 kg, Lait de coco 1.5 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Riz 0.5 kg, Huile de cuisson 0.04 L.
 
@@ -184,11 +244,15 @@ Décongeler le thon au frigo la veille. Riz. Faire revenir oignon, ail, gingembr
 
 ## J16 · Déjeuner : Ragoût de soja, patate douce et tomate aux épices indiennes, riz
 
+8 personnes · préparation 15 min · cuisson 210 min
+
 Ingrédients : Graines de soja sèches 1.2 kg, Patates douces 1.5 kg, Tomates pelées 1 boîte 400 g, Oignons 0.2 kg, Ail 0.03 kg, Gingembre 0.05 kg, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde jaune 0.2 sachet 80 g, Riz 0.4 kg, Huile de cuisson 0.04 L.
 
 Tremper 2 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1,2 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais.
 
 ## J16 · Dîner : Poulet poêlé à l'ail et aux herbes, pommes de terre sautées, chou
+
+8 personnes · préparation 20 min · cuisson 35 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Pommes de terre 2 kg, Ail 0.04 kg, Herbes italiennes 0.2 pot 30 g, Margarine 0.08 kg, Chou blanc 0.25 gros chou, Moutarde forte 0.1 pot 250 g, Huile de cuisson 0.06 L.
 
@@ -196,11 +260,15 @@ Précuire les pommes de terre en morceaux 10 min à la vapeur, puis les faire sa
 
 ## J17 · Déjeuner : Soja et tempeh croustillants au sambal (façon kering), riz et chou sauté
 
+8 personnes · préparation 15 min · cuisson 25 min
+
 Ingrédients : Graines de soja sèches 0.8 kg, Tempeh 0.7 kg, Sambal 0.02 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Ail 0.03 kg, Oignons 0.1 kg, Chou blanc 0.25 gros chou, Riz 0.4 kg, Huile de cuisson 0.06 L, Huile d'olive vierge extra 0.02 L (bouteilles de 750 ml).
 
 Décongeler le tempeh la veille. Bien égoutter et sécher le soja cuit hier ; faire frire séparément le soja et le tempeh en petits dés, en 2 fois, 8 à 10 min jusqu'à ce qu'ils croustillent. Faire revenir ail et oignon, ajouter le sambal et la sauce Bangkok, enrober le soja. Chou sauté 4 min, riz.
 
 ## J17 · Dîner : Dahl de lentilles et courge aux graines de moutarde, riz
+
+8 personnes · préparation 15 min · cuisson 30 min
 
 Ingrédients : Lentilles en conserve 4 boîte 400 g, Lait de coco 1 brique 400 ml (équiv., acheté 7 × 1 L), Courge 0.5 pièce, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde noire 0.2 sachet 80 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.2 kg, Riz 0.5 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
 
@@ -208,11 +276,15 @@ Riz. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gin
 
 ## J18 · Déjeuner : Salade de haricots blancs au thon, oignon et herbes
 
+8 personnes · préparation 15 min · cuisson 60 min
+
 Ingrédients : Haricots blancs secs 0.8 kg, Thon 3 boîte (à l'huile), Oignons 0.15 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml), Herbes italiennes 0.2 pot 30 g, Moutarde forte 0.1 pot 250 g.
 
 Tremper les haricots la veille, les cuire 1 h le matin et les refroidir. Mélanger avec le thon et l'oignon émincé. Vinaigrette : huile, moutarde, herbes, sel, poivre.
 
 ## J18 · Dîner : Mie goreng au tempeh, œufs et légumes
+
+8 personnes · préparation 20 min · cuisson 20 min
 
 Ingrédients : Nouilles aux œufs (Atom Bulan) 2 paquet, Nouilles de riz 1 paquet 400 g, Tempeh 0.7 kg, Œufs 8 pièce, Chou blanc 0.25 gros chou, Oignons 0.15 kg, Ail 0.03 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Sambal 0.02 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml).
 
@@ -220,11 +292,15 @@ Décongeler le tempeh la veille, le couper en dés et le dorer 6 min. Cuire les 
 
 ## J19 · Déjeuner : Quinoa rouge et riz aux sardines et oignon
 
+8 personnes · préparation 10 min · cuisson 15 min
+
 Ingrédients : Quinoa rouge 1 paquet 500 g, Riz 0.4 kg, Sardines (grande boîte) 3 boîte 425 g, Oignons 0.1 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
 Cuire ensemble le quinoa rincé et le riz dans 2 volumes d'eau, 15 min, laisser tiédir. Mélanger avec les sardines émiettées, l'oignon émincé, l'huile, du sel et du poivre.
 
 ## J19 · Dîner : Poulet coco-citronnelle et patate douce (lait de coco en poudre), riz
+
+8 personnes · préparation 15 min · cuisson 25 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Lait de coco en poudre 1 sachet 250 g, Patates douces 1.5 kg, Citronnelle 1 tige, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Sambal 0.02 kg, Riz 0.5 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
 
@@ -232,11 +308,15 @@ Délayer le sachet de lait de coco en poudre dans 1 L d'eau tiède. Faire reveni
 
 ## J20 · Déjeuner : Soupe épaisse de haricots rouges, courge et gingembre
 
+8 personnes · préparation 15 min · cuisson 120 min
+
 Ingrédients : Haricots rouges secs 1.3 kg, Courge 0.5 pièce, Gingembre 0.05 kg, Citronnelle 1 tige, Oignons 0.15 kg, Ail 0.03 kg, Curry de Madras en poudre 0.05 boîte 225 g, Huile d'olive vierge extra 0.03 L (bouteilles de 750 ml).
 
 Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30) : 1,3 kg pour une soupe qui tient au corps. Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié pour épaissir, saler.
 
 ## J20 · Dîner : Curry de poulet aux pommes de terre, riz
+
+8 personnes · préparation 15 min · cuisson 30 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Pommes de terre 0.8 kg, Curry de Madras en poudre 0.1 boîte 225 g, Oignons 0.2 kg, Ail 0.03 kg, Gingembre 0.05 kg, Margarine 0.05 kg, Riz 0.4 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
 
@@ -244,11 +324,15 @@ Riz. Faire revenir oignon, ail et gingembre, ajouter le curry, puis le poulet en
 
 ## J21 · Déjeuner : Salade tiède de soja, patate douce rôtie et sésame
 
+8 personnes · préparation 15 min · cuisson 180 min
+
 Ingrédients : Graines de soja sèches 1.2 kg, Patates douces 0.8 kg, Graines de sésame 0.05 kg, Oignons 0.1 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml).
 
 Tremper 1,2 kg de soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé.
 
 ## J21 · Dîner : Dîner d'arrivée : poulet grillé sambal-citron, riz au coco grillé, salade de chou
+
+8 personnes · préparation 40 min · cuisson 15 min
 
 Ingrédients : Blanc de poulet 0.9 kg, Sambal 0.03 kg, Citrons verts 1 pièce, Ail 0.03 kg, Chou blanc 0.25 gros chou, Copeaux de coco séchés 0.3 sachet, Riz 0.6 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 

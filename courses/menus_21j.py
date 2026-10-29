@@ -185,6 +185,19 @@ M = [
  "Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citron. Griller à la poêle très chaude 3 à 4 min par face. Griller les copeaux de coco à sec et les mélanger au riz chaud. Salade de chou émincé, huile et sel."),
 ]
 
+# Temps estimés pour 8 (minutes) : (préparation active, cuisson y compris légumineuses du jour)
+TEMPS = {
+ (1, "dej"): (25, 15), (1, "din"): (20, 30), (2, "dej"): (25, 15), (2, "din"): (15, 20), (3, "dej"): (45, 10),
+ (3, "din"): (15, 105), (4, "dej"): (20, 15), (4, "din"): (20, 30), (5, "dej"): (20, 75), (5, "din"): (40, 40),
+ (6, "dej"): (20, 40), (6, "din"): (15, 30), (7, "dej"): (25, 20), (7, "din"): (40, 40), (8, "dej"): (20, 105),
+ (8, "din"): (20, 20), (9, "dej"): (10, 20), (9, "din"): (20, 25), (10, "dej"): (20, 15), (10, "din"): (15, 210),
+ (11, "dej"): (30, 25), (11, "din"): (20, 90), (12, "dej"): (40, 40), (12, "din"): (15, 25), (13, "dej"): (20, 20),
+ (13, "din"): (20, 120), (14, "dej"): (20, 25), (14, "din"): (15, 20), (15, "dej"): (40, 30), (15, "din"): (15, 25),
+ (16, "dej"): (15, 210), (16, "din"): (20, 35), (17, "dej"): (15, 25), (17, "din"): (15, 30), (18, "dej"): (15, 60),
+ (18, "din"): (20, 20), (19, "dej"): (10, 15), (19, "din"): (15, 25), (20, "dej"): (15, 120), (20, "din"): (15, 30),
+ (21, "dej"): (15, 180), (21, "din"): (40, 15),
+}
+
 # Limites de conservation estimées (dernier jour d'utilisation conseillé, chaleur humide, sans frigo sauf mention)
 FRAIS = {"Tofu soyeux": 6, "Tomates fraîches": 5, "Concombres": 5, "Maïs (épis)": 5, "Haricots longs": 4,
          "Avocats": 12, "Yaourt nature": 14, "Mozzarella râpée": 14, "Carottes": 12, "Chayote": 18}
@@ -206,6 +219,7 @@ def check():
             if n != H and n not in inv: errs.append(f"J{d} {o} : « {n} » absent de l'inventaire")
             use[n] += q; last[n] = max(last[n], d)
     if len(seen) != 42: errs.append(f"{len(seen)} repas au lieu de 42")
+    if set(TEMPS) != seen: errs.append("temps manquants pour " + ", ".join(f"J{d} {o}" for d, o in sorted(seen - set(TEMPS))))
     # huile : tournesol d'abord, puis olive
     oil = use.pop(H)
     sun = min(oil, inv["Huile de cuisson"]["initial"] * 0.95)
@@ -239,7 +253,7 @@ def build():
             for n, q in items.items():
                 if n == H: continue
                 its.append([n, q])
-            day["lunch" if o == "dej" else "dinner"] = {"recipe": r, "items": its, "oil": oilq, "steps": steps}
+            day["lunch" if o == "dej" else "dinner"] = {"recipe": r, "items": its, "oil": oilq, "steps": steps, "time": list(TEMPS[(d, o)])}
         menu.append(day)
     # huile : affectée au tournesol tant qu'il en reste, puis à l'olive (ordre chronologique)
     sun_left = inv["Huile de cuisson"]["initial"] * 0.95
@@ -261,7 +275,8 @@ def build():
     for i, day in enumerate(menu, 1):
         for k, lab in (("lunch", "Déjeuner"), ("dinner", "Dîner")):
             m = day[k]
-            L += [f"## J{i} · {lab} : {m['recipe']}", "",
+            p, c = m["time"]
+            L += [f"## J{i} · {lab} : {m['recipe']}", "", f"8 personnes · préparation {p} min · cuisson {c} min", "",
                   "Ingrédients : " + ", ".join(f"{n} {q:g} {inv[n]['unit']}" for n, q in m["items"]) + ".", "",
                   m["steps"], ""]
     L += ["## Bilan des stocks après 21 jours", "", "| Denrée | Repas | Stock | Reste | Unité |", "|---|---:|---:|---:|---|"]
