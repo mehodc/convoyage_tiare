@@ -502,49 +502,102 @@ function buildSegs(E){
   out.forEach(s=>{s.key=keyOf(s.start);Object.assign(s,E.classify(s.start,s.end))});
   return out;
 }
+/* Optimisation locale : partant de la répartition gloutonne, on déplace ou échange des créneaux entre équipiers
+   tant que cela réduit l'écart à la moyenne (somme des carrés), sans créer de chevauchement ni de repos trop court.
+   Entièrement déterministe : deux téléphones avec les mêmes réglages obtiennent le même planning. */
+const W_WATCH=[["n",8],["lever",30],["coucher",15],["h",2],["nh",2]];
+function balanceWatches(E,segs,ENT,fixed){
+  const st=E.st,stag=st.stag&&st.per>=2,half=Math.ceil(st.per/2),rest=st.rest*H;
+  const onList=S.crew.filter(c=>c.on).map(c=>c.id),on=new Set(onList);if(onList.length<2)return;
+  const slots=[];
+  segs.forEach((sg,i)=>ENT[i].forEach((id,j)=>{const wEnd=(stag&&!sg.prevC&&j>=half)?sg.end:sg.fullEnd,w=E.classify(sg.start,wEnd);
+    const sl={i,j,start:sg.start,end:wEnd,n:1,lever:w.type==="lever"?1:0,coucher:w.type==="coucher"?1:0,h:w.hours,nh:w.nh,fixed:!!fixed[i],segs:[i]};
+    if(wEnd>sg.end&&i+1<segs.length)sl.segs.push(i+1);slots.push(sl)}));
+  const A=slots.map(sl=>ENT[sl.i][sl.j]),N=onList.length,X={},L={},mem=segs.map(()=>[]),pc=new Map(),pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
+  S.crew.forEach(c=>{X[c.id]={n:0,lever:0,coucher:0,h:0,nh:0};L[c.id]=[]});
+  const mean={n:0,lever:0,coucher:0,h:0,nh:0};
+  slots.forEach((sl,k)=>{const p=A[k];if(!X[p])return;W_WATCH.forEach(([m])=>{X[p][m]+=sl[m];if(on.has(p))mean[m]+=sl[m]/N});L[p].push(k);sl.segs.forEach(g=>mem[g].push(p))});
+  mem.forEach(g=>{for(let x=0;x<g.length;x++)for(let y=x+1;y<g.length;y++){const k=pk(g[x],g[y]);pc.set(k,(pc.get(k)||0)+1)}});
+  Object.values(L).forEach(l=>l.sort((a,b)=>slots[a].start-slots[b].start||a-b));
+  const viol=l=>{let c=0;for(let t=1;t<l.length;t++){const a=slots[l[t-1]],b=slots[l[t]];if(b.start<a.end)c+=10000;else if(b.start-a.end<rest-1e-6)c+=300}return c};
+  const V={};Object.keys(L).forEach(p=>V[p]=viol(L[p]));
+  const ins=(l,k)=>{let lo=0,hi=l.length;const t=slots[k].start;while(lo<hi){const m=(lo+hi)>>1;if(slots[l[m]].start<t||(slots[l[m]].start===t&&l[m]<k))lo=m+1;else hi=m}l.splice(lo,0,k)};
+  function move(k,q){ // déplace le créneau k vers q, renvoie la variation de coût
+    const p=A[k],sl=slots[k];let d=0;
+    W_WATCH.forEach(([m,w])=>{const v=sl[m];if(!v)return;if(on.has(p))d+=w*(v*v-2*v*(X[p][m]-mean[m]));if(on.has(q))d+=w*(v*v+2*v*(X[q][m]-mean[m]))});
+    sl.segs.forEach(g=>{const arr=mem[g];arr.splice(arr.indexOf(p),1);
+      arr.forEach(o=>{const a=pk(p,o),c=pc.get(a)||0;d+=1-2*c;pc.set(a,c-1);const b=pk(q,o),e=pc.get(b)||0;d+=1+2*e;pc.set(b,e+1)});arr.push(q)});
+    W_WATCH.forEach(([m])=>{X[p][m]-=sl[m];X[q][m]+=sl[m]});
+    L[p].splice(L[p].indexOf(k),1);ins(L[q],k);const vp=viol(L[p]),vq=viol(L[q]);d+=vp-V[p]+vq-V[q];V[p]=vp;V[q]=vq;
+    A[k]=q;return d;
+  }
+  const free=slots.map((sl,k)=>k).filter(k=>!slots[k].fixed&&on.has(A[k]));
+  const hs={};free.forEach(k=>{const h=Math.round(slots[k].h*4);hs[h]=(hs[h]||0)+1});const modeH=+Object.keys(hs).sort((a,b)=>hs[b]-hs[a])[0];
+  const partial=k=>{const sl=slots[k];return sl.nh>1e-6&&sl.nh<sl.h-1e-6};
+  const special=free.filter(k=>slots[k].lever||slots[k].coucher||Math.round(slots[k].h*4)!==modeH||partial(k));
+  const inSeg=(k,q)=>slots[k].segs.some(g=>mem[g].includes(q));
+  const md=(k,p,q)=>{const sl=slots[k];let d=0;W_WATCH.forEach(([m,w])=>{const v=sl[m];if(!v)return;if(on.has(p))d+=w*(v*v-2*v*(X[p][m]-mean[m]));if(on.has(q))d+=w*(v*v+2*v*(X[q][m]-mean[m]))});return d};
+  const md2=(k1,k2,p,q)=>{const a=slots[k1],b=slots[k2];let d=0;W_WATCH.forEach(([m,w])=>{const v=a[m]-b[m];if(!v)return;d+=w*(2*v*v-2*v*(X[p][m]-mean[m])+2*v*(X[q][m]-mean[m]))});return d};
+  for(let pass=0;pass<25;pass++){let better=false;
+    for(const k of free)for(const q of onList){if(q===A[k])continue;const p=A[k];if(md(k,p,q)>=-1e-9&&!V[p])continue;if(inSeg(k,q))continue;const d=move(k,q);if(d<-1e-9)better=true;else move(k,p)}
+    for(const k1 of special)for(const k2 of free){const p=A[k1],q=A[k2];if(p===q||k1===k2)continue;const a=slots[k1],b=slots[k2];
+      if(a.lever===b.lever&&a.coucher===b.coucher&&Math.abs(a.h-b.h)<1e-6&&Math.abs(a.nh-b.nh)<1e-6)continue;
+      if(md2(k1,k2,p,q)>=-1e-9)continue;
+      const d=move(k1,q)+move(k2,p);if(d<-1e-9)better=true;else{move(k2,q);move(k1,p)}}
+    if(!better)break}
+  slots.forEach((sl,k)=>{if(!sl.fixed)ENT[sl.i][sl.j]=A[k]});
+}
 function assignWatches(){
   const E=env(), st=E.st, stag=st.stag&&st.per>=2, segs=buildSegs(E), ids=new Set(S.crew.map(c=>c.id));
-  const stats={};S.crew.forEach(c=>stats[c.id]={h:0,nh:0,lever:0,coucher:0,n:0,last:-Infinity});
-  const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a, pool=S.crew.filter(c=>c.on), order={};S.crew.forEach((c,i)=>order[c.id]=i);
-  const watches=[];const half=Math.ceil(st.per/2);
-  let run=0;
-  segs.forEach((sg,i)=>{
-    const prevC=i>0&&segs[i-1].end===sg.start, next=segs[i+1]&&segs[i+1].start===sg.end?segs[i+1]:null;
-    let need,fullEnd;
-    run=prevC?run+1:0;sg.run=run;
-    if(!stag){need=st.per;fullEnd=sg.end}
-    else{fullEnd=next?next.end:sg.end;
-      if(!prevC)need=st.stagSolo?half:st.per;
-      else if(!next&&st.stagSolo&&segs[i-1].carryOn.length)need=0;
-      else need=half}
-    sg.need=need;sg.fullEnd=fullEnd;
-    const w=E.classify(sg.start,fullEnd);
-    let ent;const ov=S.overrides[sg.key];
-    if(ov){ent=ov.filter(id=>ids.has(id));sg.edited=true}
-    else{
-      ent=[];
-      for(let k=0;k<Math.min(need,pool.length);k++){
-        const cands=pool.filter(p=>!ent.includes(p.id));
-        const rested=cands.filter(p=>(sg.start-stats[p.id].last)/H>=st.rest-1e-9);
-        const use=rested.length?rested:cands;
-        const prim=p=>{const s=stats[p.id];return w.type==="lever"?s.lever:w.type==="coucher"?s.coucher:w.type==="nuit"?s.nh:s.h};
-        const team=[...ent,...(stag&&prevC?segs[i-1].carryOn:[])];
-        const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
-        use.sort((a,b)=>prim(a)-prim(b)||pair(a)-pair(b)||stats[a.id].h-stats[b.id].h||stats[a.id].last-stats[b.id].last||order[a.id]-order[b.id]);
-        ent.push(use[0].id);
+  const pool=S.crew.filter(c=>c.on), order={};S.crew.forEach((c,i)=>order[c.id]=i);const half=Math.ceil(st.per/2);
+  const fixed={};
+  function pass(forced){
+    const stats={};S.crew.forEach(c=>stats[c.id]={h:0,nh:0,lever:0,coucher:0,n:0,last:-Infinity});
+    const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a,watches=[];let run=0;
+    segs.forEach((sg,i)=>{
+      const prevC=i>0&&segs[i-1].end===sg.start, next=segs[i+1]&&segs[i+1].start===sg.end?segs[i+1]:null;
+      let need,fullEnd;
+      run=prevC?run+1:0;sg.run=run;sg.prevC=prevC;
+      if(!stag){need=st.per;fullEnd=sg.end}
+      else{fullEnd=next?next.end:sg.end;
+        if(!prevC)need=st.stagSolo?half:st.per;
+        else if(!next&&st.stagSolo&&segs[i-1].carryOn.length)need=0;
+        else need=half}
+      sg.need=need;sg.fullEnd=fullEnd;
+      const w=E.classify(sg.start,fullEnd);
+      let ent;const ov=S.overrides[sg.key];
+      if(ov){ent=ov.filter(id=>ids.has(id));sg.edited=true;fixed[i]=true}
+      else if(forced)ent=forced[i].slice();
+      else{
+        ent=[];
+        for(let k=0;k<Math.min(need,pool.length);k++){
+          const cands=pool.filter(p=>!ent.includes(p.id)&&!(stag&&prevC&&segs[i-1].carryOn.includes(p.id)));
+          const rested=cands.filter(p=>(sg.start-stats[p.id].last)/H>=st.rest-1e-9);
+          const use=rested.length?rested:cands;if(!use.length)break;
+          const prim=p=>{const s=stats[p.id];return w.type==="lever"?s.lever:w.type==="coucher"?s.coucher:w.type==="nuit"?s.nh:s.h};
+          const team=[...ent,...(stag&&prevC?segs[i-1].carryOn:[])];
+          const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
+          use.sort((a,b)=>prim(a)-prim(b)||pair(a)-pair(b)||stats[a.id].h-stats[b.id].h||stats[a.id].last-stats[b.id].last||order[a.id]-order[b.id]);
+          ent.push(use[0].id);
+        }
       }
-    }
-    sg.wtype=w.type;sg.entrants=ent;sg.carry=stag&&prevC?segs[i-1].carryOn:[];sg.carryOn=[];
-    ent.forEach((id,j)=>{
-      const wEnd=(stag&&!prevC&&j>=half)?sg.end:fullEnd;
-      const ww=wEnd===fullEnd?w:E.classify(sg.start,wEnd);
-      if(wEnd>sg.end)sg.carryOn.push(id);
-      watches.push({id,start:sg.start,end:wEnd,type:ww.type,hours:ww.hours,nh:ww.nh,key:sg.key,lane:stag?(run%2)*half+j:j});
-      const s=stats[id];if(!s)return;s.h+=ww.hours;s.nh+=ww.nh;if(ww.type==="lever")s.lever++;if(ww.type==="coucher")s.coucher++;s.n++;s.last=wEnd;
+      sg.wtype=w.type;sg.entrants=ent;sg.carry=stag&&prevC?segs[i-1].carryOn:[];sg.carryOn=[];
+      ent.forEach((id,j)=>{
+        const wEnd=(stag&&!prevC&&j>=half)?sg.end:fullEnd;
+        const ww=wEnd===fullEnd?w:E.classify(sg.start,wEnd);
+        if(wEnd>sg.end)sg.carryOn.push(id);
+        watches.push({id,start:sg.start,end:wEnd,type:ww.type,hours:ww.hours,nh:ww.nh,key:sg.key,lane:stag?(run%2)*half+j:j});
+        const s=stats[id];if(!s)return;s.h+=ww.hours;s.nh+=ww.nh;if(ww.type==="lever")s.lever++;if(ww.type==="coucher")s.coucher++;s.n++;s.last=wEnd;
+      });
+      sg.team=[...sg.carry,...ent];
+      for(let a=0;a<sg.team.length;a++)for(let b=a+1;b<sg.team.length;b++){const k=pk(sg.team[a],sg.team[b]);pairs[k]=(pairs[k]||0)+1}
     });
-    sg.team=[...sg.carry,...ent];
-    for(let a=0;a<sg.team.length;a++)for(let b=a+1;b<sg.team.length;b++){const k=pk(sg.team[a],sg.team[b]);pairs[k]=(pairs[k]||0)+1}
-  });
+    return {stats,watches};
+  }
+  pass(null);
+  const ENT=segs.map(sg=>sg.entrants.slice());
+  balanceWatches(E,segs,ENT,fixed);
+  const {stats,watches}=pass(ENT);
   const keys=new Set(segs.map(s=>s.key));
   segs.forEach((sg,i)=>{const nx=segs[i+1];sg.nextEnt=nx&&nx.start===sg.end?nx.entrants:[]});
   return {segs,stats,watches,orphans:Object.keys(S.overrides).filter(k=>!keys.has(k)),stag,lanes:stag?2*half:st.per};
@@ -560,6 +613,30 @@ function instancesOf(duty){
   }
   return out;
 }
+function balanceDuty(duty,inst,busy,total,fixedKeys){
+  const pool=S.crew.filter(c=>!duty.excl.includes(c.id)).map(c=>c.id),inPool=new Set(pool),N=pool.length;if(N<2)return;
+  const gap=(+S.settings.gap||0)*H,slots=[];
+  inst.forEach((it,ii)=>it.team.forEach((id,j)=>slots.push({ii,j,a:it.start,b:it.end,fixed:fixedKeys.has(it.key)})));
+  const A=slots.map(sl=>inst[sl.ii].team[sl.j]),cnt={},own={};S.crew.forEach(c=>{cnt[c.id]=0;own[c.id]=[]});
+  slots.forEach((sl,k)=>{cnt[A[k]]=(cnt[A[k]]||0)+1;(own[A[k]]=own[A[k]]||[]).push(k)});
+  let tot=0;pool.forEach(p=>tot+=cnt[p]);const mu=tot/N;let tt=0;pool.forEach(p=>tt+=total[p]+cnt[p]);const mt=tt/N;
+  const clash=(a,b,x,y)=>x<b&&y>a?10000:(x<b+gap&&y>a-gap?200:0);
+  const pen=(k,p,skip)=>{const sl=slots[k];let c=0;(busy[p]||[]).forEach(x=>c+=clash(sl.a,sl.b,x.a,x.b));(own[p]||[]).forEach(t=>{if(t!==k&&t!==skip){const o=slots[t];c+=clash(sl.a,sl.b,o.a,o.b)}});return c};
+  const team=k=>inst[slots[k].ii].team;
+  const cd=(p,q)=>(inPool.has(p)?10*(1-2*(cnt[p]-mu))+3*(1-2*(total[p]+cnt[p]-mt)):0)+(inPool.has(q)?10*(1+2*(cnt[q]-mu))+3*(1+2*(total[q]+cnt[q]-mt)):0);
+  function move(k,q){const p=A[k];let d=0;
+    if(inPool.has(p))d+=10*(1-2*(cnt[p]-mu))+3*(1-2*(total[p]+cnt[p]-mt));
+    if(inPool.has(q))d+=10*(1+2*(cnt[q]-mu))+3*(1+2*(total[q]+cnt[q]-mt));
+    d+=pen(k,q)-pen(k,p);
+    cnt[p]--;cnt[q]++;own[p].splice(own[p].indexOf(k),1);own[q].push(k);team(k)[slots[k].j]=q;A[k]=q;return d}
+  const free=slots.map((s,k)=>k).filter(k=>!slots[k].fixed&&inPool.has(A[k]));
+  for(let pass=0;pass<25;pass++){let better=false;
+    const hot=free.filter(k=>pen(k,A[k])>0);
+    for(const k of free)for(const q of pool){if(q===A[k]||team(k).includes(q))continue;const p=A[k];if(cd(p,q)>=-1e-9&&!hot.includes(k))continue;const d=move(k,q);if(d<-1e-9)better=true;else move(k,p)}
+    for(const k1 of hot)for(const k2 of free){const p=A[k1],q=A[k2];if(p===q||k1===k2||team(k1).includes(q)||team(k2).includes(p))continue;
+      const d=move(k1,q)+move(k2,p);if(d<-1e-9)better=true;else{move(k2,q);move(k1,p)}}
+    if(!better)break}
+}
 function assignDuties(RW){
   const busy={};S.crew.forEach(c=>busy[c.id]=[]);
   RW.watches.forEach(w=>busy[w.id]&&busy[w.id].push({a:w.start,b:w.end,what:"de quart"}));
@@ -568,11 +645,12 @@ function assignDuties(RW){
   S.duties.forEach(duty=>{
     const inst=instancesOf(duty),ids=new Set(S.crew.map(c=>c.id));
     const pool=S.crew.filter(c=>!duty.excl.includes(c.id)),cnt={};S.crew.forEach(c=>cnt[c.id]=0);
-    const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a;
-    const gap=(+S.settings.gap||0)*H,isBusy=(id,a,b,g)=>busy[id].some(x=>x.a<b+g&&x.b>a-g);
+    const pairs={},pk=(a,b)=>a<b?a+"|"+b:b+"|"+a,fixedKeys=new Set();
+    const gap=(+S.settings.gap||0)*H,tmp={};S.crew.forEach(c=>tmp[c.id]=busy[c.id].slice());
+    const isBusy=(id,a,b,g)=>tmp[id].some(x=>x.a<b+g&&x.b>a-g);
     inst.forEach(it=>{
       let team;const ov=duty.overrides[it.key];
-      if(ov){team=ov.filter(id=>ids.has(id));it.edited=true}
+      if(ov){team=ov.filter(id=>ids.has(id));it.edited=true;fixedKeys.add(it.key)}
       else{team=[];
         for(let k=0;k<Math.min(duty.per,pool.length);k++){
           const cands=pool.filter(p=>!team.includes(p.id)),free=cands.filter(p=>!isBusy(p.id,it.start,it.end,gap)),free0=free.length?free:cands.filter(p=>!isBusy(p.id,it.start,it.end,0)),use=free0.length?free0:cands;
@@ -581,9 +659,12 @@ function assignDuties(RW){
           team.push(use[0].id);
         }}
       it.team=team;
-      team.forEach(id=>{if(cnt[id]==null)return;cnt[id]++;total[id]++;busy[id].push({a:it.start,b:it.end,what:duty.name.toLowerCase()})});
+      team.forEach(id=>{if(cnt[id]==null)return;cnt[id]++;tmp[id].push({a:it.start,b:it.end})});
       for(let a=0;a<team.length;a++)for(let b=a+1;b<team.length;b++){const k=pk(team[a],team[b]);pairs[k]=(pairs[k]||0)+1}
     });
+    balanceDuty(duty,inst,busy,total,fixedKeys);
+    S.crew.forEach(c=>cnt[c.id]=0);
+    inst.forEach(it=>it.team.forEach(id=>{if(cnt[id]==null)return;cnt[id]++;total[id]++;busy[id].push({a:it.start,b:it.end,what:duty.name.toLowerCase()})}));
     const keys=new Set(inst.map(i=>i.key));
     res[duty.id]={inst,cnt,orphans:Object.keys(duty.overrides).filter(k=>!keys.has(k))};
   });
