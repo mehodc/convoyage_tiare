@@ -37,14 +37,14 @@
  {
   "id": "t1-quinoa-blanc",
   "name": "Quinoa blanc",
-  "unit": "paquet (poids non lisible)",
+  "unit": "paquet 500 g",
   "cat": "Féculents",
   "initial": 5.0
  },
  {
   "id": "t1-quinoa-rouge",
   "name": "Quinoa rouge",
-  "unit": "paquet (poids non lisible)",
+  "unit": "paquet 500 g",
   "cat": "Féculents",
   "initial": 5.0
  },
@@ -317,9 +317,9 @@
  {
   "id": "t1-huile-d-olive-vierge-extra",
   "name": "Huile d'olive vierge extra",
-  "unit": "bouteille (contenance non lisible)",
+  "unit": "L (bouteilles de 750 ml)",
   "cat": "Épicerie et condiments",
-  "initial": 5.0
+  "initial": 3.75
  },
  {
   "id": "t1-sucre",
@@ -726,5 +726,12 @@
   "unit": "pièce",
   "cat": "Fruits",
   "initial": 0.0
+ },
+ {
+  "id": "t3-riz",
+  "name": "Riz",
+  "unit": "kg",
+  "cat": "Féculents",
+  "initial": 0
  }
 ]

@@ -33,3 +33,7 @@ Sur un téléphone neuf, commencer par récupérer ou intégrer avant de modifie
 ## Inventaire de départ
 
 L'inventaire de l'outil vient du ticket Pepito Senggigi du 28/10/2026, transcrit ligne par ligne dans [`courses/ticket-pepito-2026-10-28.csv`](courses/ticket-pepito-2026-10-28.csv). `python3 courses/inventaire_depuis_ticket.py` vérifie la transcription contre le pied du ticket (109 lignes, 21 822 947 IDR, 256 250 IDR de remises) et produit `courses/inventaire.json`. Le regroupement des articles en denrées (unités, rayons) est dans [`courses/denrees.csv`](courses/denrees.csv). Les articles hors alimentation (papier toilette, crème solaire, sacs, javel, brosse à dents) sont exclus. Les achats du marché local du 29/10/2026 sont dans [`courses/marche-2026-10-29.csv`](courses/marche-2026-10-29.csv) (quantité achetée, quantité prévue et remarques) et s'ajoutent au ticket dans `inventaire.json`.
+
+## Menus des 21 jours
+
+[`courses/menus_21j.py`](courses/menus_21j.py) définit les 42 repas (déjeuner et dîner pour 8, avec la préparation) et refuse le plan si un ingrédient n'existe pas dans l'inventaire, si une denrée qui se garde dépasse ~70 % de son stock (21 jours sur 30 jours de vivres) ou si un produit frais est utilisé au-delà de sa durée de conservation estimée. Il produit `courses/menus-21j.json` (injecté dans l'outil) et [`courses/menus-21j.md`](courses/menus-21j.md) (version lisible avec le bilan des stocks). Petits-déjeuners, collations et fruits ne sont pas comptés dans les repas.
