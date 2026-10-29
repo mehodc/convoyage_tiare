@@ -354,12 +354,13 @@ const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLo
 function defaultDuties(){return [
   {id:"repas",name:"Repas",meal:true,per:2,occ:[{id:"dej",label:"Déjeuner",time:"12:00",dur:1.5},{id:"din",label:"Dîner",time:"18:30",dur:1.5}],excl:[],overrides:{}},
   {id:"vaisselle",name:"Vaisselle",meal:false,per:2,occ:[{id:"midi",label:"Après déjeuner",time:"13:30",dur:0.5},{id:"soir",label:"Après dîner",time:"20:00",dur:0.5}],excl:[],overrides:{}},
-  {id:"menage",name:"Ménage",meal:false,per:2,occ:[{id:"matin",label:"Carré et sanitaires",time:"10:00",dur:1}],excl:[],overrides:{}}
+  {id:"menage",name:"Ménage",meal:false,per:1,occ:[{id:"matin",label:"Carré et sanitaires",time:"10:00",dur:1}],excl:[],overrides:{}}
 ]}
 const INV_SRC="pepito-2026-10-28",INV_T=Date.UTC(2026,9,28,8,30);
 const MKT_SRC="marche-2026-10-29",MKT_T=Date.UTC(2026,9,29,6,30);
 const MENU_SRC="menus-2026-10-29",MENU_T=Date.UTC(2026,9,29,7,10);
 const MENU2_SRC="menus-riz-12kg",MENU2_T=Date.UTC(2026,9,29,7,30);
+const MENAGE_SRC="menage-1-personne",MENAGE_T=Date.UTC(2026,9,29,8,10),MENAGE_JOUR="2026-10-29";
 const seedInv=()=>SEED.inventory.map(i=>Object.assign({id:"t1-"+norm(i.name).replace(/[^a-z0-9]+/g,"-")},JSON.parse(JSON.stringify(i))));
 function defaults(){
   const d=new Date();d.setDate(d.getDate()+1);d.setHours(18,0,0,0);
@@ -369,7 +370,7 @@ function defaults(){
     crew:names.map((n,i)=>({id:"c"+(i+1),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
     cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8},
     duties:defaultDuties(),meals:{},inv:seedInv(),invLog:[],
-    banners:{inv:true,meals:true},fresh:true,invSrc:INV_SRC,mktSrc:MKT_SRC,menuSrc:MENU_SRC,menu2Src:MENU2_SRC};
+    banners:{inv:true,meals:true},fresh:true,invSrc:INV_SRC,mktSrc:MKT_SRC,menuSrc:MENU_SRC,menu2Src:MENU2_SRC,menageSrc:MENAGE_SRC};
 }
 const DEF=defaults();
 let S;
@@ -1419,7 +1420,23 @@ function migrateMenus2(){
   Object.keys(after).forEach(k=>{if(after[k]!==before[k])sy.meta[k]=MENU2_T});
   if(sy.lastPush>=MENU2_T)sy.lastPush=MENU2_T-1;
 }
-migrateInv();migrateMarket();repairInv();migrateMenus();migrateMenus2();
+function migrateMenage(){
+  // Ménage à une seule personne ; le premier ménage (celui d'aujourd'hui s'il y en a un) reste à Tim
+  if(S.menageSrc===MENAGE_SRC)return;
+  S.menageSrc=MENAGE_SRC;
+  const d=S.duties.find(x=>x.id==="menage")||S.duties.find(x=>norm(x.name)==="menage");if(!d)return;
+  const sy=S.sync,before=flatten(S);lastFlat=before;
+  d.per=1;
+  const tim=S.crew.find(c=>norm(c.name)==="tim");
+  const inst=instancesOf(d),today=inst.filter(it=>keyOf(it.start).slice(0,10)===MENAGE_JOUR),first=today[0]||inst[0];
+  if(tim&&first){const ov=d.overrides[first.key];if(!ov||ov.length!==1||ov[0]!==tim.id)d.overrides[first.key]=[tim.id]}
+  // ménages déjà modifiés à la main : on ne garde que la première personne
+  Object.keys(d.overrides).forEach(k=>{if(d.overrides[k].length>1)d.overrides[k]=d.overrides[k].slice(0,1)});
+  const after=flatten(S);track();
+  Object.keys(after).forEach(k=>{if(after[k]!==before[k])sy.meta[k]=MENAGE_T});
+  if(sy.lastPush>=MENAGE_T)sy.lastPush=MENAGE_T-1;
+}
+migrateInv();migrateMarket();repairInv();migrateMenus();migrateMenus2();migrateMenage();
 boot();
 setInterval(()=>{if(!editKey&&!dutyEdit&&S.tab==="quarts")renderTimeline()},60000);
 window.__T={get S(){return S},qtyTxt,splitSteps,save:()=>save(),syAction,recompute:()=>recompute(),flatten,mergePackage,makePackage,asPackage,pendingKeys,assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
