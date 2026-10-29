@@ -2,6 +2,7 @@
 
 Entrées : ticket-pepito-2026-10-28.csv (109 lignes transcrites du ticket)
           denrees.csv (unité et rayon de chaque denrée)
+         marche-2026-10-29.csv (achats du marché, ajoutés au ticket)
 Sorties : inventaire.json (inventaire injecté dans l'outil)
 Contrôles : nombre de lignes, total et remises comparés au pied du ticket.
 """
@@ -46,8 +47,25 @@ for l in lignes:
     else:
         hors_alim.append(l["libelle_ticket"])
 
-inv = [{"name": n, "unit": d["unite"], "cat": d["rayon"], "initial": round(stock[n], 3)}
+def ident(prefixe, nom):
+    import unicodedata, re
+    n = unicodedata.normalize("NFD", nom)
+    n = "".join(c for c in n if unicodedata.category(c) != "Mn").lower().strip()
+    return prefixe + re.sub(r"[^a-z0-9]+", "-", n)
+
+inv = [{"id": ident("t1-", n), "name": n, "unit": d["unite"], "cat": d["rayon"], "initial": round(stock[n], 3)}
        for n, d in denrees.items() if stock[n] > 0]
+
+# Achats du marché du 29/10/2026 (ajoutés à côté du ticket, sans rien remplacer)
+marche = list(csv.DictReader(open(ICI / "marche-2026-10-29.csv", encoding="utf-8"), delimiter=";"))
+noms = {i["name"] for i in inv}
+for m in marche:
+    if m["rayon"] not in RAYONS or len(m) != 6:
+        sys.exit(f"marche-2026-10-29.csv : ligne mal formée pour « {m['denree']} »")
+    if m["denree"] in noms:
+        sys.exit(f"« {m['denree']} » existe déjà dans le ticket : fusionner à la main")
+    inv.append({"id": ident("t2-", m["denree"]), "name": m["denree"], "unit": m["unite"], "cat": m["rayon"], "initial": float(m["qte"])})
+print(f"Marché : {len(marche)} denrées ajoutées.")
 json.dump(inv, open(ICI / "inventaire.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(f"Ticket contrôlé : {len(lignes)} lignes, total {total:,} IDR, remises {remise:,} IDR.")
 print(f"{len(inv)} denrées dans l'inventaire ; hors alimentation exclus : {', '.join(hors_alim)}.")
