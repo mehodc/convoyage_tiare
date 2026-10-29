@@ -324,7 +324,7 @@ body.sheet-open{overflow:hidden}
         <input type="text" id="addName" placeholder="Prénom de l'équipier" aria-label="Prénom du nouvel équipier">
         <button class="btn primary" type="submit">Ajouter</button>
       </form>
-      <p class="hint">Décoche une tâche pour en exempter quelqu'un (skipper hors quart, malade, cuisinier attitré) sans l'effacer. Les mêmes réglages se retrouvent dans chaque planning.</p>
+      <p class="hint">« Éviter le midi » limite les repas et vaisselles entre 11 h et 16 h pour cette personne, à nombre de corvées égal. Décoche une tâche pour en exempter quelqu'un (skipper hors quart, malade, cuisinier attitré) sans l'effacer. Les mêmes réglages se retrouvent dans chaque planning.</p>
     </section>
     <div id="genDyn" style="display:contents"></div>
   </div>
@@ -360,6 +360,7 @@ const INV_SRC="pepito-2026-10-28",INV_T=Date.UTC(2026,9,28,8,30);
 const MKT_SRC="marche-2026-10-29",MKT_T=Date.UTC(2026,9,29,6,30);
 const MENU_SRC="menus-2026-10-29",MENU_T=Date.UTC(2026,9,29,7,10);
 const MENU2_SRC="menus-riz-12kg",MENU2_T=Date.UTC(2026,9,29,7,30);
+const MARION_SRC="marion-midi",MARION_T=Date.UTC(2026,9,29,8,25);
 const MENAGE_SRC="menage-1-personne",MENAGE_T=Date.UTC(2026,9,29,8,10),MENAGE_JOUR="2026-10-29";
 const seedInv=()=>SEED.inventory.map(i=>Object.assign({id:"t1-"+norm(i.name).replace(/[^a-z0-9]+/g,"-")},JSON.parse(JSON.stringify(i))));
 function defaults(){
@@ -370,7 +371,7 @@ function defaults(){
     crew:names.map((n,i)=>({id:"c"+(i+1),name:n,on:true,color:COLORS[i%COLORS.length]})),overrides:{},focus:"",
     cal:{who:"",when:"all",alarm:"15",boat:8,agenda:8},
     duties:defaultDuties(),meals:{},inv:seedInv(),invLog:[],
-    banners:{inv:true,meals:true},fresh:true,invSrc:INV_SRC,mktSrc:MKT_SRC,menuSrc:MENU_SRC,menu2Src:MENU2_SRC,menageSrc:MENAGE_SRC};
+    banners:{inv:true,meals:true},fresh:true,invSrc:INV_SRC,mktSrc:MKT_SRC,menuSrc:MENU_SRC,menu2Src:MENU2_SRC,menageSrc:MENAGE_SRC,marionSrc:MARION_SRC};
 }
 const DEF=defaults();
 let S;
@@ -506,6 +507,7 @@ function buildSegs(E){
 /* Optimisation locale : partant de la répartition gloutonne, on déplace ou échange des créneaux entre équipiers
    tant que cela réduit l'écart à la moyenne (somme des carrés), sans créer de chevauchement ni de repos trop court.
    Entièrement déterministe : deux téléphones avec les mêmes réglages obtiennent le même planning. */
+let GAP_PEN=30; // coût d'une corvée placée à moins du battement d'un quart ou d'une autre corvée (200 avant le 29/10 16 h 30)
 const W_WATCH=[["n",8],["lever",30],["coucher",15],["h",2],["nh",2]];
 function balanceWatches(E,segs,ENT,fixed){
   const st=E.st,stag=st.stag&&st.per>=2,half=Math.ceil(st.per/2),rest=st.rest*H;
@@ -621,8 +623,9 @@ function balanceDuty(duty,inst,busy,total,fixedKeys){
   const A=slots.map(sl=>inst[sl.ii].team[sl.j]),cnt={},own={};S.crew.forEach(c=>{cnt[c.id]=0;own[c.id]=[]});
   slots.forEach((sl,k)=>{cnt[A[k]]=(cnt[A[k]]||0)+1;(own[A[k]]=own[A[k]]||[]).push(k)});
   let tot=0;pool.forEach(p=>tot+=cnt[p]);const mu=tot/N;let tt=0;pool.forEach(p=>tt+=total[p]+cnt[p]);const mt=tt/N;
-  const clash=(a,b,x,y)=>x<b&&y>a?10000:(x<b+gap&&y>a-gap?200:0);
-  const pen=(k,p,skip)=>{const sl=slots[k];let c=0;(busy[p]||[]).forEach(x=>c+=clash(sl.a,sl.b,x.a,x.b));(own[p]||[]).forEach(t=>{if(t!==k&&t!==skip){const o=slots[t];c+=clash(sl.a,sl.b,o.a,o.b)}});return c};
+  const clash=(a,b,x,y)=>x<b&&y>a?10000:(x<b+gap&&y>a-gap?GAP_PEN:0);
+  const noonAvoid=new Set(S.crew.filter(c=>c.avoidNoon).map(c=>c.id)),isNoon=sl=>{const m=mod(sl.a);return m>=11*60&&m<16*60};
+  const pen=(k,p,skip)=>{const sl=slots[k];let c=noonAvoid.has(p)&&isNoon(sl)?20:0;(busy[p]||[]).forEach(x=>c+=clash(sl.a,sl.b,x.a,x.b));(own[p]||[]).forEach(t=>{if(t!==k&&t!==skip){const o=slots[t];c+=clash(sl.a,sl.b,o.a,o.b)}});return c};
   const team=k=>inst[slots[k].ii].team;
   const cd=(p,q)=>(inPool.has(p)?10*(1-2*(cnt[p]-mu))+3*(1-2*(total[p]+cnt[p]-mt)):0)+(inPool.has(q)?10*(1+2*(cnt[q]-mu))+3*(1+2*(total[q]+cnt[q]-mt)):0);
   function move(k,q){const p=A[k];let d=0;
@@ -656,7 +659,8 @@ function assignDuties(RW){
         for(let k=0;k<Math.min(duty.per,pool.length);k++){
           const cands=pool.filter(p=>!team.includes(p.id)),free=cands.filter(p=>!isBusy(p.id,it.start,it.end,gap)),free0=free.length?free:cands.filter(p=>!isBusy(p.id,it.start,it.end,0)),use=free0.length?free0:cands;
           const pair=p=>team.reduce((a,t)=>a+(pairs[pk(t,p.id)]||0),0);
-          use.sort((a,b)=>cnt[a.id]-cnt[b.id]||pair(a)-pair(b)||total[a.id]-total[b.id]||order[a.id]-order[b.id]);
+          const noon=mod(it.start)>=11*60&&mod(it.start)<16*60,av=p=>noon&&p.avoidNoon?1:0;
+          use.sort((a,b)=>cnt[a.id]-cnt[b.id]||av(a)-av(b)||pair(a)-pair(b)||total[a.id]-total[b.id]||order[a.id]-order[b.id]);
           team.push(use[0].id);
         }}
       it.team=team;
@@ -718,13 +722,13 @@ function renderSettings(){
   $("sSunrise").value=s.sunrise;$("sSunset").value=s.sunset;$("sRest").value=s.rest;$("sNightStart").value=s.nightStart;$("sNightEnd").value=s.nightEnd;
   $("sNightOnly").checked=!!s.nightOnly;$("sStag").checked=!!s.stag;$("sStagSolo").checked=!!s.stagSolo;$("sStagSolo").disabled=!s.stag;$("stagSoloRow").style.opacity=s.stag?"":".5";$("sDurDay").disabled=!!s.nightOnly;
 }
-let crewSig="";const sigOf=()=>JSON.stringify([S.crew.map(c=>[c.id,c.name,c.on]),S.duties.map(d=>[d.id,d.name,d.excl])]);
+let crewSig="";const sigOf=()=>JSON.stringify([S.crew.map(c=>[c.id,c.name,c.on,!!c.avoidNoon]),S.duties.map(d=>[d.id,d.name,d.excl])]);
 function renderCrew(){
   $("crewList").innerHTML=S.crew.map(c=>`<li class="${c.on?"":"off"}" data-id="${c.id}">
     <span class="dot" style="background:${c.color}"></span>
     <input type="text" id="n-${c.id}" value="${esc(c.name)}" aria-label="Nom" data-act="rename">
     <button class="btn ghost small" type="button" data-act="del" aria-label="Retirer ${esc(c.name)}">✕</button>
-    <span class="tasks"><label class="toggle"><input type="checkbox" data-act="on" ${c.on?"checked":""}> Quarts</label>${S.duties.map(d=>`<label class="toggle"><input type="checkbox" data-act="duty" data-duty="${d.id}" ${d.excl.includes(c.id)?"":"checked"}> ${esc(d.name)}</label>`).join("")}</span></li>`).join("");
+    <span class="tasks"><label class="toggle"><input type="checkbox" data-act="on" ${c.on?"checked":""}> Quarts</label><label class="toggle" title="Le moins possible de repas et vaisselle entre 11 h et 16 h, sans déséquilibrer les corvées"><input type="checkbox" data-act="noon" ${c.avoidNoon?"checked":""}> Éviter le midi</label>${S.duties.map(d=>`<label class="toggle"><input type="checkbox" data-act="duty" data-duty="${d.id}" ${d.excl.includes(c.id)?"":"checked"}> ${esc(d.name)}</label>`).join("")}</span></li>`).join("");
   crewSig=sigOf();
   const f=$("focusSel");f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
   f.value=crewById(S.focus)?S.focus:"";
@@ -1198,6 +1202,7 @@ $("crewList").addEventListener("change",e=>{
   const li=e.target.closest("li");if(!li)return;const c=crewById(li.dataset.id);
   if(e.target.dataset.act==="rename"){c.name=e.target.value.trim()||c.name;e.target.value=c.name;const f=$("focusSel"),v=f.value;f.innerHTML=`<option value="">Tout l'équipage</option>`+S.crew.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");f.value=v;recompute()}
   if(e.target.dataset.act==="on"){c.on=e.target.checked;li.classList.toggle("off",!c.on);recompute()}
+  if(e.target.dataset.act==="noon"){if(e.target.checked)c.avoidNoon=true;else delete c.avoidNoon;crewSig=sigOf();recompute();return}
   if(e.target.dataset.act==="duty"){const d=S.duties.find(x=>x.id===e.target.dataset.duty);if(!d)return;d.excl=e.target.checked?d.excl.filter(x=>x!==c.id):[...d.excl,c.id];crewSig=sigOf();recompute()}
 });
 $("crewList").addEventListener("click",e=>{
@@ -1436,7 +1441,20 @@ function migrateMenage(){
   Object.keys(after).forEach(k=>{if(after[k]!==before[k])sy.meta[k]=MENAGE_T});
   if(sy.lastPush>=MENAGE_T)sy.lastPush=MENAGE_T-1;
 }
-migrateInv();migrateMarket();repairInv();migrateMenus();migrateMenus2();migrateMenage();
+function migrateMarion(){
+  if(S.marionSrc===MARION_SRC)return;
+  S.marionSrc=MARION_SRC;
+  const m=S.crew.find(c=>norm(c.name)==="marion");
+  const sy=S.sync,before=flatten(S);lastFlat=before;
+  // aujourd'hui et les jours passés ne bougent pas : on fige leurs corvées telles qu'elles sont calculées maintenant
+  GAP_PEN=200;compute();GAP_PEN=30;
+  S.duties.forEach(d=>RD.res[d.id].inst.forEach(it=>{if(keyOf(it.start).slice(0,10)<=MENAGE_JOUR&&!d.overrides[it.key]&&it.team.length)d.overrides[it.key]=it.team.slice()}));
+  if(m)m.avoidNoon=true;
+  const after=flatten(S);track();
+  Object.keys(after).forEach(k=>{if(after[k]!==before[k])sy.meta[k]=MARION_T});
+  if(sy.lastPush>=MARION_T)sy.lastPush=MARION_T-1;
+}
+migrateInv();migrateMarket();repairInv();migrateMenus();migrateMenus2();migrateMenage();migrateMarion();
 boot();
 setInterval(()=>{if(!editKey&&!dutyEdit&&S.tab==="quarts")renderTimeline()},60000);
 window.__T={get S(){return S},qtyTxt,splitSteps,save:()=>save(),syAction,recompute:()=>recompute(),flatten,mergePackage,makePackage,asPackage,pendingKeys,assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
