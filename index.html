@@ -1455,6 +1455,9 @@ function migrateMarion(){
   if(sy.lastPush>=MARION_T)sy.lastPush=MARION_T-1;
 }
 migrateInv();migrateMarket();repairInv();migrateMenus();migrateMenus2();migrateMenage();migrateMarion();
+// Configuration intégrée au fichier (fusionnée une seule fois par appareil)
+const EMBED=null/*__EMBED__*/;
+if(EMBED&&EMBED.app==="bord-tiare"&&S.embedAt!==EMBED.at){try{mergePackage(EMBED);repairInv();S.embedAt=EMBED.at;lastFlat=flatten(S)}catch(e){}}
 boot();
 setInterval(()=>{if(!editKey&&!dutyEdit&&S.tab==="quarts")renderTimeline()},60000);
 window.__T={get S(){return S},qtyTxt,splitSteps,save:()=>save(),syAction,recompute:()=>recompute(),flatten,mergePackage,makePackage,asPackage,pendingKeys,assignWatches,assignDuties,invCompute,compute,get RD(){return RD},get RW(){return RW},prefillMeals};
