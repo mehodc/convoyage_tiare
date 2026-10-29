@@ -10,7 +10,7 @@ Cuire les pâtes al dente (moitié eau de mer, moitié eau douce), égoutter et 
 
 ## J1 · Dîner : Curry de poulet coco et pommes de terre, riz
 
-Ingrédients : Blanc de poulet 0.9 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Pommes de terre 1.2 kg, Tomates fraîches 0.4 kg, Oignons 0.25 kg, Ail 0.03 kg, Gingembre 0.05 kg, Curry de Madras en poudre 0.1 boîte 225 g, Riz 1 kg, Huile de cuisson 0.05 L.
+Ingrédients : Blanc de poulet 0.9 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Pommes de terre 1.2 kg, Tomates fraîches 0.4 kg, Oignons 0.25 kg, Ail 0.03 kg, Gingembre 0.05 kg, Curry de Madras en poudre 0.1 boîte 225 g, Riz 0.4 kg, Huile de cuisson 0.05 L.
 
 Lancer le riz au multicuiseur. Faire revenir oignons, ail et gingembre hachés 5 min, ajouter 3 c. à s. de curry et laisser 1 min. Ajouter le poulet en cubes et le dorer 5 min, puis les pommes de terre en dés, les tomates et le lait de coco. Couvrir et mijoter 20 min, jusqu'à ce que les pommes de terre soient tendres. Saler.
 
@@ -22,7 +22,7 @@ Décongeler le thon au frigo la veille. Rincer le quinoa, le cuire 15 min dans 2
 
 ## J2 · Dîner : Tofu soyeux sambal, haricots longs sautés et riz
 
-Ingrédients : Tofu soyeux 5 barquette, Haricots longs 2 botte, Sambal 0.03 kg, Sauce Bangkok (Kokita) 0.15 flacon 400 g, Oignons 0.15 kg, Ail 0.03 kg, Gingembre 0.03 kg, Riz 1 kg, Huile de cuisson 0.05 L.
+Ingrédients : Tofu soyeux 5 barquette, Haricots longs 2 botte, Sambal 0.03 kg, Sauce Bangkok (Kokita) 0.15 flacon 400 g, Oignons 0.15 kg, Ail 0.03 kg, Gingembre 0.03 kg, Riz 0.6 kg, Huile de cuisson 0.05 L.
 
 Lancer le riz. Faire revenir oignon, ail et gingembre, ajouter 2 c. à s. de sambal, la sauce Bangkok et un verre d'eau. Glisser le tofu en gros cubes et laisser chauffer 5 min sans remuer : il est fragile, l'arroser de sauce à la cuillère. À côté, sauter les haricots longs coupés 5 min à feu vif avec un peu d'ail.
 
@@ -34,19 +34,19 @@ Tremper les nouilles de riz 10 min dans l'eau chaude, égoutter. Faire une omele
 
 ## J3 · Dîner : Haricots rouges mijotés tomate-sambal, maïs et cheddar, riz
 
-Ingrédients : Haricots rouges secs 1 kg, Tomates concassées 1.5 boîte 400 g, Maïs (épis) 6 épi, Oignons 0.25 kg, Ail 0.04 kg, Sambal 0.02 kg, Curry de Madras en poudre 0.05 boîte 225 g, Cheddar 0.15 kg, Riz 1 kg, Huile de cuisson 0.04 L.
+Ingrédients : Haricots rouges secs 1.2 kg, Tomates concassées 1.5 boîte 400 g, Maïs (épis) 6 épi, Oignons 0.25 kg, Ail 0.04 kg, Sambal 0.02 kg, Curry de Madras en poudre 0.05 boîte 225 g, Cheddar 0.15 kg, Riz 0.3 kg, Huile de cuisson 0.04 L.
 
-La veille au soir (J2), tremper 1,8 kg de haricots rouges : 1 kg pour ce soir, 0,8 kg pour demain midi. Les égoutter, couvrir d'eau neuve, bouillir 10 min à gros bouillons (indispensable pour les haricots rouges), puis cuire 1 h à 1 h 30 jusqu'à ce qu'ils soient tendres. Réserver la part de demain. Faire revenir oignons et ail, ajouter curry, sambal, tomates, maïs égrené et les haricots, mijoter 20 min. Servir avec le riz et le cheddar râpé.
+La veille au soir (J2), tremper 2 kg de haricots rouges : 1,2 kg pour ce soir, 0,8 kg pour demain midi. Les égoutter, couvrir d'eau neuve, bouillir 10 min à gros bouillons (indispensable pour les haricots rouges), puis cuire 1 h à 1 h 30 jusqu'à ce qu'ils soient tendres. Réserver la part de demain. Faire revenir oignons et ail, ajouter curry, sambal, tomates, maïs égrené et les haricots, mijoter 20 min. Servir avec le riz et le cheddar râpé.
 
 ## J4 · Déjeuner : Bol burrito : haricots rouges, riz, salsa concombre-tomate, yaourt citronné
 
-Ingrédients : Haricots rouges secs 0.8 kg, Riz 0.8 kg, Concombres 1 kg, Tomates fraîches 0.6 kg, Maïs (épis) 4 épi, Yaourt nature 0.5 L, Citrons verts 1 pièce, Oignons 0.1 kg, Cheddar 0.1 kg, Sambal 0.01 kg.
+Ingrédients : Haricots rouges secs 0.8 kg, Riz 0.3 kg, Concombres 1 kg, Tomates fraîches 0.6 kg, Maïs (épis) 4 épi, Yaourt nature 0.5 L, Citrons verts 1 pièce, Oignons 0.1 kg, Cheddar 0.1 kg, Sambal 0.01 kg.
 
 Réchauffer les haricots cuits hier avec un peu d'eau. Cuire le riz. Griller les épis et les égrener. Salsa : concombre, tomate et oignon en petits dés, la moitié du citron, sel. Sauce : yaourt, reste du citron, sel. Monter les bols et parsemer de cheddar râpé.
 
 ## J4 · Dîner : Soupe au tofu soyeux, vermicelles et citronnelle, œufs pochés
 
-Ingrédients : Tofu soyeux 5 barquette, Vermicelles de soja (Longkou) 1 paquet 500 g, Haricots longs 2 botte, Carottes 0.2 kg, Chou blanc 0.25 gros chou, Citronnelle 2 tige, Gingembre 0.06 kg, Ail 0.03 kg, Œufs 8 pièce, Sambal 0.02 kg, Riz 0.6 kg.
+Ingrédients : Tofu soyeux 5 barquette, Vermicelles de soja (Longkou) 1 paquet 500 g, Haricots longs 2 botte, Carottes 0.2 kg, Chou blanc 0.25 gros chou, Citronnelle 2 tige, Gingembre 0.06 kg, Ail 0.03 kg, Œufs 8 pièce, Sambal 0.02 kg, Riz 0.4 kg.
 
 Bouillon : 4 L d'eau, citronnelle écrasée, gingembre en lamelles et ail, 15 min à frémissement (ajouter un cube ou de la sauce soja si vous en avez, sinon saler). Ajouter carottes et chou émincés 5 min, les haricots longs 3 min, puis les vermicelles trempés. Pocher les œufs 3 min dans le bouillon frémissant et glisser le tofu en cubes à la fin. Riz à part, sambal à table.
 
@@ -70,7 +70,7 @@ Couper les pommes de terre en fines lamelles et émincer les oignons ; les cuire
 
 ## J6 · Dîner : Curry de tofu soyeux et patate douce au lait de coco, riz
 
-Ingrédients : Tofu soyeux 5 barquette, Patates douces 1.2 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Citronnelle 1 tige, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Riz 1 kg, Huile de cuisson 0.04 L.
+Ingrédients : Tofu soyeux 5 barquette, Patates douces 1.2 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Citronnelle 1 tige, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Riz 0.4 kg, Huile de cuisson 0.04 L.
 
 Riz. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter 3 c. à s. de curry. Ajouter la patate douce en cubes de 2 cm, le lait de coco et un verre d'eau, mijoter 15 min. Glisser le tofu en cubes et laisser 5 min sans remuer. C'est le dernier tofu : ne pas le garder au-delà de ce jour.
 
@@ -88,13 +88,13 @@ Chapatis : 750 g de farine, environ 450 ml d'eau tiède et du sel ; pétrir, lai
 
 ## J8 · Déjeuner : Riz aux haricots rouges, guacamole et chou croquant
 
-Ingrédients : Haricots rouges secs 1 kg, Riz 1 kg, Avocats 1.5 kg, Citrons verts 2 pièce, Oignons 0.1 kg, Chou blanc 0.25 gros chou, Sambal 0.02 kg, Ail 0.02 kg.
+Ingrédients : Haricots rouges secs 1.3 kg, Riz 0.5 kg, Avocats 1.5 kg, Citrons verts 2 pièce, Oignons 0.1 kg, Chou blanc 0.25 gros chou, Sambal 0.02 kg, Ail 0.02 kg.
 
 Tremper les haricots la veille au soir, puis les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mélanger les haricots chauds avec le riz cuit, l'ail et le sel. Guacamole : avocats écrasés, citron, oignon haché fin, sambal, sel. Servir avec le chou émincé finement.
 
 ## J8 · Dîner : Poulet sauté citronnelle-gingembre et chayote, riz
 
-Ingrédients : Blanc de poulet 0.9 kg, Chayote 1 kg, Citronnelle 2 tige, Gingembre 0.08 kg, Ail 0.03 kg, Oignons 0.15 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Riz 1 kg, Huile de cuisson 0.05 L.
+Ingrédients : Blanc de poulet 0.9 kg, Chayote 1 kg, Citronnelle 2 tige, Gingembre 0.08 kg, Ail 0.03 kg, Oignons 0.15 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Riz 0.6 kg, Huile de cuisson 0.05 L.
 
 Riz. Hacher finement la citronnelle (le cœur tendre), le gingembre et l'ail. Saisir le poulet en lanières à feu vif 4 min, réserver. Faire sauter la chayote épluchée en bâtonnets avec l'oignon 5 min, ajouter le hachis et le poulet, la sauce Bangkok et un trait d'eau, 2 min.
 
@@ -118,15 +118,15 @@ Rincer le quinoa et le cuire 15 min dans 2 volumes d'eau, laisser refroidir. Ajo
 
 ## J10 · Dîner : Curry de soja et courge au lait de coco, riz
 
-Ingrédients : Graines de soja sèches 0.9 kg, Courge 0.5 pièce, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.2 kg, Riz 1 kg, Huile de cuisson 0.04 L.
+Ingrédients : Graines de soja sèches 1.1 kg, Courge 0.5 pièce, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.2 kg, Riz 0.4 kg, Huile de cuisson 0.04 L.
 
-Le soja est long : le tremper 12 h la veille (1,8 kg, la moitié sert aux galettes de demain midi), puis le cuire 2 h 30 à 3 h jusqu'à ce qu'il soit tendre, idéalement dès le matin. Faire revenir oignon, ail et gingembre, ajouter le curry, la courge en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter 0,9 kg (poids sec) de soja cuit, 10 min. Servir avec le riz.
+Le soja est long : le tremper 12 h la veille (2 kg : 1,1 kg pour ce soir, 0,9 kg pour les galettes de demain midi), puis le cuire 2 h 30 à 3 h jusqu'à ce qu'il soit tendre, idéalement dès le matin. Faire revenir oignon, ail et gingembre, ajouter le curry, la courge en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter 1,1 kg (poids sec) de soja cuit, 10 min. Servir avec le riz.
 
-## J11 · Déjeuner : Galettes de soja aux oignons, sauce yaourt, riz
+## J11 · Déjeuner : Galettes de soja aux oignons, sauce yaourt, quinoa
 
-Ingrédients : Graines de soja sèches 0.9 kg, Œufs 4 pièce, Farine de blé 0.1 kg, Oignons 0.15 kg, Ail 0.03 kg, Gingembre 0.03 kg, Yaourt nature 0.4 L, Riz 0.6 kg, Huile de cuisson 0.1 L.
+Ingrédients : Graines de soja sèches 0.9 kg, Œufs 4 pièce, Farine de blé 0.1 kg, Oignons 0.15 kg, Ail 0.03 kg, Gingembre 0.03 kg, Yaourt nature 0.4 L, Quinoa rouge 1 paquet 500 g, Huile de cuisson 0.1 L.
 
-Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Servir avec un peu de riz.
+Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Cuire le quinoa 15 min dans 2 volumes d'eau et servir avec.
 
 ## J11 · Dîner : Minestrone de haricots blancs, courge et pommes de terre, parmesan
 
@@ -142,7 +142,7 @@ Même méthode que les pizzas du J5 : pâte farine-yaourt reposée 20 min, sauce
 
 ## J12 · Dîner : Maquereau à la tomate, gingembre et chayote, riz
 
-Ingrédients : Maquereau 3 boîte 425 g, Tomates pelées 1 boîte 400 g, Chayote 1 kg, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Sambal 0.02 kg, Riz 1 kg, Huile de cuisson 0.04 L.
+Ingrédients : Maquereau 3 boîte 425 g, Tomates pelées 1 boîte 400 g, Chayote 1 kg, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Sambal 0.02 kg, Riz 0.5 kg, Huile de cuisson 0.04 L.
 
 Riz. Faire revenir oignon, ail et gingembre, ajouter la chayote en dés 5 min, puis les tomates et le sambal, 10 min. Ajouter le maquereau en gros morceaux avec un peu de son jus et réchauffer 3 min sans trop remuer.
 
@@ -154,7 +154,7 @@ Décongeler le tempeh la veille. Le couper en bâtonnets et le dorer 6 à 8 min 
 
 ## J13 · Dîner : Haricots rouges façon rendang (coco, citronnelle, coco grillée), riz
 
-Ingrédients : Haricots rouges secs 1 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Citronnelle 1 tige, Gingembre 0.06 kg, Ail 0.04 kg, Oignons 0.2 kg, Sambal 0.02 kg, Copeaux de coco séchés 0.5 sachet, Curry de Madras en poudre 0.05 boîte 225 g, Riz 1 kg, Huile de cuisson 0.04 L.
+Ingrédients : Haricots rouges secs 1.2 kg, Lait de coco 2 brique 400 ml (équiv., acheté 7 × 1 L), Citronnelle 1 tige, Gingembre 0.06 kg, Ail 0.04 kg, Oignons 0.2 kg, Sambal 0.02 kg, Copeaux de coco séchés 0.5 sachet, Curry de Madras en poudre 0.05 boîte 225 g, Riz 0.5 kg, Huile de cuisson 0.04 L.
 
 Tremper les haricots la veille, les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Mixer oignon, ail, gingembre, citronnelle et sambal en pâte, la faire revenir 5 min avec le curry. Ajouter le lait de coco et les haricots, mijoter à découvert 25 min jusqu'à ce que la sauce épaississe. Griller les copeaux de coco à sec et les parsemer dessus.
 
@@ -178,15 +178,15 @@ Griller le sésame à sec et le mixer avec un peu d'huile en pâte (tahini). Mix
 
 ## J15 · Dîner : Curry de thon et patate douce au lait de coco, riz
 
-Ingrédients : Filets de poisson 1 kg (longe de thon saku), Patates douces 1.5 kg, Lait de coco 1.5 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Riz 1 kg, Huile de cuisson 0.04 L.
+Ingrédients : Filets de poisson 1 kg (longe de thon saku), Patates douces 1.5 kg, Lait de coco 1.5 brique 400 ml (équiv., acheté 7 × 1 L), Curry de Madras en poudre 0.1 boîte 225 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Riz 0.5 kg, Huile de cuisson 0.04 L.
 
 Décongeler le thon au frigo la veille. Riz. Faire revenir oignon, ail, gingembre et curry, ajouter la patate douce en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter le thon en gros cubes et cuire 4 min à frémissement, sans remuer pour qu'il reste moelleux.
 
 ## J16 · Déjeuner : Ragoût de soja, patate douce et tomate aux épices indiennes, riz
 
-Ingrédients : Graines de soja sèches 1 kg, Patates douces 1.5 kg, Tomates pelées 1 boîte 400 g, Oignons 0.2 kg, Ail 0.03 kg, Gingembre 0.05 kg, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde jaune 0.2 sachet 80 g, Riz 0.8 kg, Huile de cuisson 0.04 L.
+Ingrédients : Graines de soja sèches 1.2 kg, Patates douces 1.5 kg, Tomates pelées 1 boîte 400 g, Oignons 0.2 kg, Ail 0.03 kg, Gingembre 0.05 kg, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde jaune 0.2 sachet 80 g, Riz 0.4 kg, Huile de cuisson 0.04 L.
 
-Tremper 1,8 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais.
+Tremper 2 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1,2 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais.
 
 ## J16 · Dîner : Poulet poêlé à l'ail et aux herbes, pommes de terre sautées, chou
 
@@ -196,13 +196,13 @@ Précuire les pommes de terre en morceaux 10 min à la vapeur, puis les faire sa
 
 ## J17 · Déjeuner : Soja et tempeh croustillants au sambal (façon kering), riz et chou sauté
 
-Ingrédients : Graines de soja sèches 0.8 kg, Tempeh 0.7 kg, Sambal 0.02 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Ail 0.03 kg, Oignons 0.1 kg, Chou blanc 0.25 gros chou, Riz 0.8 kg, Huile de cuisson 0.06 L, Huile d'olive vierge extra 0.02 L (bouteilles de 750 ml).
+Ingrédients : Graines de soja sèches 0.8 kg, Tempeh 0.7 kg, Sambal 0.02 kg, Sauce Bangkok (Kokita) 0.1 flacon 400 g, Ail 0.03 kg, Oignons 0.1 kg, Chou blanc 0.25 gros chou, Riz 0.4 kg, Huile de cuisson 0.06 L, Huile d'olive vierge extra 0.02 L (bouteilles de 750 ml).
 
 Décongeler le tempeh la veille. Bien égoutter et sécher le soja cuit hier ; faire frire séparément le soja et le tempeh en petits dés, en 2 fois, 8 à 10 min jusqu'à ce qu'ils croustillent. Faire revenir ail et oignon, ajouter le sambal et la sauce Bangkok, enrober le soja. Chou sauté 4 min, riz.
 
 ## J17 · Dîner : Dahl de lentilles et courge aux graines de moutarde, riz
 
-Ingrédients : Lentilles en conserve 3 boîte 400 g, Lait de coco 1 brique 400 ml (équiv., acheté 7 × 1 L), Courge 0.5 pièce, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde noire 0.2 sachet 80 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.2 kg, Riz 1 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
+Ingrédients : Lentilles en conserve 4 boîte 400 g, Lait de coco 1 brique 400 ml (équiv., acheté 7 × 1 L), Courge 0.5 pièce, Mélange d'épices indien 0.25 pot 50 g, Graines de moutarde noire 0.2 sachet 80 g, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.2 kg, Riz 0.5 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
 
 Riz. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices. Ajouter la courge en petits dés et un verre d'eau, 12 min, puis les lentilles égouttées et le lait de coco, 10 min. Écraser grossièrement.
 
@@ -220,37 +220,37 @@ Décongeler le tempeh la veille, le couper en dés et le dorer 6 min. Cuire les 
 
 ## J19 · Déjeuner : Quinoa rouge et riz aux sardines et oignon
 
-Ingrédients : Quinoa rouge 1 paquet 500 g, Riz 0.5 kg, Sardines (grande boîte) 3 boîte 425 g, Oignons 0.1 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
+Ingrédients : Quinoa rouge 1 paquet 500 g, Riz 0.4 kg, Sardines (grande boîte) 3 boîte 425 g, Oignons 0.1 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
 Cuire ensemble le quinoa rincé et le riz dans 2 volumes d'eau, 15 min, laisser tiédir. Mélanger avec les sardines émiettées, l'oignon émincé, l'huile, du sel et du poivre.
 
 ## J19 · Dîner : Poulet coco-citronnelle et patate douce (lait de coco en poudre), riz
 
-Ingrédients : Blanc de poulet 0.9 kg, Lait de coco en poudre 1 sachet 250 g, Patates douces 1.5 kg, Citronnelle 1 tige, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Sambal 0.02 kg, Riz 1 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
+Ingrédients : Blanc de poulet 0.9 kg, Lait de coco en poudre 1 sachet 250 g, Patates douces 1.5 kg, Citronnelle 1 tige, Gingembre 0.05 kg, Ail 0.03 kg, Oignons 0.15 kg, Sambal 0.02 kg, Riz 0.5 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
 
 Délayer le sachet de lait de coco en poudre dans 1 L d'eau tiède. Faire revenir oignon, ail, gingembre et citronnelle écrasée, ajouter le poulet en cubes 5 min, puis la patate douce, le lait de coco et le sambal, 15 min. Servir avec le riz.
 
-## J20 · Déjeuner : Soupe de haricots rouges, courge et gingembre, riz
+## J20 · Déjeuner : Soupe épaisse de haricots rouges, courge et gingembre
 
-Ingrédients : Haricots rouges secs 1 kg, Courge 0.5 pièce, Gingembre 0.05 kg, Citronnelle 1 tige, Oignons 0.15 kg, Ail 0.03 kg, Curry de Madras en poudre 0.05 boîte 225 g, Riz 0.8 kg, Huile d'olive vierge extra 0.03 L (bouteilles de 750 ml).
+Ingrédients : Haricots rouges secs 1.3 kg, Courge 0.5 pièce, Gingembre 0.05 kg, Citronnelle 1 tige, Oignons 0.15 kg, Ail 0.03 kg, Curry de Madras en poudre 0.05 boîte 225 g, Huile d'olive vierge extra 0.03 L (bouteilles de 750 ml).
 
-Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié, saler. Riz à part.
+Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30) : 1,3 kg pour une soupe qui tient au corps. Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié pour épaissir, saler.
 
 ## J20 · Dîner : Curry de poulet aux pommes de terre, riz
 
-Ingrédients : Blanc de poulet 0.9 kg, Pommes de terre 0.8 kg, Curry de Madras en poudre 0.1 boîte 225 g, Oignons 0.2 kg, Ail 0.03 kg, Gingembre 0.05 kg, Margarine 0.05 kg, Riz 1 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
+Ingrédients : Blanc de poulet 0.9 kg, Pommes de terre 0.8 kg, Curry de Madras en poudre 0.1 boîte 225 g, Oignons 0.2 kg, Ail 0.03 kg, Gingembre 0.05 kg, Margarine 0.05 kg, Riz 0.4 kg, Huile d'olive vierge extra 0.04 L (bouteilles de 750 ml).
 
 Riz. Faire revenir oignon, ail et gingembre, ajouter le curry, puis le poulet en cubes 5 min. Ajouter les pommes de terre en dés et deux verres d'eau, mijoter 20 min. Finir avec la margarine.
 
 ## J21 · Déjeuner : Salade tiède de soja, patate douce rôtie et sésame
 
-Ingrédients : Graines de soja sèches 0.9 kg, Patates douces 0.8 kg, Graines de sésame 0.05 kg, Oignons 0.1 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml), Riz 0.6 kg.
+Ingrédients : Graines de soja sèches 1.2 kg, Patates douces 0.8 kg, Graines de sésame 0.05 kg, Oignons 0.1 kg, Huile d'olive vierge extra 0.06 L (bouteilles de 750 ml).
 
-Tremper le soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé, servir sur un peu de riz.
+Tremper 1,2 kg de soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé.
 
 ## J21 · Dîner : Dîner d'arrivée : poulet grillé sambal-citron, riz au coco grillé, salade de chou
 
-Ingrédients : Blanc de poulet 0.9 kg, Sambal 0.03 kg, Citrons verts 1 pièce, Ail 0.03 kg, Chou blanc 0.25 gros chou, Copeaux de coco séchés 0.3 sachet, Riz 1 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
+Ingrédients : Blanc de poulet 0.9 kg, Sambal 0.03 kg, Citrons verts 1 pièce, Ail 0.03 kg, Chou blanc 0.25 gros chou, Copeaux de coco séchés 0.3 sachet, Riz 0.6 kg, Huile d'olive vierge extra 0.05 L (bouteilles de 750 ml).
 
 Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citron. Griller à la poêle très chaude 3 à 4 min par face. Griller les copeaux de coco à sec et les mélanger au riz chaud. Salade de chou émincé, huile et sel.
 
@@ -279,17 +279,17 @@ Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citr
 | Gingembre | 0.87 | 5 | 4.13 | kg |
 | Graines de moutarde jaune | 0.2 | 1 | 0.8 | sachet 80 g |
 | Graines de moutarde noire | 0.4 | 1 | 0.6 | sachet 80 g |
-| Graines de soja sèches | 4.5 | 9 | 4.5 | kg |
+| Graines de soja sèches | 5.2 | 9 | 3.8 | kg |
 | Graines de sésame | 0.25 | 0.5 | 0.25 | kg |
 | Haricots blancs secs | 2.4 | 9 | 6.6 | kg |
 | Haricots longs | 5 | 5 | 0 | botte |
-| Haricots rouges secs | 4.8 | 9 | 4.2 | kg |
+| Haricots rouges secs | 5.8 | 9 | 3.2 | kg |
 | Herbes italiennes | 1.4 | 2 | 0.6 | pot 30 g |
 | Huile d'olive vierge extra | 1.04 | 3.75 | 2.71 | L (bouteilles de 750 ml) |
 | Huile de cuisson | 0.95 | 1 | 0.05 | L |
 | Lait de coco | 12 | 17.5 | 5.5 | brique 400 ml (équiv., acheté 7 × 1 L) |
 | Lait de coco en poudre | 1 | 1 | 0 | sachet 250 g |
-| Lentilles en conserve | 6 | 10 | 4 | boîte 400 g |
+| Lentilles en conserve | 7 | 10 | 3 | boîte 400 g |
 | Maquereau | 6 | 8 | 2 | boîte 425 g |
 | Margarine | 0.26 | 1.5 | 1.24 | kg |
 | Maïs (épis) | 20 | 20 | 0 | épi |
@@ -308,7 +308,8 @@ Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citr
 | Pommes de terre | 8 | 8 | 0 | kg |
 | Pâtes | 2 | 3 | 1 | kg |
 | Quinoa blanc | 4 | 5 | 1 | paquet 500 g |
-| Quinoa rouge | 3 | 5 | 2 | paquet 500 g |
+| Quinoa rouge | 4 | 5 | 1 | paquet 500 g |
+| Riz | 8.6 | 12 | 3.4 | kg |
 | Sambal | 0.27 | 0.38 | 0.11 | kg |
 | Sardines (grande boîte) | 6 | 8 | 2 | boîte 425 g |
 | Sauce Bangkok (Kokita) | 0.7 | 1 | 0.3 | flacon 400 g |
@@ -323,4 +324,4 @@ Mariner le poulet en aiguillettes 30 min avec le sambal, l'ail et le jus du citr
 | Yaourt nature | 2.1 | 3 | 0.9 | L |
 | Œufs | 64 | 150 | 86 | pièce |
 
-Riz nécessaire : 19.5 kg. Huile totale : 1.23 L.
+Riz nécessaire : 8.6 kg. Huile totale : 1.23 L.

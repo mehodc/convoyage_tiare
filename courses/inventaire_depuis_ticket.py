@@ -67,8 +67,8 @@ for m in marche:
     inv.append({"id": ident("t2-", m["denree"]), "name": m["denree"], "unit": m["unite"], "cat": m["rayon"], "initial": float(m["qte"])})
 print(f"Marché : {len(marche)} denrées ajoutées.")
 
-# Stock déjà à bord, quantité à saisir dans l'outil
-inv.append({"id": "t3-riz", "name": "Riz", "unit": "kg", "cat": "Féculents", "initial": 0})
+# Stock déjà à bord (12 kg de riz saisis le 29/10)
+inv.append({"id": "t3-riz", "name": "Riz", "unit": "kg", "cat": "Féculents", "initial": 12})
 json.dump(inv, open(ICI / "inventaire.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(f"Ticket contrôlé : {len(lignes)} lignes, total {total:,} IDR, remises {remise:,} IDR.")
 print(f"{len(inv)} denrées dans l'inventaire ; hors alimentation exclus : {', '.join(hors_alim)}.")

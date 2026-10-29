@@ -75,7 +75,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.4
     ],
     [
      "Huile de cuisson",
@@ -161,7 +161,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.6
     ],
     [
      "Huile de cuisson",
@@ -223,7 +223,7 @@
    "items": [
     [
      "Haricots rouges secs",
-     1.0
+     1.2
     ],
     [
      "Tomates concassées",
@@ -255,14 +255,14 @@
     ],
     [
      "Riz",
-     1.0
+     0.3
     ],
     [
      "Huile de cuisson",
      0.04
     ]
    ],
-   "steps": "La veille au soir (J2), tremper 1,8 kg de haricots rouges : 1 kg pour ce soir, 0,8 kg pour demain midi. Les égoutter, couvrir d'eau neuve, bouillir 10 min à gros bouillons (indispensable pour les haricots rouges), puis cuire 1 h à 1 h 30 jusqu'à ce qu'ils soient tendres. Réserver la part de demain. Faire revenir oignons et ail, ajouter curry, sambal, tomates, maïs égrené et les haricots, mijoter 20 min. Servir avec le riz et le cheddar râpé."
+   "steps": "La veille au soir (J2), tremper 2 kg de haricots rouges : 1,2 kg pour ce soir, 0,8 kg pour demain midi. Les égoutter, couvrir d'eau neuve, bouillir 10 min à gros bouillons (indispensable pour les haricots rouges), puis cuire 1 h à 1 h 30 jusqu'à ce qu'ils soient tendres. Réserver la part de demain. Faire revenir oignons et ail, ajouter curry, sambal, tomates, maïs égrené et les haricots, mijoter 20 min. Servir avec le riz et le cheddar râpé."
   }
  },
  {
@@ -275,7 +275,7 @@
     ],
     [
      "Riz",
-     0.8
+     0.3
     ],
     [
      "Concombres",
@@ -357,7 +357,7 @@
     ],
     [
      "Riz",
-     0.6
+     0.4
     ]
    ],
    "steps": "Bouillon : 4 L d'eau, citronnelle écrasée, gingembre en lamelles et ail, 15 min à frémissement (ajouter un cube ou de la sauce soja si vous en avez, sinon saler). Ajouter carottes et chou émincés 5 min, les haricots longs 3 min, puis les vermicelles trempés. Pocher les œufs 3 min dans le bouillon frémissant et glisser le tofu en cubes à la fin. Riz à part, sambal à table."
@@ -525,7 +525,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.4
     ],
     [
      "Huile de cuisson",
@@ -643,11 +643,11 @@
    "items": [
     [
      "Haricots rouges secs",
-     1.0
+     1.3
     ],
     [
      "Riz",
-     1.0
+     0.5
     ],
     [
      "Avocats",
@@ -709,7 +709,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.6
     ],
     [
      "Huile de cuisson",
@@ -841,7 +841,7 @@
    "items": [
     [
      "Graines de soja sèches",
-     0.9
+     1.1
     ],
     [
      "Courge",
@@ -869,19 +869,19 @@
     ],
     [
      "Riz",
-     1.0
+     0.4
     ],
     [
      "Huile de cuisson",
      0.04
     ]
    ],
-   "steps": "Le soja est long : le tremper 12 h la veille (1,8 kg, la moitié sert aux galettes de demain midi), puis le cuire 2 h 30 à 3 h jusqu'à ce qu'il soit tendre, idéalement dès le matin. Faire revenir oignon, ail et gingembre, ajouter le curry, la courge en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter 0,9 kg (poids sec) de soja cuit, 10 min. Servir avec le riz."
+   "steps": "Le soja est long : le tremper 12 h la veille (2 kg : 1,1 kg pour ce soir, 0,9 kg pour les galettes de demain midi), puis le cuire 2 h 30 à 3 h jusqu'à ce qu'il soit tendre, idéalement dès le matin. Faire revenir oignon, ail et gingembre, ajouter le curry, la courge en cubes, le lait de coco et un verre d'eau, 15 min. Ajouter 1,1 kg (poids sec) de soja cuit, 10 min. Servir avec le riz."
   }
  },
  {
   "lunch": {
-   "recipe": "Galettes de soja aux oignons, sauce yaourt, riz",
+   "recipe": "Galettes de soja aux oignons, sauce yaourt, quinoa",
    "items": [
     [
      "Graines de soja sèches",
@@ -912,15 +912,15 @@
      0.4
     ],
     [
-     "Riz",
-     0.6
+     "Quinoa rouge",
+     1
     ],
     [
      "Huile de cuisson",
      0.1
     ]
    ],
-   "steps": "Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Servir avec un peu de riz."
+   "steps": "Mixer grossièrement le soja cuit hier avec oignon, ail, gingembre, les œufs, la farine et du sel. Former 24 galettes et les dorer 3 min par face à la poêle huilée. Sauce : yaourt et sel. Cuire le quinoa 15 min dans 2 volumes d'eau et servir avec."
   },
   "dinner": {
    "recipe": "Minestrone de haricots blancs, courge et pommes de terre, parmesan",
@@ -1045,7 +1045,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.5
     ],
     [
      "Huile de cuisson",
@@ -1103,7 +1103,7 @@
    "items": [
     [
      "Haricots rouges secs",
-     1.0
+     1.2
     ],
     [
      "Lait de coco",
@@ -1139,7 +1139,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.5
     ],
     [
      "Huile de cuisson",
@@ -1287,7 +1287,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.5
     ],
     [
      "Huile de cuisson",
@@ -1303,7 +1303,7 @@
    "items": [
     [
      "Graines de soja sèches",
-     1.0
+     1.2
     ],
     [
      "Patates douces",
@@ -1335,14 +1335,14 @@
     ],
     [
      "Riz",
-     0.8
+     0.4
     ],
     [
      "Huile de cuisson",
      0.04
     ]
    ],
-   "steps": "Tremper 1,8 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais."
+   "steps": "Tremper 2 kg de soja 12 h la veille (0,8 kg pour demain midi) et le cuire 2 h 30 à 3 h, en commençant tôt. Faire sauter les graines de moutarde dans l'huile, ajouter oignon, ail, gingembre et épices, puis les tomates, la patate douce en dés et un verre d'eau, 15 min. Ajouter 1,2 kg (poids sec) de soja cuit, 10 min. Réserver le reste au frais."
   },
   "dinner": {
    "recipe": "Poulet poêlé à l'ail et aux herbes, pommes de terre sautées, chou",
@@ -1417,7 +1417,7 @@
     ],
     [
      "Riz",
-     0.8
+     0.4
     ],
     [
      "Huile de cuisson",
@@ -1435,7 +1435,7 @@
    "items": [
     [
      "Lentilles en conserve",
-     3
+     4
     ],
     [
      "Lait de coco",
@@ -1467,7 +1467,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.5
     ],
     [
      "Huile d'olive vierge extra",
@@ -1565,7 +1565,7 @@
     ],
     [
      "Riz",
-     0.5
+     0.4
     ],
     [
      "Sardines (grande boîte)",
@@ -1619,7 +1619,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.5
     ],
     [
      "Huile d'olive vierge extra",
@@ -1631,11 +1631,11 @@
  },
  {
   "lunch": {
-   "recipe": "Soupe de haricots rouges, courge et gingembre, riz",
+   "recipe": "Soupe épaisse de haricots rouges, courge et gingembre",
    "items": [
     [
      "Haricots rouges secs",
-     1.0
+     1.3
     ],
     [
      "Courge",
@@ -1662,15 +1662,11 @@
      0.05
     ],
     [
-     "Riz",
-     0.8
-    ],
-    [
      "Huile d'olive vierge extra",
      0.03
     ]
    ],
-   "steps": "Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30). Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié, saler. Riz à part."
+   "steps": "Tremper les haricots la veille et les cuire le matin (10 min à gros bouillons, puis 1 h à 1 h 30) : 1,3 kg pour une soupe qui tient au corps. Faire revenir oignon, ail, gingembre, citronnelle et curry, ajouter la courge en dés, les haricots et 3 L d'eau de cuisson, 20 min. Mixer à moitié pour épaissir, saler."
   },
   "dinner": {
    "recipe": "Curry de poulet aux pommes de terre, riz",
@@ -1705,7 +1701,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.4
     ],
     [
      "Huile d'olive vierge extra",
@@ -1721,7 +1717,7 @@
    "items": [
     [
      "Graines de soja sèches",
-     0.9
+     1.2
     ],
     [
      "Patates douces",
@@ -1738,13 +1734,9 @@
     [
      "Huile d'olive vierge extra",
      0.06
-    ],
-    [
-     "Riz",
-     0.6
     ]
    ],
-   "steps": "Tremper le soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé, servir sur un peu de riz."
+   "steps": "Tremper 1,2 kg de soja 12 h la veille et le cuire 2 h 30 à 3 h dès le matin. Faire dorer la patate douce en cubes à la poêle 15 min. Mélanger avec le soja tiède, l'oignon émincé, l'huile, du sel et le sésame grillé."
   },
   "dinner": {
    "recipe": "Dîner d'arrivée : poulet grillé sambal-citron, riz au coco grillé, salade de chou",
@@ -1775,7 +1767,7 @@
     ],
     [
      "Riz",
-     1.0
+     0.6
     ],
     [
      "Huile d'olive vierge extra",
